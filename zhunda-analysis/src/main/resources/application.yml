@@ -1,0 +1,10 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: zhunda-Analysis
+  servlet:
+    multipart:
+      max-file-size: 100MB #文件大小
+      max-request-size: 100MB #总文件大小

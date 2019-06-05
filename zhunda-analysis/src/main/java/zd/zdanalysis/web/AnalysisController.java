@@ -31,6 +31,11 @@ public class AnalysisController {
         if (fileName != null) {
             //设置文件路径
             String save="F:\\test\\";
+            String oxs = System.getProperty("os.name");
+            if (!oxs.toLowerCase().startsWith("win")){
+                save="/opt/zhundaSave/";
+                System.out.println("There is Linux");
+            }
             File file = new File(save+fileName);
             //File file = new File(realPath , fileName);
             if (file.exists()) {

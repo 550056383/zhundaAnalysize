@@ -30,6 +30,7 @@ public class AnalysisController {
         System.out.println("fileName::"+fileName);
         if (fileName != null) {
             //设置文件路径
+            String save="123456";
             File file = new File("F:\\test\\"+fileName);
             //File file = new File(realPath , fileName);
             if (file.exists()) {

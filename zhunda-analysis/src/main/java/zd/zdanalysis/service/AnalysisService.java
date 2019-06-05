@@ -1,10 +1,12 @@
 package zd.zdanalysis.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import zd.zdcommons.FactoryProducer;
 import zd.zdcommons.Utils;
 import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
+import zd.zdcommons.analysis.ClockAnalysis;
 import zd.zdcommons.analysis.Complete;
 import zd.zdcommons.analysis.Logic;
 import zd.zdcommons.facotry.AnalysisFactory;
@@ -12,6 +14,7 @@ import zd.zdcommons.facotry.ReadFacotory;
 import zd.zdcommons.pojo.Pageto;
 import zd.zdcommons.pojo.ResultMessage;
 import zd.zdcommons.read.ReadIntegrityExcel;
+import zd.zdcommons.read.ReadclockExcel;
 import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.serviceImp.ReadExcelImp;
 
@@ -21,7 +24,6 @@ import java.util.Map;
 
 @Service
 public class AnalysisService {
-
     public Pageto getAnalysis(MultipartFile shishi, MultipartFile daka) {
         Utils utils = new Utils();
         //创建分析抽象工厂
@@ -34,6 +36,12 @@ public class AnalysisService {
         ReadFacotory readFactory = (ReadFacotory) FactoryProducer.getFactory("Read");
         ReadIntegrityExcel integrityExcel = (ReadIntegrityExcel) readFactory.getExcel("SHISHI");
         List<Map<String, Object>> maps = integrityExcel.getExcel(shishi);
+
+        //针对打卡 2019/6/5 14.40 修改添加的
+        ReadclockExcel ddsd =   new  ReadclockExcel();
+        List<Map<String, Object>> dakamaps = ddsd.getExcel(daka);//打卡
+        ClockAnalysis clockAnalysis = new ClockAnalysis();//打卡的分析
+        //
         //获取原来标题
         Map<String, Object> titleMap = utils.getTitle();
         Pageto pt = new Pageto();
@@ -44,10 +52,18 @@ public class AnalysisService {
         long iACount=0;
         //逻辑性计数
         long iLCont=0;
+
         //信息
         List<ResultMessage> reslist=new ArrayList<ResultMessage>();
         for (Map t :maps){
             ResultMessage resultC = complete.getIntegrityAnalysis(t,titleMap);
+            //打卡得到的ResultMessage 2019/6/5 14.40添加的代码
+            ResultMessage resultD = clockAnalysis.clockfenxi(t, dakamaps);
+            //
+            if(resultD!=null){
+                iACount++;
+                reslist.add(resultD);//添加打卡的相关
+            }
             if(resultC!=null){
                 iCCount++;
                 reslist.add(resultC);

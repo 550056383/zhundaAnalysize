@@ -9,11 +9,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="zhun-commons" />
         <module name="zhunda-analysis" />
-        <module name="zhunda-gateway" />
         <module name="zhunda-interface" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="zhunda-gateway" target="1.5" />
       <module name="zhunda-interface" target="1.5" />
       <module name="zhunda-item" target="1.5" />
       <module name="zhunda-registry" target="1.5" />

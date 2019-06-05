@@ -80,7 +80,7 @@ public class ReadIntegrityExcel implements ReadExcelImp {
             //获得当前sheet的结束行
             int lastRowNum = sheet.getLastRowNum();
             System.out.println("结束行:"+lastRowNum);
-            //循环除了第一行的所有行
+            //循环除了第一行的所有行 1
             for(int rowNum = firstRowNum;rowNum <= lastRowNum;rowNum++){
                 //获得当前行
                 Row row = sheet.getRow(rowNum);

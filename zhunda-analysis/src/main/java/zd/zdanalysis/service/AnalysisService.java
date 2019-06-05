@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class AnalysisService {
@@ -41,6 +42,14 @@ public class AnalysisService {
         ReadFacotory readFactory = (ReadFacotory) FactoryProducer.getFactory("Read");
         ReadIntegrityExcel integrityExcel = (ReadIntegrityExcel) readFactory.getExcel("SHISHI");
         List<Map<String, Object>> maps = integrityExcel.getExcel(shishi);
+        /*for (Map<String, Object> map : maps) {
+            Set<Map.Entry<String, Object>> entrySet = map.entrySet();
+            for (Map.Entry<String, Object> entry : entrySet) {
+
+                System.out.println("jian---"+entry.getKey()+"--值----"+entry.getValue());
+
+            }*/
+
 
         //针对打卡 2019/6/5 14.40 修改添加的
         ReadclockExcel ddsd =   new  ReadclockExcel();
@@ -80,9 +89,12 @@ public class AnalysisService {
                 reslist.add(resultL);
                 //System.out.println(resultL);
             }
+            System.out.println("获取的东西"+reslist.get(0));
         }
+        //final String uuId = "dsdsd";
         final String uuId = utils.getUUId();
 //       写入流
+        System.out.println("得到的集合"+reslist+"uuid"+uuId);
         utils.writeExcel(reslist,uuId);
         pt.setUId(uuId);
         pt.setResultms(reslist);

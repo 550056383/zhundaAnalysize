@@ -19,7 +19,8 @@ public class ClockAnalysis {
     public ResultMessage clockfenxi(Map<String, Object> map,List<Map<String, Object>> lis){
 
         //结果信息的实体类对象
-        ResultMessage r = new ResultMessage();
+        //为空======
+        ResultMessage r = null;
         //Listmessge
         ArrayList<String> list = new ArrayList<String>();
         //记录count数即错误数
@@ -27,24 +28,19 @@ public class ClockAnalysis {
 
         String duid = (String) map.get("YD5-dUID");
         for (Map<String, Object> li : lis) {
-            if(duid.equals(li.get("DUID"))){//表示实施中的duid在打卡数据表中存在
-                    r.setTError("打卡完成");
-                    r.setDUID(duid);
-                    r.setDUName(map.get("YD5-dUName").toString());
-                    r.setMessge(null);
-                    r.setDarea(map.get("YD5-area").toString());
-                    r.setXcount(count);
-                    return r;
+            if(!(duid.equals(li.get("DUID")))){ //表示未打卡
+                list.add("未打卡");
+                r = new ResultMessage();
+                r.setTError("准确性错误");
+                r.setDUID(duid);
+                r.setDUName(map.get("YD5-dUName").toString());
+                r.setMessge(list);
+                r.setDarea(map.get("YD5-area").toString());
+                count++;
+                r.setXcount(count);
+                return r;
             }
         }
-        //表示实施的数据在打卡中不存在
-        r.setTError("未打卡");
-        r.setDUID(duid);
-        r.setDUName(map.get("YD5-dUName").toString());
-        r.setMessge(null);
-        r.setDarea(map.get("YD5-area").toString());
-        count++;
-        r.setXcount(count);
-        return r;
+        return r;//表示打卡成功 返回空值
     }
 }

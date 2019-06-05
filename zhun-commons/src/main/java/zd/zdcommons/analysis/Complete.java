@@ -108,9 +108,7 @@ public class Complete implements AnalysisImp {
         }
         //添加最终数据
         if(list.size()>0){
-	            /*r.setTError("完整性错误");
-	            r.setDUID(resource.get("YD5-dUID").toString());
-	            r.setDUName(resource.get("YD5-dUName").toString());*/r=new ResultMessage();
+            r=new ResultMessage();
             r.setTError("完整性错误");
             r.setDarea(resource.get("YD5-area").toString());
             r.setDUID(resource.get("YD5-dUID").toString());

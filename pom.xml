@@ -9,9 +9,7 @@
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
     <modules>
-        <module>zhunda-item</module>
         <module>zhunda-analysis</module>
-        <module>zhunda-gateway</module>
         <module>zhun-commons</module>
 
     </modules>

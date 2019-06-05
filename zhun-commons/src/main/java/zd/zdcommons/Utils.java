@@ -1,7 +1,6 @@
 package zd.zdcommons;
 
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -12,7 +11,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -98,7 +96,8 @@ public class Utils {
             "M1800-constructionPlanFDD","M1800-questionClassificationFDD","M1800-whetherPlanningFDD",
             "M1800-arrivalDateFDD","M1800-deliveryCompletionDateFFD","M1800-installationFDD","M1800-openedFDD",
             "M1800-nmNEIDFDD","M1800-baseStationNameFDD"};
-
+    private final static String xls = "xls";
+    private final static String xlsx = "xlsx";
 //获得原标题
     public Map<String,Object> getTitle(){
         HashMap<String, Object> titleMap = new HashMap<String, Object>();
@@ -107,82 +106,7 @@ public class Utils {
         }
         return titleMap;
     };
-    private final static String xls = "xls";
-    private final static String xlsx = "xlsx";
-
-    public static List<Map<String,Object>> readExcel(MultipartFile file) {
-        String[] str = new String[128];
-        //创建类型接受
-        ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        //检查文件
-//        checkFile(file);
-        //获得Workbook工作薄对象
-        Workbook workbook = getWorkBook(file);
-        //创建返回对象，把每行中的值作为一个数组，所有行作为一个集合返回
-
-        if(workbook != null){
-
-            //获得当前sheet工作表
-            Sheet sheet = workbook.getSheet("Site Rollout Plan");
-            if (sheet==null){
-                sheet = workbook.getSheetAt(0);
-            }
-            String sheetName = sheet.getSheetName();
-            System.out.println("sheetName:::::::::::"+sheetName);
-            //获得当前sheet的开始行
-            int firstRowNum  = sheet.getFirstRowNum();
-            //获得当前sheet的结束行
-            int lastRowNum = sheet.getLastRowNum();
-            System.out.println("结束行:"+lastRowNum);
-            //循环除了第一行的所有行
-            for(int rowNum = firstRowNum;rowNum <= lastRowNum;rowNum++){
-                //获得当前行
-                Row row = sheet.getRow(rowNum);
-                Map<String, Object> map = new HashMap<String, Object>();
-                if(row == null){
-                    continue;
-                }
-                //获得当前行的开始列
-                int firstCellNum = row.getFirstCellNum();
-                //获得当前行的列数
-                //int lastCellNum = row.getLastCellNum();
-                int lastCellNum =128;
-//                System.out.println("开始列：："+firstCellNum);
-//                System.out.println("结束列：："+lastCellNum);
-                String[] cells = new String[row.getPhysicalNumberOfCells()];
-                //循环当前行
-                for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
-                    Cell cell = row.getCell(cellNum);
-                    String s = "";
-                    if(cell != null){
-                        //让日期类型转换成天数
-                        cell.setCellType(Cell.CELL_TYPE_STRING);
-                        s = cell.toString().trim();
-                    }
-                    //判断标题和数据
-                    if(rowNum==0){
-                        //标题(注意去空格)
-                        str[cellNum]=s;
-
-                    }else{
-                        map.put(str[cellNum],s);
-                    }
-                }
-                //写入数据
-                if(rowNum!=0){
-                    list.add(map);
-                }
-            }
-            try {
-                workbook.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return list;
-    }
-
+    //获取Work表
     public static Workbook getWorkBook(MultipartFile file) {
         //获得文件名
         String fileName = file.getOriginalFilename();
@@ -204,7 +128,7 @@ public class Utils {
         }
         return workbook;
     }
-
+    //转换日期Excel
     public static String importByExcelForDate(String value) {//value就是它的天数
         String currentCellValue = "";
         if(value != null && !value.equals("")){
@@ -216,8 +140,7 @@ public class Utils {
         }
         return currentCellValue;
     }
-
-
+    //写文档
     public static  void writeExcel(List<ResultMessage> rem,String name) {
         System.out.println("write Excel is comming");
         //第一步，创建一个workbook对应一个excel文件
@@ -273,11 +196,13 @@ public class Utils {
             e.printStackTrace();
         }
     }
+    //得到唯一标识代码
     public String getUUId(){
         String uuid = UUID.randomUUID().toString();   //转化为String对象
         uuid = uuid.replace("-", ""); //因为UUID本身为32位只是生成时多了“-”，所以将它们去点就可
         return uuid;
     }
+    //判断系统返回存储
     public static String getOS(){
         String save="F:\\test\\";
         String os = System.getProperty("os.name");

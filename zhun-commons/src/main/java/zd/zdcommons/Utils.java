@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -389,8 +390,9 @@ public class Utils {
         }
         return resultm;
     }
-    public static  void writeExcel(List<ResultMessage> rem,String name) {
 
+    public static  void writeExcel(List<ResultMessage> rem,String name) {
+        System.out.println("write Excel is comming");
         //第一步，创建一个workbook对应一个excel文件
         HSSFWorkbook workbook = new HSSFWorkbook();
         //第二部，在workbook中创建一个sheet对应excel中的sheet
@@ -432,9 +434,13 @@ public class Utils {
 
         //将文件保存到指定的位置
         try {
-            FileOutputStream fos = new FileOutputStream("F:\\test\\"+name+".xls");
+            String save=getOS();
+
+            System.out.println("save==="+save);
+            System.out.println("file save address::"+save+name+".xls");
+            FileOutputStream fos = new FileOutputStream(save+name+".xls");
             workbook.write(fos);
-            System.out.println("写入成功");
+            System.out.println("write is ok");
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -444,6 +450,15 @@ public class Utils {
         String uuid = UUID.randomUUID().toString();   //转化为String对象
         uuid = uuid.replace("-", ""); //因为UUID本身为32位只是生成时多了“-”，所以将它们去点就可
         return uuid;
+    }
+    public static String getOS(){
+        String save="F:\\test\\";
+        String os = System.getProperty("os.name");
+        if(!os.toLowerCase().startsWith("win")){
+            save="/opt/zhundaSave/";
+            System.out.println("There is Linux");
+        }
+        return save;
     }
 
 }

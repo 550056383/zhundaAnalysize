@@ -2,6 +2,7 @@ package zd.zdanalysis.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import zd.zdcommons.FactoryProducer;
 import zd.zdcommons.Utils;
@@ -18,6 +19,10 @@ import zd.zdcommons.read.ReadclockExcel;
 import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.serviceImp.ReadExcelImp;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -86,4 +91,21 @@ public class AnalysisService {
         pt.setILCount(iLCont);
         return pt;
     }
+    public String getDownload(HttpServletResponse response, @RequestParam("uid") String uid){
+        Utils utils = new Utils();
+        String fileName=uid+".xls";
+        try {
+            OutputStream outputStream = response.getOutputStream();
+            Boolean down = utils.getDownload(outputStream, fileName);
+            if(down){
+                response.setContentType("application/force-download");// 设置强制下载不打开
+                response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);// 设置文件名
+                return "文件下载完成";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "文件下载失败";
+    };
 }

@@ -212,5 +212,39 @@ public class Utils {
         }
         return save;
     }
-
+    //下载文件
+    public static Boolean getDownload(OutputStream os,String fileName){
+        String save = getOS();
+        File file = new File(save+fileName);
+        System.out.println();
+        if (file.exists()) {
+            System.out.println("文件存在");
+            //方大缓存读取
+            byte[] buffer = new byte[1000000];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    os.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+                System.out.println("导出读取完成");
+                return true;
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                try {
+                    bis.close();
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        System.out.println("导出文档不存在");
+        return false;
+    }
 }

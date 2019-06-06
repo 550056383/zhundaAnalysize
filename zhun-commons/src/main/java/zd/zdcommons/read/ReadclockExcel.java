@@ -20,11 +20,11 @@ public class ReadclockExcel implements ReadExcelImp {
 
     //打卡表头数组
     private static final String dakab[] = {"Num", "UserName", "Company", "Clock-time", "Distance", "Address", "Note",
-            "DUID","DU-name", "CustomersiteID", "Customersite-name", "Issite-punches", "Clock-type", "Up-downSite",
-            "Ismore-inclockSite", "Reason-moreSite", "Otherreason-moreSite", "Isdistance-abnormal", "Activity-name", "Province", "Delivery-area",
-            "Activity-streams", "Picture", "PassID", "Expiry-date", "Skill-level", "Site-number", "Facerecognition-results",
-            "Offline-abnormal", "Fence-scene",
-            "Facerecognition-pictureresults", "Custom-clock"};
+    "DUID","DU-name", "CustomersiteID", "Customersite-name", "Issite-punches", "Clock-type", "Up-downSite",
+     "Ismore-inclockSite", "Reason-moreSite", "Otherreason-moreSite", "Isdistance-abnormal", "Activity-name", "Province", "Delivery-area",
+     "Activity-streams", "Picture", "PassID", "Expiry-date", "Skill-level", "Site-number", "Facerecognition-results",
+     "Offline-abnormal", "Fence-scene",
+     "Facerecognition-pictureresults", "Custom-clock"};
     private final static String xls = "xls";
     private final static String xlsx = "xlsx";
 
@@ -42,7 +42,7 @@ public class ReadclockExcel implements ReadExcelImp {
         if(workbook != null){
 
             //获得当前sheet工作表
-            Sheet sheet = workbook.getSheet("Site Rollout Plan");
+            Sheet sheet = workbook.getSheet("打卡详情报表");
             if (sheet==null){
                 sheet = workbook.getSheetAt(0);
             }
@@ -54,7 +54,7 @@ public class ReadclockExcel implements ReadExcelImp {
             int lastRowNum = sheet.getLastRowNum();
             System.out.println("结束行:"+lastRowNum);
             //循环除了第一行的所有行
-            for(int rowNum = firstRowNum;rowNum <= lastRowNum;rowNum++){
+            for(int rowNum = 1;rowNum <= lastRowNum;rowNum++){
                 //获得当前行
                 Row row = sheet.getRow(rowNum);
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -67,7 +67,7 @@ public class ReadclockExcel implements ReadExcelImp {
                 int lastCellNum =32;
                 String[] cells = new String[row.getPhysicalNumberOfCells()];
                 //循环当前行
-                for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
+                for(int cellNum = 1; cellNum < lastCellNum;cellNum++){
                     Cell cell = row.getCell(cellNum);
                     String s = "";
                     if(cell != null){

@@ -1,5 +1,6 @@
 package zd.zdcommons.analysis;
 
+import zd.zdcommons.pojo.Message;
 import zd.zdcommons.pojo.ResultMessage;
 
 import java.util.ArrayList;
@@ -21,10 +22,10 @@ public class ClockAnalysis {
 
         //结果信息的实体类对象
         //为空======
-        ResultMessage rs = null;
-        //Listmessge
+        ResultMessage resultm = null;
+        Message message = null;
+        List<Message> meslist=new ArrayList<Message>();
         ArrayList<String> list = new ArrayList<String>();
-        list.add("未打卡");
         //记录count数即错误数
         long count=0;
 
@@ -39,15 +40,38 @@ public class ClockAnalysis {
             if((duid.equals(li.get("DUID").toString()))){ //表示打卡
                 return null;
             }
-
-            rs = new ResultMessage();
-            rs.setTError("准确性错误");
-            rs.setDUID(duid);
-            rs.setDUName(map.get("YD5-dUName").toString());
-            rs.setMessge(list);
-            rs.setDarea(map.get("YD5-area").toString());
-            rs.setXcount(count);
+            resultm = new ResultMessage();
+            resultm.setTError("准确性错误");
+            resultm.setDUID(duid);
+            resultm.setDUName(map.get("YD5-dUName").toString());
+            resultm.setDarea(map.get("YD5-area").toString());
+            resultm.setXcount(count);
+            //添加错误
+            message = get5G(message, list);
+            meslist.add(message);
+            resultm.setMessge(meslist);
         }
-        return rs;//表示打卡成功 返回空值
+        return resultm;//表示打卡成功 返回空值
+    }
+    private final static Message get5G(Message mes, List<String> list){
+        mes = new Message();
+        mes.setAction("G");
+        mes.setTitle("5G");
+        mes.setMessages(list);
+        return mes;
+    }
+    private final static Message get3DMIMO(Message mes,List<String> list){
+        mes = new Message();
+        mes.setAction("D");
+        mes.setTitle("3D-MIMO");
+        mes.setMessages(list);
+        return mes;
+    }
+    private final static Message get1800Anchor(Message mes,List<String> list){
+        mes = new Message();
+        mes.setAction("M");
+        mes.setTitle("锚点1800M");
+        mes.setMessages(list);
+        return mes;
     }
 }

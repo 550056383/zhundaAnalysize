@@ -10,7 +10,7 @@ public class ResultMessage {
     private String dUID;
     private String dUName;
     private String darea;
-    private List<String>messge;
+    private List<Message>messge;
     private Long xcount;
 
     @Override

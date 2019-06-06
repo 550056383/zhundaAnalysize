@@ -20,7 +20,7 @@ import zd.zdcommons.pojo.ResultMessage;
 
 public class Utils {
     //对应数组
-    public static final String[] yuan = {"Customer Site ID","Customer Site Name","DU ID",
+    private static final String[] yuan = {"Customer Site ID","Customer Site Name","DU ID",
             "DU Name","行政区域","Subcontractor","督导单位","Software Commissioning-Baseline Start Date",
             "Software Commissioning-Baseline End Date",
             "Software Commissioning-Plan Start Date","Software Commissioning-Plan End Date",
@@ -61,7 +61,7 @@ public class Utils {
             "FDD1800规划编号","FDD1800施工计划","锚点FDD1800问题分类","FDD1800是否规划","FDD1800到货日期",
             "FDD1800交优完成日期","FDD1800安装","FDD1800开通","FDD1800 NM NE ID","FDD1800网管基站名称"};
     //数组
-    public static String shu[] = {"YD5-customerSiteID","YD5-customerSiteName","YD5-dUID",
+    private static String shu[] = {"YD5-customerSiteID","YD5-customerSiteName","YD5-dUID",
             "YD5-dUName","YD5-area","YD5-Subcontractor","YD5-supervisionUnit","YD5-SC-baselineStartDate",
             "YD5-SC-baselineEndDate","YD5-SC-planStartDate","YD5-SC-planEndDate","YD5-SC-actualStartDate",
             "YD5-SC-actualEndDate","YD5-SC-owner","YD5-SC-approveState","YD5-SC-deliveryAttachmentRequired",
@@ -157,6 +157,8 @@ public class Utils {
         cell = row.createCell(3);
         cell.setCellValue("错误类型");
         cell = row.createCell(4);
+        cell.setCellValue("所属类型");
+        cell = row.createCell(5);
         cell.setCellValue("错误信息");
         System.out.println("回传多少数据"+rem.size());
 
@@ -164,9 +166,10 @@ public class Utils {
         //第五步，写入数据
         for(int i=0;i<rem.size();i++) {
             List<Message> mes = rem.get(i).getMessge();
-            for (int z=0;i<mes.size();i++){
+            for (int z=0;z<mes.size();z++){
                 //拿取错误类型5g，3D,1800瞄点
-                List<String> messages = mes.get(i).getMessages();
+                List<String> messages = mes.get(z).getMessages();
+
                 for (int j=0;j<messages.size();j++){
                     List<String> oneData=new ArrayList<String>();
                     //封装每一个属性
@@ -174,16 +177,21 @@ public class Utils {
                     oneData.add(rem.get(i).getDUName().toString());
                     oneData.add(rem.get(i).getDarea().toString());
                     oneData.add(rem.get(i).getTError().toString());
+                    oneData.add(mes.get(z).getTitle().toString());
                     oneData.add(messages.get(j));
                     //添加一行
                     HSSFRow row1 = sheet.createRow(cellsum + 1);
                     cellsum++;
                     for(int x=0;x<oneData.size();x++) {
+                        System.out.println("x======="+x);
                         //创建单元格设值
                         row1.createCell(x).setCellValue(oneData.get(x));
                     }
                 }
+
             }
+
+
         }
 
         //将文件保存到指定的位置

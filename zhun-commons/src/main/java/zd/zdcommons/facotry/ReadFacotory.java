@@ -2,6 +2,7 @@ package zd.zdcommons.facotry;
 
 import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
 import zd.zdcommons.read.ReadIntegrityExcel;
+import zd.zdcommons.read.ReadclockExcel;
 import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.serviceImp.ReadExcelImp;
 
@@ -14,9 +15,9 @@ public class ReadFacotory extends AnalysisAbstractFactory {
         if(excelname.equalsIgnoreCase("SHISHI")){
             System.out.println("创建SHISHI");
             return new ReadIntegrityExcel();
-        } else if(excelname.equalsIgnoreCase("daka")){
-            System.out.println("创建daka");
-            return new  ReadIntegrityExcel();
+        } else if(excelname.equalsIgnoreCase("DAKA")){
+            System.out.println("创建DAKA");
+            return new ReadclockExcel();
         }
         return null;
     }

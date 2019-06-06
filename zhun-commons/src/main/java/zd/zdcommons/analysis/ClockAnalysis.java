@@ -40,17 +40,18 @@ public class ClockAnalysis {
             if((duid.equals(li.get("DUID").toString()))){ //表示打卡
                 return null;
             }
+        }
             resultm = new ResultMessage();
             resultm.setTError("准确性错误");
             resultm.setDUID(duid);
             resultm.setDUName(map.get("YD5-dUName").toString());
             resultm.setDarea(map.get("YD5-area").toString());
             resultm.setXcount(count);
+            list.add(map.get("YD5-dUName").toString()+" --该站未打卡");
             //添加错误
             message = get5G(message, list);
             meslist.add(message);
             resultm.setMessge(meslist);
-        }
         return resultm;//表示打卡成功 返回空值
     }
     private final static Message get5G(Message mes, List<String> list){

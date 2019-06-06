@@ -155,8 +155,10 @@ public class Utils {
         cell = row.createCell(1);
         cell.setCellValue("duName");
         cell = row.createCell(2);
-        cell.setCellValue("错误类型");
+        cell.setCellValue("行政区域");
         cell = row.createCell(3);
+        cell.setCellValue("错误类型");
+        cell = row.createCell(4);
         cell.setCellValue("错误信息");
         System.out.println("回传多少数据"+rem.size());
 
@@ -169,6 +171,7 @@ public class Utils {
                 //封装每一个属性
                 oneData.add(rem.get(i).getDUID().toString());
                 oneData.add(rem.get(i).getDUName().toString());
+                oneData.add(rem.get(i).getDarea().toString());
                 oneData.add(rem.get(i).getTError().toString());
                 oneData.add(remlist.get(j));
                 HSSFRow row1 = sheet.createRow(cellsum + 1);

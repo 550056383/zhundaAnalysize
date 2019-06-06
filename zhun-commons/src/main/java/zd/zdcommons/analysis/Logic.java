@@ -43,7 +43,7 @@ public class Logic implements AnalysisImp {
         return resultm;
     }
 
-    private final static String [] logicStr={"YD5-RFI-actualEndDate","YD5-MOS-actualEndDate","YD5-IC-actualEndDate","YD5-SC-actualStartDate"};
+    private final static String [] logicStr={"YD5-RFI-actualEndDate","YD5-MOS-actualEndDate","YD5-IC-actualEndDate","YD5-SC-actualEndDate"};
     public static ResultMessage getIntegrityLogicAnalysize(Map<String, Object> resource){
         ResultMessage resultm = null;
         ArrayList<String> list = new ArrayList<String>();

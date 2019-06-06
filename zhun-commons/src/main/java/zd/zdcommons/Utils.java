@@ -22,7 +22,7 @@ import zd.zdcommons.pojo.ResultMessage;
 
 public class Utils {
     //对应数组
-    private static final String[] yuan = {"Customer Site ID","Customer Site Name","DU ID",
+    public static final String[] yuan = {"Customer Site ID","Customer Site Name","DU ID",
             "DU Name","行政区域","Subcontractor","督导单位","Software Commissioning-Baseline Start Date",
             "Software Commissioning-Baseline End Date",
             "Software Commissioning-Plan Start Date","Software Commissioning-Plan End Date",
@@ -63,7 +63,7 @@ public class Utils {
             "FDD1800规划编号","FDD1800施工计划","锚点FDD1800问题分类","FDD1800是否规划","FDD1800到货日期",
             "FDD1800交优完成日期","FDD1800安装","FDD1800开通","FDD1800 NM NE ID","FDD1800网管基站名称"};
     //数组
-    private static String shu[] = {"YD5-customerSiteID","YD5-customerSiteName","YD5-dUID",
+    public static String shu[] = {"YD5-customerSiteID","YD5-customerSiteName","YD5-dUID",
             "YD5-dUName","YD5-area","YD5-Subcontractor","YD5-supervisionUnit","YD5-SC-baselineStartDate",
             "YD5-SC-baselineEndDate","YD5-SC-planStartDate","YD5-SC-planEndDate","YD5-SC-actualStartDate",
             "YD5-SC-actualEndDate","YD5-SC-owner","YD5-SC-approveState","YD5-SC-deliveryAttachmentRequired",
@@ -71,7 +71,7 @@ public class Utils {
             "YD5-SC-delayReason","YD5-AAU-baselineStartDate","YD5-AAU-baselineEndDate","YD5-AAU-planStartDate",
             "YD5-AAU-planEndDate","YD5-AAU-actualStartDate","YD5-AAU-actualEndDate",
             "YD5-AAU-owner","YD5-AAU-approveState","YD5-AAU-deliveryAttachmentRequired",
-            "YD5-AAU-deliveryAttachmentUploaded","YD5-AAU-accumulation","YD5-AAU-delayReason",
+            "YD5-AAU-deliveryAttachmentUploaded","YD5-AAU-accumulation","YD5-AAU-remarks","YD5-AAU-delayReason",
             "YD5-residentialBroadband","YD5-transmissionEquipped","YD5-deliveryType","YD5-Nmneid",
             "YD5-nROPO","YD5-rruToneNumber","YD5-rruHardwareNumber","YD5-spectrum","YD5-nroServiceContract",
             "YD5-scenario","YD5-auuArrivalQuantity","YD5-problemClassification","YD5-RFI-baselineEndDate",
@@ -90,7 +90,7 @@ public class Utils {
             "YD5-productModel","YD5-contractConnection","YD5-remoteStationType","YD5-standard",
             "YD5-transmissionBandwidth","YD5-nroSubcontractor","YD5-standingType2",
             "MIMO-miMO3DDate","MIMO-miMO3DID","MIMO-miMO3DGoodsQuantity","MIMO-deliveryDate",
-            "MIMO-questionClassification","","MIMO-planningNumber","MIMO-installationDate","MIMO-completionDate",
+            "MIMO-questionClassification","MIMO-planningNumber","MIMO-installationDate","MIMO-completionDate",
             "MIMO-nmNEID","MIMO-openTypeStand","MIMO-openTypeStandTarget","MIMO-baseStationName","MIMO-transmissionBandwidthe4G",
             "MIMO-transmissionAvailable4G","M1800-deliveryDateFDD","M1800-programNumberFDD",
             "M1800-constructionPlanFDD","M1800-questionClassificationFDD","M1800-whetherPlanningFDD",

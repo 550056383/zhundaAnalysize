@@ -6,9 +6,6 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import zd.zdcommons.pojo.Message;
 import zd.zdcommons.pojo.ResultMessage;
 
 public class Utils {
@@ -165,22 +163,28 @@ public class Utils {
         int cellsum=0;
         //第五步，写入数据
         for(int i=0;i<rem.size();i++) {
-            List<String> remlist = rem.get(i).getMessge();
-            for (int j=0;j<remlist.size();j++){
-                List<String> oneData=new ArrayList<String>();
-                //封装每一个属性
-                oneData.add(rem.get(i).getDUID().toString());
-                oneData.add(rem.get(i).getDUName().toString());
-                oneData.add(rem.get(i).getDarea().toString());
-                oneData.add(rem.get(i).getTError().toString());
-                oneData.add(remlist.get(j));
-                HSSFRow row1 = sheet.createRow(cellsum + 1);
-                cellsum++;
-                for(int z=0;z<oneData.size();z++) {
-                    //创建单元格设值
-                    row1.createCell(z).setCellValue(oneData.get(z));
+            List<Message> mes = rem.get(i).getMessge();
+            for (int z=0;i<mes.size();i++){
+                //拿取错误类型5g，3D,1800瞄点
+                List<String> messages = mes.get(i).getMessages();
+                for (int j=0;j<messages.size();j++){
+                    List<String> oneData=new ArrayList<String>();
+                    //封装每一个属性
+                    oneData.add(rem.get(i).getDUID().toString());
+                    oneData.add(rem.get(i).getDUName().toString());
+                    oneData.add(rem.get(i).getDarea().toString());
+                    oneData.add(rem.get(i).getTError().toString());
+                    oneData.add(messages.get(j));
+                    //添加一行
+                    HSSFRow row1 = sheet.createRow(cellsum + 1);
+                    cellsum++;
+                    for(int x=0;x<oneData.size();x++) {
+                        //创建单元格设值
+                        row1.createCell(x).setCellValue(oneData.get(x));
+                    }
                 }
             }
+
 
 
         }

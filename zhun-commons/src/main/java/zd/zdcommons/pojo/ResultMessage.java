@@ -13,6 +13,7 @@ public class ResultMessage {
     private List<Message>messge;
     private Long xcount;
 
+
     @Override
     public String toString() {
         return "ResultMessage{" +

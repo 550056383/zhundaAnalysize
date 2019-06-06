@@ -23,26 +23,9 @@ import java.util.Map;
 
 @Service
 public class AnalysisService {
+
+
     public Pageto getAnalysis(MultipartFile shishi, MultipartFile daka) {
-
-        if(daka==null){
-            //表示打卡为空 调用实施文件的处理方法
-            Pageto pageto = manageShishi(shishi);
-            return pageto;
-        }
-        //否则表示打卡文件也存在 调用打卡方法
-        Pageto pageto = manageDaka(shishi, daka);
-        return pageto;
-    }
-
-
-    /**
-     * 处理打卡和实施的方法 此时打卡和实施文档都上传了
-     * @param shishi
-     * @param daka
-     * @return
-     */
-    public Pageto manageDaka(MultipartFile shishi, MultipartFile daka) {
         Utils utils = new Utils();
         //创建分析抽象工厂
         AnalysisFactory analysisFactory = (AnalysisFactory) FactoryProducer.getFactory("Analysisze");
@@ -50,15 +33,14 @@ public class AnalysisService {
         Complete complete = (Complete) analysisFactory.getAnalysis("Complete");
         //打开逻辑处理
         Logic logic = (Logic) analysisFactory.getAnalysis("Logic");
+        ClockAnalysis clock = new ClockAnalysis();
         //创建读取抽象工厂
         ReadFacotory readFactory = (ReadFacotory) FactoryProducer.getFactory("Read");
         ReadIntegrityExcel integrityExcel = (ReadIntegrityExcel) readFactory.getExcel("SHISHI");
+        ReadclockExcel readclockExcel = (ReadclockExcel) readFactory.getExcel("DAKA");
+
         List<Map<String, Object>> maps = integrityExcel.getExcel(shishi);
-        //针对打卡 2019/6/5 14.40 修改添加的
-        ReadclockExcel ddsd = new ReadclockExcel();
-        List<Map<String, Object>> dakamaps = ddsd.getExcel(daka);//打卡
-        ClockAnalysis clockAnalysis = new ClockAnalysis();//打卡的分析
-        //
+        List<Map<String, Object>> dakalist = readclockExcel.getExcel(daka);
         //获取原来标题
         Map<String, Object> titleMap = utils.getTitle();
         Pageto pt = new Pageto();
@@ -72,33 +54,30 @@ public class AnalysisService {
 
         //信息
         List<ResultMessage> reslist = new ArrayList<ResultMessage>();
-        for (Map t : maps) {
-            ResultMessage resultC = complete.getIntegrityAnalysis(t, titleMap);
-            //打卡得到的ResultMessage 2019/6/5 14.40添加的代码
-            //ArrayList<ResultMessage> clockfenxi = clockAnalysis.clockfenxi(t, dakamaps);
-            //
-            ResultMessage resultD = clockAnalysis.clockfenxi(t, dakamaps);
-            if (resultD != null) {//表示存在没有打卡信息
-                    iACount++;
-                    reslist.add(resultD);//添加打卡的相关
-            }
-            //
+        for (Map map : maps) {
+            ResultMessage resultC = complete.getIntegrityAnalysis(map, titleMap);
             if (resultC != null) {
                 iCCount++;
                 reslist.add(resultC);
                 //System.out.println(resultC);
             }
-            ResultMessage resultL = logic.getIntegrityAnalysis(t, titleMap);
+            ResultMessage resultL = logic.getIntegrityAnalysis(map, titleMap);
             if (resultL != null) {
                 iLCont++;
                 reslist.add(resultL);
                 //System.out.println(resultL);
             }
+            ResultMessage resultD = clock.clockfenxi(map, dakalist);
+            if (resultD != null) {
+                iACount++;
+                System.out.println("resultD====>"+resultD);
+                reslist.add(resultD);
+                //System.out.println(resultL);
+            }
         }
-        //final String uuId = "dsdsd";
+
         final String uuId = utils.getUUId();
 //       写入流
-        System.out.println("得到的集合" + reslist + "uuid" + uuId);
         utils.writeExcel(reslist, uuId);
         pt.setUId(uuId);
         pt.setResultms(reslist);
@@ -108,68 +87,7 @@ public class AnalysisService {
         return pt;
     }
 
-    /**
-     * 处理实施文件的方法 此方法只有实施文档上传 没有打卡
-     * @param shishi  上传的实施文档
-     */
-    public Pageto manageShishi(MultipartFile shishi){
-        Utils utils = new Utils();
-        //创建分析抽象工厂
-        AnalysisFactory analysisFactory = (AnalysisFactory) FactoryProducer.getFactory("Analysisze");
-        //打开完整性分析
-        Complete complete = (Complete) analysisFactory.getAnalysis("Complete");
-        //打开逻辑处理
-        Logic logic = (Logic) analysisFactory.getAnalysis("Logic");
-        //创建读取抽象工厂
-        ReadFacotory readFactory = (ReadFacotory) FactoryProducer.getFactory("Read");
-        ReadIntegrityExcel integrityExcel = (ReadIntegrityExcel) readFactory.getExcel("SHISHI");
-        List<Map<String, Object>> maps = integrityExcel.getExcel(shishi);
-
-        //获取原来标题
-        Map<String, Object> titleMap = utils.getTitle();
-        Pageto pt = new Pageto();
-
-        //完整性计数
-        long iCCount = 0;
-        //准确性计数
-        long iACount = 0;
-        //逻辑性计数
-        long iLCont = 0;
-
-        //信息
-        List<ResultMessage> reslist = new ArrayList<ResultMessage>();
-        for (Map t : maps) {
-            ResultMessage resultC = complete.getIntegrityAnalysis(t, titleMap);
-            if (resultC != null) {
-                iCCount++;
-                reslist.add(resultC);
-                //System.out.println(resultC);
-            }
-            ResultMessage resultL = logic.getIntegrityAnalysis(t, titleMap);
-            if (resultL != null) {
-                iLCont++;
-                reslist.add(resultL);
-                //System.out.println(resultL);
-            }
-            System.out.println("获取的东西" + reslist.get(0));
-        }
-        //final String uuId = "dsdsd";
-        final String uuId = utils.getUUId();
-        // 写入流
-        System.out.println("得到的集合" + reslist + "uuid" + uuId);
-        utils.writeExcel(reslist, uuId);
-        pt.setUId(uuId);
-        pt.setResultms(reslist);
-        pt.setIACount(iACount);
-        pt.setICCount(iCCount);
-        pt.setILCount(iLCont);
-        return pt;
-    }
-
-
-
-
-    public String getDownload(HttpServletResponse response, @RequestParam("uid") String uid) {
+    public String getDownload(HttpServletResponse response, String uid) {
         Utils utils = new Utils();
         String fileName = uid + ".xls";
         try {

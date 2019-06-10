@@ -1,6 +1,7 @@
 package zd.zdcommons;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -15,8 +16,19 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
+import zd.zdcommons.analysis.ClockAnalysis;
+import zd.zdcommons.analysis.Complete;
+import zd.zdcommons.analysis.Logic;
+import zd.zdcommons.facotry.AnalysisFactory;
+import zd.zdcommons.facotry.ReadFacotory;
 import zd.zdcommons.pojo.Message;
+import zd.zdcommons.pojo.Pageto;
 import zd.zdcommons.pojo.ResultMessage;
+import zd.zdcommons.read.ReadIntegrityExcel;
+import zd.zdcommons.read.ReadclockExcel;
+import zd.zdcommons.serviceImp.AnalysisImp;
+import zd.zdcommons.serviceImp.ReadExcelImp;
 
 public class Utils {
     //对应数组
@@ -96,7 +108,7 @@ public class Utils {
             "M1800-nmNEIDFDD","M1800-baseStationNameFDD"};
     private final static String xls = "xls";
     private final static String xlsx = "xlsx";
-//获得原标题
+    //获得原标题
     public Map<String,Object> getTitle(){
         HashMap<String, Object> titleMap = new HashMap<String, Object>();
         for (int i=0;i<shu.length;i++){
@@ -183,7 +195,6 @@ public class Utils {
                     HSSFRow row1 = sheet.createRow(cellsum + 1);
                     cellsum++;
                     for(int x=0;x<oneData.size();x++) {
-                        System.out.println("x======="+x);
                         //创建单元格设值
                         row1.createCell(x).setCellValue(oneData.get(x));
                     }
@@ -258,5 +269,70 @@ public class Utils {
         };
         System.out.println("导出文档不存在");
         return false;
+    }
+    //得到读取数据
+    public Map<String,List<Map<String, Object>>> getExcelResource(String[] strName,Map<String,MultipartFile> mapFile){
+        //判断是否传值
+        if(strName.length<1 || mapFile.isEmpty()){
+            return null;
+        }
+        HashMap<String, List<Map<String, Object>>> resourcemap = new HashMap<String, List<Map<String, Object>>>();
+        //创建读取抽象工厂
+        AnalysisAbstractFactory analysisAbstractFactory = FactoryProducer.getFactory("Read");
+        //动态读取
+        for (String name:strName){
+            ReadExcelImp readexcel = analysisAbstractFactory.getExcel(name);
+            List<Map<String, Object>> excel = readexcel.getExcel(mapFile.get(name));
+            resourcemap.put(name,excel);
+        }
+        return resourcemap;
+    }
+
+    //进行分析
+    public Pageto getPageto(Map<String,List<Map<String, Object>>> reeouce,long iCCount, long iACount, long iLCont){
+        //创建页面返回结果
+        Pageto pt = new Pageto();
+        //创建返回结果
+        List<ResultMessage> reslist = new ArrayList<ResultMessage>();
+        //创建读取抽象工厂
+        AnalysisAbstractFactory analysisFactory = FactoryProducer.getFactory("Analysisze");
+        //动态实施分析
+        if(reeouce.get("SHISHI")!=null){
+            AnalysisImp complete = analysisFactory.getAnalysis("Complete");
+            AnalysisImp logic = analysisFactory.getAnalysis("Logic");
+            for (Map map:reeouce.get("SHISHI")){
+                ResultMessage resultC = complete.getIntegrityAnalysis(map, getTitle());
+                if (resultC != null) {
+                    iCCount++;
+                    reslist.add(resultC);
+                }
+                ResultMessage resultL = logic.getIntegrityAnalysis(map,getTitle());
+                if (resultL != null) {
+                    iLCont++;
+                    reslist.add(resultL);
+                }
+                //判断是否打卡开启
+                if(reeouce.get("DAKA")!=null){
+                    ResultMessage resultD = analysisFactory.getAnalysis("DAKA").getIntegrityAnalysis(map,reeouce.get("DAKA"));
+                    if (resultD != null) {
+                        iACount++;
+                        reslist.add(resultD);
+                        //System.out.println(resultL);
+                    }
+                }
+            }
+        }
+        final String uuId = getUUId();
+//       写入流
+        writeExcel(reslist, uuId);
+        pt.setUId(uuId);
+        pt.setResultms(reslist);
+        pt.setIACount(iACount);
+        pt.setICCount(iCCount);
+        pt.setILCount(iLCont);
+        return pt;
+    }
+    public Pageto getAnalysis() {
+        return null;
     }
 }

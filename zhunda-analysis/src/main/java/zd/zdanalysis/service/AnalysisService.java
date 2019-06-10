@@ -69,7 +69,6 @@ public class AnalysisService {
             ResultMessage resultD = clock.clockfenxi(map, dakalist);
             if (resultD != null) {
                 iACount++;
-                System.out.println("resultD====>"+resultD);
                 reslist.add(resultD);
                 //System.out.println(resultL);
             }

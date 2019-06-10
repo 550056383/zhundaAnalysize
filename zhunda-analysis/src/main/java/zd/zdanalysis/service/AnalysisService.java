@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,67 +28,15 @@ public class AnalysisService {
 
     public Pageto getAnalysis(MultipartFile shishi, MultipartFile daka) {
         Utils utils = new Utils();
-
-        //创建分析抽象工厂
-        AnalysisFactory analysisFactory = (AnalysisFactory) FactoryProducer.getFactory("Analysisze");
-        //创建读取抽象工厂
-        ReadFacotory readFactory = (ReadFacotory) FactoryProducer.getFactory("Read");
-        ReadIntegrityExcel integrityExcel = (ReadIntegrityExcel) readFactory.getExcel("SHISHI");
-        ReadclockExcel readclockExcel = (ReadclockExcel) readFactory.getExcel("DAKA");
-        //读取文档
-        List<Map<String, Object>> maps = integrityExcel.getExcel(shishi);
-        List<Map<String, Object>> dakalist = readclockExcel.getExcel(daka);
-        //打开完整性分析
-        Complete complete = (Complete) analysisFactory.getAnalysis("Complete");
-        //打开逻辑处理
-        Logic logic = (Logic) analysisFactory.getAnalysis("Logic");
-        //打卡打卡处理
-        ClockAnalysis clock =(ClockAnalysis) analysisFactory.getAnalysis("DAKA");
-        //ClockAnalysis clock = new ClockAnalysis();
-
-        //获取原来标题
-        Map<String, Object> titleMap = utils.getTitle();
-        Pageto pt = new Pageto();
-
-        //完整性计数
-        long iCCount = 0;
-        //准确性计数
-        long iACount = 0;
-        //逻辑性计数
-        long iLCont = 0;
-
-        //信息
-        List<ResultMessage> reslist = new ArrayList<ResultMessage>();
-        for (Map map : maps) {
-            ResultMessage resultC = complete.getIntegrityAnalysis(map, titleMap);
-            if (resultC != null) {
-                iCCount++;
-                reslist.add(resultC);
-                //System.out.println(resultC);
-            }
-            ResultMessage resultL = logic.getIntegrityAnalysis(map, titleMap);
-            if (resultL != null) {
-                iLCont++;
-                reslist.add(resultL);
-                //System.out.println(resultL);
-            }
-            ResultMessage resultD = clock.getIntegrityAnalysis(map, dakalist);
-            if (resultD != null) {
-                iACount++;
-                reslist.add(resultD);
-                //System.out.println(resultL);
-            }
-        }
-
-        final String uuId = utils.getUUId();
-//       写入流
-        utils.writeExcel(reslist, uuId);
-        pt.setUId(uuId);
-        pt.setResultms(reslist);
-        pt.setIACount(iACount);
-        pt.setICCount(iCCount);
-        pt.setILCount(iLCont);
-        return pt;
+        Map<String, MultipartFile> mapfile = new HashMap<String, MultipartFile>();
+        mapfile.put("SHISHI",shishi);
+        mapfile.put("DAKA",daka);
+        String strName[]={"SHISHI","DAKA"};
+        //读取数据
+        Map<String, List<Map<String, Object>>> excelResource = utils.getExcelResource(strName, mapfile);
+        //输出数据
+        Pageto pageto = utils.getPageto(excelResource);
+        return pageto;
     }
 
     public String getDownload(HttpServletResponse response, String uid) {

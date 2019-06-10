@@ -71,7 +71,7 @@ public class AnalysisService {
                 reslist.add(resultL);
                 //System.out.println(resultL);
             }
-            ResultMessage resultD = clock.clockfenxi(map, dakalist);
+            ResultMessage resultD = clock.getIntegrityAnalysis(map, dakalist);
             if (resultD != null) {
                 iACount++;
                 reslist.add(resultD);

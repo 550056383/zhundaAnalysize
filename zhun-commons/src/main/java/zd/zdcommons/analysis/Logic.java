@@ -11,6 +11,11 @@ import static zd.zdcommons.Utils.importByExcelForDate;
 
 public class Logic implements AnalysisImp {
     @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis) {
+        return null;
+    }
+
+    @Override
     public ResultMessage getIntegrityAnalysis(Map<String, Object> resource,Map<String,Object> titleMap) {
         ResultMessage resultm = null;
         Message message = null;

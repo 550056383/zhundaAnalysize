@@ -1,6 +1,7 @@
 package zd.zdcommons.facotry;
 
 import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
+import zd.zdcommons.analysis.ClockAnalysis;
 import zd.zdcommons.analysis.Complete;
 import zd.zdcommons.analysis.Logic;
 import zd.zdcommons.serviceImp.AnalysisImp;
@@ -18,6 +19,9 @@ public class AnalysisFactory extends AnalysisAbstractFactory {
         } else if(analysis.equalsIgnoreCase("Logic")){
             System.out.println("创建Logic");
             return new Logic();
+        }else if(analysis.equalsIgnoreCase("DAKA")){
+            System.out.println("创建DAKA");
+            return new ClockAnalysis();
         }
         return null;
     }

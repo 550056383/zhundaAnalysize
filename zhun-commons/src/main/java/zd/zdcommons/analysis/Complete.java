@@ -11,6 +11,11 @@ import java.util.Map;
 
 public class Complete implements AnalysisImp {
     @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis) {
+        return null;
+    }
+
+    @Override
     public ResultMessage getIntegrityAnalysis(Map<String, Object> resource,Map<String,Object> titleMap) {
         //结果信息的实体类
         ResultMessage resultm = null;
@@ -223,38 +228,36 @@ public class Complete implements AnalysisImp {
     //第一个规则所需要判断的字段
     private static final String[] duidstr = {"YD5-dUID","YD5-customerSiteID","YD5-customerSiteName",
             "YD5-dUName","YD5-area","YD5-Subcontractor","YD5-spectrum","YD5-nroServiceContract",
-            "YD5-scenario","YD5-standingType","YD5-engineeringServiceMode",
-            //2019/6/10检查之后对这个字段添加了一个YD5-deliveryRegion和其他几个字段
-            "YD5-contractConnection","YD5-standingType2","YD5-standard","YD5-deliveryRegion"};
+            "YD5-scenario","YD5-scenario","YD5-standingType","YD5-engineeringServiceMode",
+            "YD5-contractConnection","YD5-standingType2","YD5-standard"};
     //第二个规则所需的字段
-    private static final String[] icad = {"YD5-RFI-actualEndDate","YD5-MOS-actualEndDate","YD5-productModel",
+    private static final String[] icad = {"YD5-MOS-actualEndDate","YD5-productModel",
             "YD5-remoteStationType","YD5-planningNumber","YD5-tianmianTransformation","YD5-dcFuse",
             "YD5-acInduction","YD5-design","YD5-rruHardwareNumber","YD5-IC-actualEndDate"};
     //第三个规则所需字段
     private static final String[] aau = {"YD5-IC-actualEndDate","YD5-deliveryType",
             "YD5-nROPO","YD5-rruToneNumber","YD5-residentialBroadband","YD5-transmissionEquipped",
-            "YD5-bbuESN","YD5-bbuSiteID","YD5-bbuSiteName","YD5-rruScenario","YD5-nmNEName","YD5-rruSiteID",
-            "YD5-rruSiteName","YD5-rruScenario","YD5-transmissionBandwidth",
-           "YD5-nroSubcontractor","YD5-AAU-actualEndDate"};//2019/6/10检查之后对这个字段添加了D5-AAU-actualEndDate
+            "YD5-bbuESN","YD5-bbuSiteID","YD5-bbuSiteName","YD5-rruScenario",
+            "YD5-transmissionBandwidth","YD5-nroSubcontractor"};
     //第四个规则所需字段
-    private static final String[] fiveg = {"YD5-completionDate","YD5-AAU-actualEndDate","YD5-receptionDate"};
+    private static final String[] fiveg = {"YD5-completionDate","YD5-AAU-actualEndDate"};
     //第六个规则所需字段
     private static final String[] fddanzhang = {"MIMO-transmissionAvailable4G","M1800-programNumberFDD",
             "M1800-constructionPlanFDD","M1800-whetherPlanningFDD","M1800-nmNEIDFDD","M1800-arrivalDateFDD",
             "M1800-installationFDD"};
     //第七个规则所需字段
     private static final String[] fddkt = {"M1800-installationFDD","M1800-baseStationNameFDD",
-            "MIMO-transmissionBandwidthe4G","M1800-openedFDD"};
+            "MIMO-transmissionBandwidthe4G"};
     //第八个规则所需字段
-    private static final String[] fddjy = {"M1800-openedFDD","M1800-deliveryCompletionDateFFD","YD5-receptionDate"};
+    private static final String[] fddjy = {"M1800-openedFDD","M1800-deliveryCompletionDateFFD"};
     //第十个规则所需字段
     private static final String[] mimoaz = {"MIMO-miMO3DID","MIMO-planningNumber",
-            "MIMO-nmNEID","MIMO-openTypeStandTarget","MIMO-openTypeStand","MIMO-miMO3DGoodsQuantity","MIMO-installationDate"};
+            "MIMO-nmNEID","MIMO-openTypeStandTarget","MIMO-openTypeStand","MIMO-miMO3DGoodsQuantity"};
     //第十一个规则
     private static final String[] mimoawc = {"MIMO-installationDate",
-            "MIMO-transmissionBandwidthe4G","MIMO-baseStationName","MIMO-completionDate"};
+            "MIMO-transmissionBandwidthe4G","MIMO-baseStationName"};
     //第十二个规则
-    private static final String[] mimojy = {"MIMO-completionDate","MIMO-deliveryDate","MIMO-miMO3DDate"};
+    private static final String[] mimojy = {"MIMO-completionDate","MIMO-miMO3DDate"};
 
     /**
      * 得到错误信息和出错次数的方法

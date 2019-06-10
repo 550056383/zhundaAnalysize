@@ -2,6 +2,7 @@ package zd.zdcommons.analysis;
 
 import zd.zdcommons.pojo.Message;
 import zd.zdcommons.pojo.ResultMessage;
+import zd.zdcommons.serviceImp.AnalysisImp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,17 +12,14 @@ import java.util.Set;
 /**
  * 打卡分析的类
  */
-public class ClockAnalysis {
+public class ClockAnalysis implements AnalysisImp {
+    @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> resource, Map<String, Object> titleMap) {
+        return null;
+    }
 
-    /**
-     *
-     * @param map 实施的一条数据
-     * @param lis 打卡的数据表
-     */
-    public ResultMessage clockfenxi(Map<String, Object> map,List<Map<String, Object>> lis){
-
-        //结果信息的实体类对象
-        //为空======
+    @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis) {
         ResultMessage resultm = null;
         Message message = null;
         List<Message> meslist=new ArrayList<Message>();
@@ -41,19 +39,20 @@ public class ClockAnalysis {
                 return null;
             }
         }
-            resultm = new ResultMessage();
-            resultm.setTError("准确性错误");
-            resultm.setDUID(duid);
-            resultm.setDUName(map.get("YD5-dUName").toString());
-            resultm.setDarea(map.get("YD5-area").toString());
-            resultm.setXcount(count);
-            list.add(map.get("YD5-dUName").toString()+" --该站未打卡");
-            //添加错误
-            message = get5G(message, list);
-            meslist.add(message);
-            resultm.setMessge(meslist);
+        resultm = new ResultMessage();
+        resultm.setTError("准确性错误");
+        resultm.setDUID(duid);
+        resultm.setDUName(map.get("YD5-dUName").toString());
+        resultm.setDarea(map.get("YD5-area").toString());
+        resultm.setXcount(count);
+        list.add(map.get("YD5-dUName").toString()+" --该站未打卡");
+        //添加错误
+        message = get5G(message, list);
+        meslist.add(message);
+        resultm.setMessge(meslist);
         return resultm;//表示打卡成功 返回空值
     }
+
     private final static Message get5G(Message mes, List<String> list){
         mes = new Message();
         mes.setAction("G");

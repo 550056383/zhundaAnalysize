@@ -38,7 +38,6 @@ public class AnalysisService {
         ReadFacotory readFactory = (ReadFacotory) FactoryProducer.getFactory("Read");
         ReadIntegrityExcel integrityExcel = (ReadIntegrityExcel) readFactory.getExcel("SHISHI");
         ReadclockExcel readclockExcel = (ReadclockExcel) readFactory.getExcel("DAKA");
-
         List<Map<String, Object>> maps = integrityExcel.getExcel(shishi);
         List<Map<String, Object>> dakalist = readclockExcel.getExcel(daka);
         //获取原来标题

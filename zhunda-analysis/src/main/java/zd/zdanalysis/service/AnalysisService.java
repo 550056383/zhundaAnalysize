@@ -27,19 +27,24 @@ public class AnalysisService {
 
     public Pageto getAnalysis(MultipartFile shishi, MultipartFile daka) {
         Utils utils = new Utils();
+
         //创建分析抽象工厂
         AnalysisFactory analysisFactory = (AnalysisFactory) FactoryProducer.getFactory("Analysisze");
-        //打开完整性分析
-        Complete complete = (Complete) analysisFactory.getAnalysis("Complete");
-        //打开逻辑处理
-        Logic logic = (Logic) analysisFactory.getAnalysis("Logic");
-        ClockAnalysis clock = new ClockAnalysis();
         //创建读取抽象工厂
         ReadFacotory readFactory = (ReadFacotory) FactoryProducer.getFactory("Read");
         ReadIntegrityExcel integrityExcel = (ReadIntegrityExcel) readFactory.getExcel("SHISHI");
         ReadclockExcel readclockExcel = (ReadclockExcel) readFactory.getExcel("DAKA");
+        //读取文档
         List<Map<String, Object>> maps = integrityExcel.getExcel(shishi);
         List<Map<String, Object>> dakalist = readclockExcel.getExcel(daka);
+        //打开完整性分析
+        Complete complete = (Complete) analysisFactory.getAnalysis("Complete");
+        //打开逻辑处理
+        Logic logic = (Logic) analysisFactory.getAnalysis("Logic");
+        //打卡打卡处理
+        ClockAnalysis clock =(ClockAnalysis) analysisFactory.getAnalysis("DAKA");
+        //ClockAnalysis clock = new ClockAnalysis();
+
         //获取原来标题
         Map<String, Object> titleMap = utils.getTitle();
         Pageto pt = new Pageto();

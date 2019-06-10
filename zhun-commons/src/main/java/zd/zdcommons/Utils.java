@@ -17,16 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
-import zd.zdcommons.analysis.ClockAnalysis;
-import zd.zdcommons.analysis.Complete;
-import zd.zdcommons.analysis.Logic;
-import zd.zdcommons.facotry.AnalysisFactory;
-import zd.zdcommons.facotry.ReadFacotory;
 import zd.zdcommons.pojo.Message;
 import zd.zdcommons.pojo.Pageto;
 import zd.zdcommons.pojo.ResultMessage;
-import zd.zdcommons.read.ReadIntegrityExcel;
-import zd.zdcommons.read.ReadclockExcel;
+
 import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.serviceImp.ReadExcelImp;
 
@@ -289,9 +283,15 @@ public class Utils {
     }
 
     //进行分析
-    public Pageto getPageto(Map<String,List<Map<String, Object>>> reeouce,long iCCount, long iACount, long iLCont){
+    public Pageto getPageto(Map<String,List<Map<String, Object>>> reeouce){
         //创建页面返回结果
         Pageto pt = new Pageto();
+        //完整性计数
+        long iCCount = 0;
+        //准确性计数
+        long iACount = 0;
+        //逻辑性计数
+        long iLCont = 0;
         //创建返回结果
         List<ResultMessage> reslist = new ArrayList<ResultMessage>();
         //创建读取抽象工厂
@@ -331,8 +331,5 @@ public class Utils {
         pt.setICCount(iCCount);
         pt.setILCount(iLCont);
         return pt;
-    }
-    public Pageto getAnalysis() {
-        return null;
     }
 }

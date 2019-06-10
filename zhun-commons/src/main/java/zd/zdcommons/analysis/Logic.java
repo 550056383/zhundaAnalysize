@@ -1,13 +1,14 @@
 package zd.zdcommons.analysis;
 
+
 import org.apache.commons.lang3.StringUtils;
+import zd.zdcommons.Utils;
 import zd.zdcommons.pojo.Message;
 import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.pojo.ResultMessage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import static zd.zdcommons.Utils.importByExcelForDate;
 
 public class Logic implements AnalysisImp {
     @Override
@@ -17,6 +18,7 @@ public class Logic implements AnalysisImp {
 
     @Override
     public ResultMessage getIntegrityAnalysis(Map<String, Object> resource,Map<String,Object> titleMap) {
+        Utils utils = new Utils();
         ResultMessage resultm = null;
         Message message = null;
         List<Message> meslist=new ArrayList<Message>();
@@ -40,9 +42,9 @@ public class Logic implements AnalysisImp {
         for (int i=0;i<logicStr.length-1;i++){
 
             int qian = Integer.parseInt(resource.get(logicStr[i]).toString());
-            String qianTime = importByExcelForDate(resource.get(logicStr[i]).toString());
+            String qianTime = utils.importByExcelForDate(resource.get(logicStr[i]).toString());
             int hou = Integer.parseInt(resource.get(logicStr[i+1]).toString());
-            String houTime = importByExcelForDate(resource.get(logicStr[i+1]).toString());
+            String houTime = utils.importByExcelForDate(resource.get(logicStr[i+1]).toString());
             if(qian<hou){
                 list.add(titleMap.get(logicStr[i])+": "+qianTime+"  | 大于 |"+titleMap.get(logicStr[i+1])+"："+houTime);
             }

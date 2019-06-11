@@ -77,15 +77,7 @@ public class ReadIntegrityExcel implements ReadExcelImp {
                         //让日期类型转换成天数
                         cell.setCellType(Cell.CELL_TYPE_STRING);
                         s = cell.toString().trim();
-                    }else {
-                        System.out.println("进来cell 空 ，在"+shu[cellNum]+"--当前下标"+cellNum);
                     }
-                    if (s.equals("宏站")){
-                        System.out.println("shu=="+shu[cellNum]);
-                    }
-//                    if(shu[cellNum].equals("YD5-scenario")){
-//                        System.out.println("场景=="+s);
-//                    }
                     map.put(shu[cellNum],s);
                 }
                 list.add(map);

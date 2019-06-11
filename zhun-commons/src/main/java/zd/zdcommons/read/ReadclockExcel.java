@@ -73,9 +73,7 @@ public class ReadclockExcel implements ReadExcelImp {
                     String s = "";
                     if(cell != null){
                         //让日期类型转换成天数
-                        System.out.println("输出：1："+cell);
                         cell.setCellType(Cell.CELL_TYPE_STRING);
-                        System.out.println("输出：2："+cell);
                         s = cell.toString().trim();
 
                     }

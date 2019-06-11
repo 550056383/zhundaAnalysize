@@ -45,7 +45,7 @@ public class Logic implements AnalysisImp {
             String qianTime = utils.importByExcelForDate(resource.get(logicStr[i]).toString());
             int hou = Integer.parseInt(resource.get(logicStr[i+1]).toString());
             String houTime = utils.importByExcelForDate(resource.get(logicStr[i+1]).toString());
-            if(qian<hou){
+            if(qian>hou){
                 list.add(titleMap.get(logicStr[i])+": "+qianTime+"  | 大于 |"+titleMap.get(logicStr[i+1])+"："+houTime);
             }
         }

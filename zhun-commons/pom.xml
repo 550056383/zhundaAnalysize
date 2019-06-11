@@ -19,6 +19,7 @@
                 <configuration>
                     <source>6</source>
                     <target>6</target>
+                    <encoding>utf8</encoding>
                 </configuration>
             </plugin>
         </plugins>

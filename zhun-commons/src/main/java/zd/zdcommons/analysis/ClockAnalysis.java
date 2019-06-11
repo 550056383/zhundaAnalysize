@@ -7,7 +7,6 @@ import zd.zdcommons.serviceImp.AnalysisImp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 打卡分析的类
@@ -30,8 +29,9 @@ public class ClockAnalysis implements AnalysisImp {
         if(lis.size()<1){
             ResultMessage r = new ResultMessage();
             r.setTError("表型错误");
+            count++;
+            r.setXcount(count);//添加一个计数
             return r;
-
         }
         String duid = (String) map.get("YD5-dUID");
         for (Map<String, Object> li : lis) {
@@ -44,6 +44,7 @@ public class ClockAnalysis implements AnalysisImp {
         resultm.setDUID(duid);
         resultm.setDUName(map.get("YD5-dUName").toString());
         resultm.setDarea(map.get("YD5-area").toString());
+        count++;//添加一个计数
         resultm.setXcount(count);
         list.add(map.get("YD5-dUName").toString()+" --该站未打卡");
         //添加错误

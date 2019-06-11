@@ -37,6 +37,7 @@ public class ReadclockExcel implements ReadExcelImp {
 //        checkFile(file);
         //获得Workbook工作薄对象
         Workbook workbook = getWorkBook(file);
+        System.out.println("获取的对象----"+workbook);
         //创建返回对象，把每行中的值作为一个数组，所有行作为一个集合返回
 
         if(workbook != null){
@@ -44,6 +45,7 @@ public class ReadclockExcel implements ReadExcelImp {
             //获得当前sheet工作表
             Sheet sheet = workbook.getSheet("打卡详情报表");
             if (sheet==null){
+                System.out.println("是否获取这里");
                 sheet = workbook.getSheetAt(0);
             }
             String sheetName = sheet.getSheetName();
@@ -52,9 +54,8 @@ public class ReadclockExcel implements ReadExcelImp {
             int firstRowNum  = sheet.getFirstRowNum();
             //获得当前sheet的结束行
             int lastRowNum = sheet.getLastRowNum();
-            System.out.println("结束行:"+lastRowNum);
             //循环除了第一行的所有行
-            for(int rowNum = 1;rowNum <= lastRowNum;rowNum++){
+            for(int rowNum = 2;rowNum <= lastRowNum;rowNum++){
                 //获得当前行
                 Row row = sheet.getRow(rowNum);
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -67,13 +68,16 @@ public class ReadclockExcel implements ReadExcelImp {
                 int lastCellNum =32;
                 String[] cells = new String[row.getPhysicalNumberOfCells()];
                 //循环当前行
-                for(int cellNum = 1; cellNum < lastCellNum;cellNum++){
+                for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
                     Cell cell = row.getCell(cellNum);
                     String s = "";
                     if(cell != null){
                         //让日期类型转换成天数
+                        System.out.println("输出：1："+cell);
                         cell.setCellType(Cell.CELL_TYPE_STRING);
+                        System.out.println("输出：2："+cell);
                         s = cell.toString().trim();
+
                     }
                     map.put(dakab[cellNum],s);
                 }

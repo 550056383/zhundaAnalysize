@@ -98,7 +98,7 @@ public class ApplicationTest {
             r=new ResultMessage();
             r.setDUID(resource.get("YD5-dUID").toString());
             r.setDUName(resource.get("YD5-dUName").toString());
-            r.setMessge(list);
+          //  r.setMessge(list);
         }
         return r;
     }
@@ -346,7 +346,7 @@ public class ApplicationTest {
             resultm.setTError("完整性错误");
             resultm.setDUID(resource.get("YD5-dUID").toString());
             resultm.setDUName(resource.get("YD5-dUName").toString());
-            resultm.setMessge(list);
+            //resultm.setMessge(list);
             resultm.setXcount(count);
             return resultm;
         }
@@ -373,7 +373,7 @@ public class ApplicationTest {
             resultm.setTError("完整性错误");
             resultm.setDUID(resource.get("YD5-dUID").toString());
             resultm.setDUName(resource.get("YD5-dUName").toString());
-            resultm.setMessge(list);
+           // resultm.setMessge(list);
             resultm.setXcount(count);
         }
         return resultm;

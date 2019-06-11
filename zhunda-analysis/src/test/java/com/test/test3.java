@@ -47,10 +47,10 @@ public abstract class test3 {
 
         Map<String, Object> map = excel.get(0);//实施的一条数据
         ClockAnalysis clockAnalysis = new ClockAnalysis();
-        ResultMessage res = clockAnalysis.clockfenxi(map, excel);
+       // ResultMessage res = clockAnalysis.clockfenxi(map, excel);
 
 
-        System.out.println("获取的最终结果"+res);
+       // System.out.println("获取的最终结果"+res);
 
 
     }

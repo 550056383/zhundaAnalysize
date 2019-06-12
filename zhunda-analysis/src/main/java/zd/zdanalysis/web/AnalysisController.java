@@ -21,16 +21,17 @@ import java.util.Map;
 public class AnalysisController {
     @Autowired
     private AnalysisService analysisService;
-    Map<String, MultipartFile> map = new HashMap<String, MultipartFile>();//用来存放文件的集合
 
     @PostMapping
     public  ResponseEntity<Pageto> getAnalysis(@RequestParam("shishi") MultipartFile shishi, @RequestParam("daka") MultipartFile daka) {
+        Map<String, MultipartFile> map = new HashMap<String, MultipartFile>();
         map.put("SHISHI",shishi);
         map.put("DAKA",daka);
         return ResponseEntity.ok(analysisService.getAnalysis(map));
     };
     @PutMapping
     public  ResponseEntity<Pageto> getAnalysis(@RequestParam("shishi") MultipartFile shishi) {
+        Map<String, MultipartFile> map = new HashMap<String, MultipartFile>();
         map.put("SHISHI",shishi);
         return ResponseEntity.ok(analysisService.getAnalysis(map));
     };

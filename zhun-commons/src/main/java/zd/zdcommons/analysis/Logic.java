@@ -35,6 +35,7 @@ public class Logic implements AnalysisImp {
             String mes = resource.get(logicStr[i]).toString();
             if (lot){
                 if (StringUtils.isBlank(mes)||mes.equals("N/A")){
+                    count++;
                     list.add(titleMap.get(logicStr[i])+"为空");
                 }
             }
@@ -45,14 +46,7 @@ public class Logic implements AnalysisImp {
                 }
             }
         }
-//        for (String str :logicStr){
-//            String mes = resource.get(str).toString();
-//            if(StringUtils.isBlank(mes)||mes.equals("N/A")){
-//                list.add(titleMap.get(str)+"为空");
-//            }
-//        }
         if(list.size()>0){
-
             message = get5G(message, list);
             meslist.add(message);
             resultm=getMessge(resultm,resource,meslist,count);
@@ -68,6 +62,7 @@ public class Logic implements AnalysisImp {
             int hou = Integer.parseInt(resource.get(logicStr[i]).toString());
             String houTime = utils.importByExcelForDate(resource.get(logicStr[i]).toString());
             if(qian>hou){
+                count++;
                 list.add(titleMap.get(logicStr[i])+": "+qianTime+"  | 大于 |"+titleMap.get(logicStr[i+1])+"："+houTime);
             }
         }

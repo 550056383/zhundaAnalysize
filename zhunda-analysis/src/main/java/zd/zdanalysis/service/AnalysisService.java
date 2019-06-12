@@ -26,14 +26,21 @@ import java.util.Map;
 public class AnalysisService {
 
 
-    public Pageto getAnalysis(MultipartFile shishi, MultipartFile daka) {
+    public Pageto getAnalysis(Map<String,MultipartFile> mapfile) {
         Utils utils = new Utils();
-        Map<String, MultipartFile> mapfile = new HashMap<String, MultipartFile>();
-        mapfile.put("SHISHI",shishi);
-        mapfile.put("DAKA",daka);
-        String strName[]={"SHISHI","DAKA"};
+        //String strName[]={};
+        String strName="";
+        if(mapfile.get("SHISHI")!=null){
+            //strName=new String[]{"SHISHI"};
+            strName="SHISHI";
+        }
+        if(mapfile.get("DAKA")!=null){
+            //strName=new String[]{"SHISHI","DAKA"};
+            strName="SHISHI,DAKA";
+        }
+        String[] split = strName.split(",");
         //读取数据
-        Map<String, List<Map<String, Object>>> excelResource = utils.getExcelResource(strName, mapfile);
+        Map<String, List<Map<String, Object>>> excelResource = utils.getExcelResource(split, mapfile);
         //输出数据
         Pageto pageto = utils.getPageto(excelResource);
         return pageto;

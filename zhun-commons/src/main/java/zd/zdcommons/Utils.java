@@ -281,6 +281,7 @@ public class Utils {
             }
             for (Map map:reeouce.get("SHISHI")){
                 ResultMessage resultC = complete.getIntegrityAnalysis(map, getTitle());
+                System.out.println("是否遍历实施");
                 if (resultC != null) {
                     iCCount++;
                     reslist.add(resultC);

@@ -45,6 +45,12 @@ public class Test2 {
 
         System.out.println("yuan ==="+shu[42]);
     }
+    @Test
+    public void test02(){
+        String s = "SHISHI,DAKA";
+        char[] chars = s.toCharArray();
+        System.out.println("数组------"+chars);
+    }
     public static List<Map<String,Object>> readExcelV2(MultipartFile file) throws IOException {
         //创建类型接受
         ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();

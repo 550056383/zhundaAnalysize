@@ -46,12 +46,6 @@ public class Logic implements AnalysisImp {
                 }
             }
         }
-//        for (String str :logicStr){
-//            String mes = resource.get(str).toString();
-//            if(StringUtils.isBlank(mes)||mes.equals("N/A")){
-//                list.add(titleMap.get(str)+"为空");
-//            }
-//        }
         if(list.size()>0){
             message = get5G(message, list);
             meslist.add(message);

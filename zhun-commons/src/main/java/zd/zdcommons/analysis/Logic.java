@@ -17,6 +17,11 @@ public class Logic implements AnalysisImp {
     }
 
     @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis, String strTitle) {
+        return null;
+    }
+
+    @Override
     public ResultMessage getIntegrityAnalysis(Map<String, Object> resource,Map<String,Object> titleMap) {
         Utils utils = new Utils();
         ResultMessage resultm = null;

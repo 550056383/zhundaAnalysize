@@ -18,6 +18,11 @@ public class ClockAnalysis implements AnalysisImp {
     }
 
     @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis, String strTitle) {
+        return null;
+    }
+
+    @Override
     public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis) {
         ResultMessage resultm = null;
         Message message = null;

@@ -25,6 +25,9 @@ public class ClockAnalysis implements AnalysisImp {
         ArrayList<String> list = new ArrayList<String>();
         //记录count数即错误数
         long count=0;
+        if(lis==null){
+            return null;
+        }
 
         if(lis.size()<1){
             ResultMessage r = new ResultMessage();

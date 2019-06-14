@@ -30,7 +30,6 @@ public class Logic implements AnalysisImp {
         //获取校验下标
         int index=-1;
         //获取数据
-        System.out.println("进入logic");
         for(int i= logicStr.length-1;i>=0;i--){
             String mes = resource.get(logicStr[i]).toString();
             if (lot){

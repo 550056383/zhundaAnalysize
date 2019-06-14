@@ -4,10 +4,7 @@ import zd.zdcommons.pojo.Message;
 import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.pojo.ResultMessage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Complete implements AnalysisImp {
     @Override
@@ -51,11 +48,11 @@ public class Complete implements AnalysisImp {
             count = Long.parseLong(map.get("count").toString());
         }
         //第五个规则
-        if((!resource.get("M1800-openedFDD").toString().isEmpty())&&(!resource.get("YD5-problemClassification").toString().isEmpty())) {
+        if((!resource.get("YD5-AAU-actualEndDate").toString().isEmpty())&&(!resource.get("YD5-problemClassification").toString().isEmpty())) {
             list5g.add(titleMap.get("YD5-problemClassification").toString());
             count++;
         }
-        if((resource.get("M1800-openedFDD").toString().isEmpty())&&(resource.get("YD5-problemClassification").toString().isEmpty())) {
+        if((resource.get("YD5-AAU-actualEndDate").toString().isEmpty())&&(resource.get("YD5-problemClassification").toString().isEmpty())) {
             list5g.add(titleMap.get("YD5-problemClassification").toString());
             count++;
         }
@@ -226,7 +223,7 @@ public class Complete implements AnalysisImp {
     private static final String[] fddkt = {"M1800-installationFDD","M1800-baseStationNameFDD",
             "MIMO-transmissionBandwidthe4G","M1800-openedFDD"};
     //第八个规则所需字段
-    private static final String[] fddjy = {"M1800-openedFDD","M1800-deliveryCompletionDateFFD","YD5-receptionDate"};
+    private static final String[] fddjy = {"M1800-openedFDD","M1800-deliveryCompletionDateFFD","M1800-deliveryDateFDD"};
     //第十个规则所需字段
     private static final String[] mimoaz = {"MIMO-miMO3DID","MIMO-planningNumber",
             "MIMO-nmNEID","MIMO-openTypeStandTarget","MIMO-openTypeStand","MIMO-miMO3DGoodsQuantity","MIMO-installationDate"};

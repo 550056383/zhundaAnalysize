@@ -17,6 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
+import zd.zdcommons.analysis.ClockAnalysis;
+import zd.zdcommons.analysis.Complete;
+import zd.zdcommons.analysis.Logic;
 import zd.zdcommons.pojo.Message;
 import zd.zdcommons.pojo.Pageto;
 import zd.zdcommons.pojo.ResultMessage;
@@ -269,6 +272,8 @@ public class Utils {
         long iLCont = 0;
         //创建返回结果
         List<ResultMessage> reslist = new ArrayList<ResultMessage>();
+        //创建区域出错计数
+        HashMap<String, HashMap<String, Object>> areacount = new HashMap<String, HashMap<String, Object>>();
         //创建读取抽象工厂
         AnalysisAbstractFactory analysisFactory = FactoryProducer.getFactory("Analysisze");
         //动态实施分析
@@ -296,19 +301,106 @@ public class Utils {
                     if (resultD != null) {
                         iACount++;
                         reslist.add(resultD);
-                        //System.out.println(resultL);
                     }
                 }
             }
+            List<Map<String, Object>> shishi = reeouce.get("SHISHI");
+            List<Map<String, Object>> daka1 = reeouce.get("DAKA");
+            //调用区域错误计数方法得到数据写入pageto
+            areacount = getAreacount(shishi, daka1, getTitle());
         }
         final String uuId = getUUId();
-//       写入流
+        // 写入流
         writeExcel(reslist, uuId);
         pt.setUId(uuId);
         pt.setResultms(reslist);
         pt.setIACount(iACount);
         pt.setICCount(iCCount);
         pt.setILCount(iLCont);
+        //设置区域出错
+        pt.setAreacount(areacount);
         return pt;
+    }
+    //区域错误计数方法
+    public HashMap<String, HashMap<String, Object>> getAreacount(List < Map < String, Object >> shishilis, List
+        < Map < String, Object >> dakalis, Map < String, Object > title){
+        HashMap<String, HashMap<String, Object>> zuizhong = new HashMap<String, HashMap<String, Object>>();//最终得到的数据
+        for (Map<String, Object> shishi : shishilis) {
+            long wcount = 0;
+            long lcount = 0;
+            long zcount = 0;
+            ResultMessage res = new Complete().getIntegrityAnalysis(shishi, title);//完整性错误返回
+            ResultMessage analysis = new Logic().getIntegrityAnalysis(shishi, title);//逻辑返回
+            ResultMessage resultMessage = new ClockAnalysis().getIntegrityAnalysis(shishi, dakalis);//打卡的返回
+            HashMap<String, Object> zuihashMap = new HashMap<String, Object>();
+            String area = (String) shishi.get("YD5-area");//区域
+            if (zuizhong.size() == 0) {
+                if(dakalis!=null){
+                    if (resultMessage != null) {//表示存在一个打卡错误即准确性错误
+                        zcount = zcount + 1;
+                    }
+                }
+
+                if (res != null) {
+                    wcount = wcount + res.getXcount();
+                }
+                if (analysis != null) {
+                    lcount = lcount + analysis.getXcount();
+                }
+                zuihashMap.put("准确性", zcount);
+                zuihashMap.put("完整性", wcount);
+                zuihashMap.put("逻辑性", lcount);
+                zuizhong.put(area, zuihashMap);
+                continue;
+            }
+            //判断当前的区域是否已经存在
+            HashMap<String, Object> baocuomap = zuizhong.get(area);
+            if (baocuomap == null) {
+                if(dakalis!=null){
+                    if (resultMessage != null) {//表示存在一个打卡错误即准确性错误
+                        zcount = zcount + 1;
+                    }
+                }
+
+                if (res != null) {
+                    wcount = wcount + res.getXcount();
+                }
+                if (analysis != null) {
+                    lcount = lcount + analysis.getXcount();
+                }
+                zuihashMap.put("准确性", zcount);
+                zuihashMap.put("完整性", wcount);
+                zuihashMap.put("逻辑性", lcount);
+                zuizhong.put(area, zuihashMap);
+                continue;
+            }
+            //表示已经存在
+            HashMap<String, Object> baocuo = zuizhong.get(area);
+            //表示存在一个打卡错误即准确性错误
+            if(dakalis!=null){
+                if (resultMessage != null) {
+                    zcount = (Long) baocuo.get("准确性") + resultMessage.getXcount();
+                } else {
+                    zcount = (Long) baocuo.get("准确性");
+                }
+            }
+            if (res != null) {
+                wcount = (Long) baocuo.get("完整性") + res.getXcount();
+            } else {
+                wcount = (Long) baocuo.get("完整性");
+            }
+            if (analysis != null) {
+                lcount = (Long) baocuo.get("逻辑性") + analysis.getXcount();
+            } else {
+                lcount = (Long) baocuo.get("逻辑性");
+            }
+            zuihashMap.put("准确性", zcount);
+            zuihashMap.put("完整性", wcount);
+            zuihashMap.put("逻辑性", lcount);
+            zuizhong.put(area, zuihashMap);
+            continue;
+        }
+        return zuizhong;
+
     }
 }

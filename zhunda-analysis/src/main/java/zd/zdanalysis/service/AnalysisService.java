@@ -1,24 +1,12 @@
 package zd.zdanalysis.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import zd.zdcommons.FactoryProducer;
 import zd.zdcommons.Utils;
-import zd.zdcommons.analysis.ClockAnalysis;
-import zd.zdcommons.analysis.Complete;
-import zd.zdcommons.analysis.Logic;
-import zd.zdcommons.facotry.AnalysisFactory;
-import zd.zdcommons.facotry.ReadFacotory;
 import zd.zdcommons.pojo.Pageto;
-import zd.zdcommons.pojo.ResultMessage;
-import zd.zdcommons.read.ReadIntegrityExcel;
-import zd.zdcommons.read.ReadclockExcel;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

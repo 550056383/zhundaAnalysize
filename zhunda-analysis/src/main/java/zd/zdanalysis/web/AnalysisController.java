@@ -35,7 +35,10 @@ public class AnalysisController {
         map.put("SHISHI",shishi);
         return ResponseEntity.ok(analysisService.getAnalysis(map));
     };
-
+    @PutMapping("/title")
+    public ResponseEntity<String[]> getTitle(@RequestParam("file") MultipartFile file,String sheetName,int index){
+        return ResponseEntity.ok(analysisService.getTitle(file,sheetName,index));
+    };
     @GetMapping("/download")
     public ResponseEntity<String> downloadFile( HttpServletResponse response,@RequestParam("uid") String uid) {
         return ResponseEntity.ok(analysisService.getDownload(response,uid));

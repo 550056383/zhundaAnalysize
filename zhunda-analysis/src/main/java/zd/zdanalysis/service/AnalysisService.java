@@ -52,5 +52,9 @@ public class AnalysisService {
         return "文件下载失败";
     }
 
-    ;
+    public String[] getTitle(MultipartFile file,String sheetName,int cout){
+        Utils utils = new Utils();
+        String[] excelTitle = utils.getExcelTitle(file, sheetName, cout);
+        return excelTitle;
+    };
 }

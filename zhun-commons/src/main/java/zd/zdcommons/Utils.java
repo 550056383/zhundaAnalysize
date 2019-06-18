@@ -7,19 +7,24 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
 import zd.zdcommons.analysis.ClockAnalysis;
 import zd.zdcommons.analysis.Complete;
 import zd.zdcommons.analysis.Logic;
+import zd.zdcommons.excel.ExcelEventParser;
 import zd.zdcommons.pojo.Message;
 import zd.zdcommons.pojo.Pageto;
 import zd.zdcommons.pojo.ResultMessage;
@@ -103,9 +108,9 @@ public class Utils {
                 workbook = new HSSFWorkbook(is);
             }else if(fileName.endsWith(xlsx)){
                 //2007
-                workbook = new XSSFWorkbook(is);
+                workbook =new XSSFWorkbook(is);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return workbook;
@@ -403,4 +408,162 @@ public class Utils {
         return zuizhong;
 
     }
+    public String[] getExcelTitle(MultipartFile file,String sheetName,int indexTitle)  {
+        Workbook workbook = getWorkBook(file);
+        //创建返回对象，把每行中的值作为一个数组，所有行作为一个集合返回
+        String [] title={};
+        if(workbook != null){
+            //获得当前sheet工作表
+            Sheet sheet =workbook.getSheet(sheetName);
+            //workbook.getSheet("Site Rollout Plan");
+            if (sheet==null){
+                sheet = workbook.getSheetAt(1);
+            }
+            String sheetTrueName = sheet.getSheetName();
+            System.out.println("sheetName:::::::::::"+sheetTrueName);
+            //获得当前sheet的开始行
+            int firstRowNum  = sheet.getFirstRowNum();
+            //得到标准头
+            String ne="";
+            //循环所有行
+            for(int rowNum = firstRowNum;rowNum <indexTitle;rowNum++){
+                //获得当前行
+                Row row = sheet.getRow(rowNum);
+                if(row == null){
+                    continue;
+                }
+                //获得当前行的开始列
+                int firstCellNum = row.getFirstCellNum();
+                //获得当前行的列数
+                int lastCellNum =row.getLastCellNum();
+                //System.out.println("lastCellNum=="+lastCellNum);
+                if(rowNum==0) title=new String[lastCellNum];
+                //循环当前行
+                for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
+                    String value = getCellValueV2(sheet, rowNum, cellNum).trim();
+                    if(!value.equals(title[cellNum])){
+                        if(rowNum==0){
+                            title[cellNum]=value;
+                        }else {
+                            title[cellNum]=title[cellNum]+"--"+value;
+                        }
+                    }
+                }
+
+            }
+        }
+        return title;
+    }
+    /**
+     * 获取单元表格值
+     *
+     * */
+    public String getCellValueV2(Sheet sheet,int rowNum,int cellNum){
+        if(isMergedRegion(sheet,rowNum,cellNum)){
+            return getMergedRegionValue(sheet,rowNum,cellNum);
+        }else{
+            //获取当前行
+            Row row = sheet.getRow(rowNum);
+            row.getCell(cellNum).setCellType(CellType.STRING);
+            return row.getCell(cellNum).getStringCellValue();
+        }
+    }
+    /**
+     * 获取合并单元格的值
+     * @param sheet
+     * @param row
+     * @param column
+     * @return
+     */
+    public  String getMergedRegionValue(Sheet sheet ,int row , int column){
+        int sheetMergeCount = sheet.getNumMergedRegions();
+
+        for(int i = 0 ; i < sheetMergeCount ; i++){
+            CellRangeAddress ca = sheet.getMergedRegion(i);
+            int firstColumn = ca.getFirstColumn();
+            int lastColumn = ca.getLastColumn();
+            int firstRow = ca.getFirstRow();
+            int lastRow = ca.getLastRow();
+
+            if(row >= firstRow && row <= lastRow){
+                if(column >= firstColumn && column <= lastColumn){
+                    Row fRow = sheet.getRow(firstRow);
+                    Cell fCell = fRow.getCell(firstColumn);
+                    if(fCell == null) return "";
+                    return fCell.getStringCellValue();
+                }
+            }
+        }
+
+        return null ;
+    }
+    /**
+     * 判断指定的单元格是否是合并单元格
+     * @param sheet
+     * @param row 行下标
+     * @param column 列下标
+     * @return
+     */
+    private  boolean isMergedRegion(Sheet sheet,int row ,int column) {
+        int sheetMergeCount = sheet.getNumMergedRegions();
+        for (int i = 0; i < sheetMergeCount; i++) {
+            CellRangeAddress range = sheet.getMergedRegion(i);
+            int firstColumn = range.getFirstColumn();
+            int lastColumn = range.getLastColumn();
+            int firstRow = range.getFirstRow();
+            int lastRow = range.getLastRow();
+            if(row >= firstRow && row <= lastRow){
+                if(column >= firstColumn && column <= lastColumn){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<String> getLotTitle(MultipartFile file){
+
+        long start = System.currentTimeMillis();
+        final List<List<String>> table = new LinkedList<List<String>>();
+        final List<String>[] fields = new List[]{new CopyOnWriteArrayList<String>()};
+        new ExcelEventParser(getFileInputStream(file)).setHandler(new ExcelEventParser.SimpleSheetContentsHandler(){
+            private List<String> field;
+            @Override
+            public void endRow(int rowNum) {
+                if(rowNum == 0){
+                    // 第一行中文描述忽略
+                    fields[0] =row;
+                }else if(rowNum == 1){
+                    // 第二行字段名
+                    field = row;
+                    //fields[0] =row;
+                }
+            }
+        }).parse();
+        long end = System.currentTimeMillis();
+        System.err.println(table.size());
+        System.err.println(end - start);
+        return fields[0];
+    }
+    /**
+     * 两种文件流解析
+     * */
+    public InputStream getFileInputStream(MultipartFile file){
+        InputStream inputStream = null;
+        try {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return inputStream;
+    };
+    public InputStream getFileInputStream(File file){
+        InputStream InputStream = null;
+        try {
+            InputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return InputStream;
+    };
 }

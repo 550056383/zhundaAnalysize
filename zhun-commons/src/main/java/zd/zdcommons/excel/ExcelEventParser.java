@@ -1,5 +1,6 @@
 package zd.zdcommons.excel;
 
+import org.apache.poi.hssf.usermodel.examples.HSSFReadWrite;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.apache.poi.util.SAXHelper;
@@ -26,9 +27,11 @@ import java.util.List;
 public class ExcelEventParser {
     private String filename;
     private SheetContentsHandler handler;
+    private InputStream inputStream;
+    public ExcelEventParser(InputStream inputStream){
+        //this.filename = filename;
 
-    public ExcelEventParser(String filename){
-        this.filename = filename;
+        this.inputStream = inputStream;
     }
 
     public ExcelEventParser setHandler(SheetContentsHandler handler) {
@@ -41,7 +44,8 @@ public class ExcelEventParser {
         InputStream sheetInputStream = null;
 
         try {
-            pkg = OPCPackage.open(filename, PackageAccess.READ);
+            // pkg = OPCPackage.open(filename, PackageAccess.READ);
+            pkg=OPCPackage.open(inputStream);
             XSSFReader xssfReader = new XSSFReader(pkg);
             StylesTable styles = xssfReader.getStylesTable();
             ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(pkg);

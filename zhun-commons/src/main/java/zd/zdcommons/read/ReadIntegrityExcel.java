@@ -46,7 +46,7 @@ public class ReadIntegrityExcel implements ReadExcelImp {
             String sheetName = sheet.getSheetName();
             System.out.println("sheetName:::::::::::"+sheetName);
             //获得当前sheet的开始行
-            int firstRowNum  = 3;
+            int firstRowNum  = 2;
             //获得当前sheet的结束行
             int lastRowNum = sheet.getLastRowNum();
             System.out.println("结束行:"+lastRowNum);
@@ -79,6 +79,7 @@ public class ReadIntegrityExcel implements ReadExcelImp {
                 }
                 list.add(map);
             }
+            System.out.println("获得数据==>"+list.size());
             try {
                 workbook.close();
             } catch (IOException e) {

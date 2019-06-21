@@ -49,8 +49,10 @@ public class Complete implements AnalysisImp {
         }
         //第五个规则
         if((!resource.get("YD5-AAU-actualEndDate").toString().isEmpty())&&(!resource.get("YD5-problemClassification").toString().isEmpty())) {
-            list5g.add(titleMap.get("YD5-problemClassification").toString());
-            count++;
+            if(!resource.get("YD5-AAU-actualEndDate").equals("已开通有告警")){
+                list5g.add(titleMap.get("YD5-problemClassification").toString());
+                count++;
+            }
         }
         if((resource.get("YD5-AAU-actualEndDate").toString().isEmpty())&&(resource.get("YD5-problemClassification").toString().isEmpty())) {
             list5g.add(titleMap.get("YD5-problemClassification").toString());
@@ -84,13 +86,20 @@ public class Complete implements AnalysisImp {
             //count = (long) map.get("count");
         }
         //第九个规则
-        if((!resource.get("M1800-openedFDD").toString().isEmpty())&&(!resource.get("M1800-questionClassificationFDD").toString().isEmpty())) {
-            listAnchor.add(titleMap.get("M1800-questionClassificationFDD").toString());
-            count++;
+        if((!resource.get("M1800-openedFDD").toString().isEmpty())) {
+            if((!resource.get("M1800-questionClassificationFDD").toString().isEmpty())
+                    ||(!resource.get("M1800-nmNEIDFDD").toString().isEmpty())||(!resource.get("M1800-baseStationNameFDD").toString().isEmpty())){
+                listAnchor.add(titleMap.get("M1800-questionClassificationFDD").toString());
+                count++;
+            }
+
         }
-        if((resource.get("M1800-openedFDD").toString().isEmpty())&&(resource.get("M1800-questionClassificationFDD").toString().isEmpty())) {
-            listAnchor.add(titleMap.get("M1800-questionClassificationFDD").toString());
-            count++;
+        if((resource.get("M1800-openedFDD").toString().isEmpty())) {
+            if((resource.get("M1800-questionClassificationFDD").toString().isEmpty())
+                    ||(resource.get("M1800-nmNEIDFDD").toString().isEmpty())||(resource.get("M1800-baseStationNameFDD").toString().isEmpty())){
+                listAnchor.add(titleMap.get("M1800-questionClassificationFDD").toString());
+                count++;
+            }
         }
 
         //添加F1800
@@ -121,13 +130,22 @@ public class Complete implements AnalysisImp {
             count = Long.parseLong(map.get("count").toString());
         }
         //第十三个规则
-        if((!resource.get("MIMO-completionDate").toString().isEmpty())&&(!resource.get("M1800-questionClassificationFDD").toString().isEmpty())) {
-            listMimo.add(titleMap.get("MIMO-questionClassification").toString());
-            count++;
+        if((!resource.get("MIMO-completionDate").toString().isEmpty())) {
+            if((!resource.get("MIMO-questionClassification").toString().isEmpty())
+                    ||(!resource.get("MIMO-nmNEID").toString().isEmpty())||(!resource.get("MIMO-baseStationName").toString().isEmpty())
+                    ||(!resource.get("MIMO-openTypeStandTarget").toString().isEmpty())||(!resource.get("MIMO-openTypeStand").toString().isEmpty())){
+                listMimo.add(titleMap.get("MIMO-questionClassification").toString());
+                count++;
+            }
+
         }
-        if((resource.get("MIMO-completionDate").toString().isEmpty())&&(resource.get("M1800-questionClassificationFDD").toString().isEmpty())) {
-            listMimo.add(titleMap.get("MIMO-questionClassification").toString());
-            count++;
+        if((resource.get("MIMO-completionDate").toString().isEmpty())) {
+            if((resource.get("MIMO-questionClassification").toString().isEmpty())
+                    ||(resource.get("MIMO-nmNEID").toString().isEmpty())||(resource.get("MIMO-baseStationName").toString().isEmpty())
+                    ||(resource.get("MIMO-openTypeStandTarget").toString().isEmpty())||(resource.get("MIMO-openTypeStand").toString().isEmpty())){
+                listMimo.add(titleMap.get("MIMO-questionClassification").toString());
+                count++;
+            }
         }
         //添加3D-MIMO
         if (listMimo.size()>0){
@@ -236,6 +254,7 @@ public class Complete implements AnalysisImp {
             "MIMO-transmissionBandwidthe4G","MIMO-baseStationName","MIMO-completionDate"};
     //第十二个规则
     private static final String[] mimojy = {"MIMO-completionDate","MIMO-deliveryDate","MIMO-miMO3DDate"};
+
     /**
      * 得到错误信息和出错次数的方法
      *

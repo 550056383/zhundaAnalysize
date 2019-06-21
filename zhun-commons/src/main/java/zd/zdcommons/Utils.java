@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -122,11 +123,24 @@ public class Utils {
             Calendar calendar = new GregorianCalendar(1900,0,-1);
             Date d = calendar.getTime();
             Date dd = DateUtils.addDays(d,Integer.valueOf(value));
-            DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
             currentCellValue = formater.format(dd);
         }
         return currentCellValue;
     }
+    public static int importByExcelForBack(String value){
+        SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd");
+        Date date =null;
+        int valuedate=0;
+        try {
+            date = f.parse(value);
+            //返回1900/1/1
+            valuedate = (int) ((date.getTime() / 1000 / 60 / 60 / 24)+25568);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return valuedate;
+    };
     //写文档
     public static  void writeExcel(List<ResultMessage> rem,String name) {
         System.out.println("write Excel is comming");
@@ -290,6 +304,7 @@ public class Utils {
                 daka=analysisFactory.getAnalysis("DAKA");
             }
             for (Map map:reeouce.get("SHISHI")){
+                System.out.println("shishi===》");
                 ResultMessage resultC = complete.getIntegrityAnalysis(map, getTitle());
                 if (resultC != null) {
                     iCCount++;
@@ -312,7 +327,7 @@ public class Utils {
             List<Map<String, Object>> shishi = reeouce.get("SHISHI");
             List<Map<String, Object>> daka1 = reeouce.get("DAKA");
             //调用区域错误计数方法得到数据写入pageto
-            areacount = getAreacount(shishi, daka1, getTitle());
+            //areacount = getAreacount(shishi, daka1, getTitle());
         }
         final String uuId = getUUId();
         // 写入流
@@ -566,4 +581,17 @@ public class Utils {
         }
         return InputStream;
     };
+    /*
+     *int强转出错
+     */
+    public static int getInteger(String s){
+        int i =0;
+        try {
+            i = Integer.parseInt(s);
+        }catch (Exception e){
+            //e.printStackTrace();如果是日期会一直报错先注释了
+        }finally {
+            return i;
+        }
+    }
 }

@@ -16,14 +16,12 @@ public class AnalysisService {
 
     public Pageto getAnalysis(Map<String,MultipartFile> mapfile) {
         Utils utils = new Utils();
-        //String strName[]={};
         String strName="";
         if(mapfile.get("SHISHI")!=null){
-            //strName=new String[]{"SHISHI"};
             strName="SHISHI";
         }
         if(mapfile.get("DAKA")!=null){
-            //strName=new String[]{"SHISHI","DAKA"};
+
             strName="SHISHI,DAKA";
         }
         String[] split = strName.split(",");

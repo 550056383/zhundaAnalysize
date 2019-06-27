@@ -9,8 +9,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,14 +21,13 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import sun.awt.SunHints;
 import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
 import zd.zdcommons.analysis.ClockAnalysis;
 import zd.zdcommons.analysis.Complete;
 import zd.zdcommons.analysis.Logic;
 import zd.zdcommons.excel.ExcelEventParser;
-import zd.zdcommons.pojo.Message;
-import zd.zdcommons.pojo.Pageto;
-import zd.zdcommons.pojo.ResultMessage;
+import zd.zdcommons.pojo.*;
 
 import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.serviceImp.ReadExcelImp;
@@ -132,15 +131,36 @@ public class Utils {
         SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd");
         Date date =null;
         int valuedate=0;
-        try {
-            date = f.parse(value);
-            //返回1900/1/1
-            valuedate = (int) ((date.getTime() / 1000 / 60 / 60 / 24)+25568);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        date = getFormate_A(value);
+        if (date==null){
+           date = getFormate_B(value);
         }
+        valuedate = (int) ((date.getTime() / 1000 / 60 / 60 / 24)+25568);
         return valuedate;
     };
+    public static Date getFormate_A(String value){
+        SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd");
+        Date date =null;
+        try {
+            date=f.parse(value);
+        } catch (ParseException e) {
+    //        System.out.println("yyyy/MM/dd，报错:"+value);
+//            e.printStackTrace();
+        }
+        return date;
+    }
+    public static Date getFormate_B(String value){
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        Date date =null;
+        try {
+            date=f.parse(value);
+        } catch (ParseException e) {
+            //System.out.println("yyyy-MM-dd，报错:"+value);
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     //写文档
     public static  void writeExcel(List<ResultMessage> rem,String name) {
         System.out.println("write Excel is comming");
@@ -261,6 +281,8 @@ public class Utils {
         System.out.println("导出文档不存在");
         return false;
     }
+
+
     //得到读取数据
     public Map<String,List<Map<String, Object>>> getExcelResource(String[] strName,Map<String,MultipartFile> mapFile){
         //判断是否传值
@@ -279,6 +301,7 @@ public class Utils {
         return resourcemap;
     }
 
+
     //进行分析
     public Pageto getPageto(Map<String,List<Map<String, Object>>> reeouce){
         //创建页面返回结果
@@ -291,10 +314,11 @@ public class Utils {
         long iLCont = 0;
         //创建返回结果
         List<ResultMessage> reslist = new ArrayList<ResultMessage>();
-        //创建区域出错计数
-        HashMap<String, HashMap<String, Object>> areacount = new HashMap<String, HashMap<String, Object>>();
         //创建读取抽象工厂
         AnalysisAbstractFactory analysisFactory = FactoryProducer.getFactory("Analysisze");
+        //创建区域出错计数
+        List<ReverseMes> areacount=null;
+        String strArea[]=null;
         //动态实施分析
         if(reeouce.get("SHISHI")!=null){
             AnalysisImp complete = analysisFactory.getAnalysis("Complete");
@@ -303,17 +327,19 @@ public class Utils {
             if (reeouce.get("DAKA")!=null){
                 daka=analysisFactory.getAnalysis("DAKA");
             }
+            HashMap<String, TempCount> xun = new HashMap<String, TempCount>();//临时数据属性存放
             for (Map map:reeouce.get("SHISHI")){
-                System.out.println("shishi===》");
                 ResultMessage resultC = complete.getIntegrityAnalysis(map, getTitle());
                 if (resultC != null) {
                     iCCount++;
                     reslist.add(resultC);
+                    getTempCount(xun,resultC,"--c");
                 }
                 ResultMessage resultL = logic.getIntegrityAnalysis(map,getTitle());
                 if (resultL != null) {
                     iLCont++;
                     reslist.add(resultL);
+                    getTempCount(xun,resultL,"--l");
                 }
                 //判断是否打卡开启
                 if(reeouce.get("DAKA")!=null){
@@ -321,13 +347,93 @@ public class Utils {
                     if (resultD != null) {
                         iACount++;
                         reslist.add(resultD);
+                        getTempCount(xun,resultD,"--a");
                     }
                 }
             }
-            List<Map<String, Object>> shishi = reeouce.get("SHISHI");
-            List<Map<String, Object>> daka1 = reeouce.get("DAKA");
-            //调用区域错误计数方法得到数据写入pageto
-            //areacount = getAreacount(shishi, daka1, getTitle());
+            Map<String, ReverseMes> inte = new HashMap<String, ReverseMes>();//地区信息的三种状态行信息（"5G","3D-MIMO","瞄点1800FDD"）
+
+            String [] strType={"5G","3D-MIMO","瞄点1800FDD"};//自动数组
+            //整合类型
+            for(Map.Entry<String,TempCount> entry:xun.entrySet()){
+                //先合并 地区
+                String stacName_type = entry.getKey();
+                int i =stacName_type.indexOf("--");
+                //得到地区名字
+                String tempname = stacName_type.substring(0, i);
+                //（c l a ）完整,逻辑，准确
+                String tempType = stacName_type.substring(stacName_type.length()-1,stacName_type.length());
+                //每个站有三种类型（"5G","3D-MIMO","瞄点1800FDD"）
+                for(String str:strType){
+                    if(inte.get(tempname+str)!=null){
+                        ReverseMes rev = inte.get(tempname+str);//得到ReverseMes
+                        ErrorCount errorCount=rev.getError();//解析错误类型（c l a ）
+                        if(str.equals("5G")){
+                            errorCount=getError(errorCount,entry.getValue().getCount5g(),tempType);
+                        }else if (str.equals("3D-MIMO")){
+                            errorCount=getError(errorCount,entry.getValue().getCount3d(),tempType);
+                        }else {
+                            errorCount=getError(errorCount,entry.getValue().getCount1800fdd(),tempType);
+                        }
+                        inte.put(tempname+str,rev);
+                    }
+                    else{
+                        ReverseMes rev=null;
+                        if(str.equals("5G")){
+                            rev = getRevMes(entry.getValue().getCount5g(), tempname, tempType, "5G");
+                        }else if (str.equals("3D-MIMO")){
+                            rev = getRevMes(entry.getValue().getCount3d(), tempname, tempType, "3D-MIMO");
+                        }else {
+                            rev = getRevMes(entry.getValue().getCount1800fdd(), tempname, tempType, "瞄点1800FDD");
+                        }
+                        //System.out.println(tempname);
+                        inte.put(tempname+str,rev);
+                    }
+                }
+            }
+            System.out.println("inte seize==" +inte.size());
+            //创建areacount对象
+            areacount=Arrays.asList(new ReverseMes[inte.size()]);
+           // ReverseMes rev[]=new ReverseMes[100];
+            //地区数组=
+             strArea=new String[(inte.size()/3)];
+            //地区下标
+            int index=0;
+            Map<String, Integer> areaIndex = new HashMap<String, Integer>();
+            //接收3d_List
+            List<ReverseMes> rev3ds=new ArrayList<ReverseMes>();
+            //接收fdd_lits
+            List<ReverseMes> rev1800fdds=new ArrayList<ReverseMes>();
+            //排序
+            for(Map.Entry<String,ReverseMes> entry:inte.entrySet()){
+                if(entry.getKey().endsWith("5G")){
+                    areacount.set(index,entry.getValue());//添加输出集合中(asList 后无法Add和remove)
+                    strArea[index]=entry.getValue().getArea();//相机集合填入
+                    areaIndex.put(entry.getValue().getArea(),index);//键值对存入下标
+                    index++;//更新下标
+                }else if(entry.getKey().endsWith("3D-MIMO")){
+                    rev3ds.add(entry.getValue());//临时存入
+                }else {
+                    rev1800fdds.add(entry.getValue());//临时存入
+                }
+            }
+            //向areacount添加3D和1800fdd
+            for (ReverseMes rev :rev3ds){
+                int i = areaIndex.get(rev.getArea());//得到当前地区下标
+                areacount.set((index+i),rev);//得到该存入的下标，并存入
+            }
+            for (ReverseMes rev:rev1800fdds){
+                int i = areaIndex.get(rev.getArea());//得到当前地区下标
+                areacount.set((2*index)+i,rev);//得到该存入的下标，并存入
+            }
+            int test=0;
+            for (ReverseMes rev:areacount){
+                if(rev.getId().equals("5G")){
+                    System.out.println(rev);
+                    test++;
+                }
+            };
+            System.out.println("ok="+test);
         }
         final String uuId = getUUId();
         // 写入流
@@ -339,8 +445,52 @@ public class Utils {
         pt.setILCount(iLCont);
         //设置区域出错
         pt.setAreacount(areacount);
+        pt.setStrArea(strArea);
         return pt;
     }
+    public void getTempCount(Map<String, TempCount> xun,ResultMessage result,String aType){
+        if(xun.get(result.getDarea()+aType)!=null){
+            TempCount tempCount= xun.get(result.getDarea()+aType);
+            tempCount.setCount3d(tempCount.getCount3d()+result.getCount3d());
+            tempCount.setCount5g(tempCount.getCount5g()+result.getCount5g());
+            tempCount.setCount1800fdd(tempCount.getCount3d()+result.getCount1800fdd());
+            xun.put(result.getDarea()+aType,tempCount);
+        }else{
+            xun.put(result.getDarea()+aType,new TempCount(result.getCount5g(),result.getCount3d(),result.getCount1800fdd()));
+        }
+    }
+
+    public ReverseMes getRevMes(Long count,String areaName, String type,String staTepy){
+        ReverseMes rev = new ReverseMes();
+        if("5G".equals(staTepy)){
+            rev.setId("5G");
+        }else if("3D-MIMO".equals(staTepy)){
+            rev.setId("3D-MIMO");
+        }else {
+            rev.setId("锚点1800M");
+        }
+        rev.setArea(areaName);
+        ErrorCount error =new ErrorCount();
+        error = getError(error, count, type);
+        rev.setError(error);
+        return rev;
+    }
+
+
+    public ErrorCount getError(ErrorCount error,Long count,String type){
+        if(type.equals("c")){
+            error.setComplete_err(count);
+        }else if(type.equals("l")){
+            error.setLogic_err(count);
+        }else {
+            error.setAccurate_err(count);
+        }
+        return error;
+    }
+
+
+
+
     //区域错误计数方法
     public HashMap<String, HashMap<String, Object>> getAreacount(List < Map < String, Object >> shishilis, List
         < Map < String, Object >> dakalis, Map < String, Object > title){
@@ -423,6 +573,9 @@ public class Utils {
         return zuizhong;
 
     }
+
+
+
     public String[] getExcelTitle(MultipartFile file,String sheetName,int indexTitle)  {
         Workbook workbook = getWorkBook(file);
         //创建返回对象，把每行中的值作为一个数组，所有行作为一个集合返回
@@ -560,6 +713,7 @@ public class Utils {
         System.err.println(end - start);
         return fields[0];
     }
+
     /**
      * 两种文件流解析
      * */
@@ -581,6 +735,7 @@ public class Utils {
         }
         return InputStream;
     };
+
     /*
      *int强转出错
      */

@@ -2,6 +2,7 @@ package zd.zdcommons.pojo;
 
 import lombok.Data;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,7 +13,8 @@ public class Pageto {
     private Long iLCount;
     private List<ResultMessage> resultms;
     private String uId;//文件名
-    private HashMap<String, HashMap<String, Object>> areacount;//区域错误计数
+    private List<ReverseMes> areacount;//区域错误计数
+    private String[] strArea;//地区
 
     @Override
     public String toString() {
@@ -23,6 +25,7 @@ public class Pageto {
                 ", resultms=" + resultms +
                 ", uId='" + uId + '\'' +
                 ", areacount=" + areacount +
+                ", strArea=" + Arrays.toString(strArea) +
                 '}';
     }
 }

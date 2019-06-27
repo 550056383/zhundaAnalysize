@@ -2,7 +2,6 @@ package zd.zdcommons.analysis;
 
 
 import org.apache.commons.lang3.StringUtils;
-import zd.zdcommons.Utils;
 import zd.zdcommons.pojo.Message;
 import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.pojo.ResultMessage;
@@ -23,23 +22,30 @@ public class Logic implements AnalysisImp {
     public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis, String strTitle) {
         return null;
     }
-    private static ResultMessage resultm = null;
-    private Message message = null;
-    private List<Message> meslist=new ArrayList<Message>();
+    private Message message = null;//创建对象;
 
     //记录count数
     private long count=0;
     @Override
     public ResultMessage getIntegrityAnalysis(Map<String, Object> resource,Map<String,Object> titleMap) {
-        System.out.println("Logic进来的");
-        count+=getLogic(logic5g,resource,titleMap,"5g",true);
+        ResultMessage resultm = null;
+        List<Message> meslist=new ArrayList<Message>();//放在外面不会更新新对象，导致指针总是指向最后一条数据
+        long count5g=0;
+        long count3d=0;
+        long count1800fdd=0;
+        meslist=getLogic(logic5g,resource,titleMap,"5g",true,meslist);
+        count5g=meslist.size();
         if (resource.get("M1800-whetherPlanningFDD").equals("是")){
-            count+=getLogic(logicFDD1800,resource,titleMap,"fd1800",false);
+            meslist=getLogic(logicFDD1800,resource,titleMap,"fd1800",false,meslist);
+            count3d=(meslist.size()-count5g);
         }
         if (getInteger(resource.get("MIMO-planningNumber").toString())>0){
-            count+=getLogic(Logic3d,resource,titleMap,"3d",false);
+            meslist=getLogic(Logic3d,resource,titleMap,"3d",false,meslist);
+            count1800fdd=(meslist.size()-count5g-count3d);
         }
-        resultm=getMessge(resource,meslist,count);
+        if(meslist.size()>0){
+            resultm=getMessge(resource,meslist,meslist.size(),resultm,count5g,count3d,count1800fdd);
+        }
         return resultm;
     }
     /**
@@ -47,21 +53,21 @@ public class Logic implements AnalysisImp {
      *@param
     * @date          2019/6/20  17:55
     */
-    public int getLogic(String[]logicstr,Map<String, Object> resource,Map<String,Object> titleMap,String mesType,boolean custom){
+    public List<Message> getLogic(String[]logicstr,Map<String, Object> resource,Map<String,Object> titleMap,String mesType,boolean custom,List<Message> meslist){
         ArrayList<String> list = new ArrayList<String>();
         //判断空性
-        Map<String, Integer> aNull = getNull(logicstr, resource, count, list, titleMap, custom, mesType);
-        int countx=aNull.get("countx");
-        int index = aNull.get("index");
-        if(index>0){//没有校验下标，说明没有没有要判定的则返回
+        Map<String, Object> aNull = getNull(logicstr, resource, count, list, titleMap, custom, mesType, meslist);
+        int index = (Integer) aNull.get("index");
+        meslist=(List<Message>)aNull.get("meslist");
+        if(list.size()==0){//说明有空集合
             //逻辑性
-            countx+=getDateLogic(logicstr, resource, count, list, titleMap, index, custom, mesType);
+            meslist=getDateLogic(logicstr, resource, count, list, titleMap, index, custom, mesType, meslist);
         }
-        return countx;
+        return meslist;
     }
     //判断是否为空
-    public Map<String,Integer> getNull(String[] logic,Map<String, Object> resource,long count,ArrayList<String> list
-            ,Map<String,Object> titleMap,boolean custom,String mesType){
+    public Map<String,Object> getNull(String[] logic,Map<String, Object> resource,long count,ArrayList<String> list
+            ,Map<String,Object> titleMap,boolean custom,String mesType,List<Message> meslist){
         Map<String, Object> map = new HashMap<String, Object>();
         //计数错误量
         int countx=0;
@@ -104,33 +110,39 @@ public class Logic implements AnalysisImp {
             }
             meslist.add(message);
         }
-        HashMap<String, Integer> resuMap = new HashMap<String, Integer>();
-        resuMap.put("index",index);
-        resuMap.put("countx",countx);
-        return resuMap;
+        map.put("index",index);
+        map.put("meslist",meslist);
+        return map;
     }
     //判断是否逻辑正常
-    public int getDateLogic(String[]logicStr,Map<String, Object> resource,long count,ArrayList<String> list
-            ,Map<String,Object> titleMap,int index,boolean custom,String mesType){
-        int countx=0;
+    public List<Message> getDateLogic(String[]logicStr,Map<String, Object> resource,long count,ArrayList<String> list
+            ,Map<String,Object> titleMap,int index,boolean custom,String mesType,List<Message> meslist){
         for (int i=index;i>0;i--){
-            int qian = getInteger(resource.get(logicStr[i-1]).toString());
+            int first=i-1;
+            int after=i;
+            if(resource.get(logicStr[after]).equals("现网已具备"))continue;//如果现网已具备 则无法比较 后时间
+            while (resource.get(logicStr[first]).equals("现网已具备")){
+                first--;//向前推时间
+                if (first<0)return meslist;
+            }
+            int qian = getInteger(resource.get(logicStr[first]).toString());
             String qianTime="";
+            //System.out.println("数组是："+logicStr[first]+"  first=:"+first);
             //如果是日期类型转换为天数
             if(qian==0){
-                qian = importByExcelForBack(resource.get(logicStr[i - 1]).toString());
-                qianTime=resource.get(logicStr[i - 1]).toString();
+                qian = importByExcelForBack(resource.get(logicStr[first]).toString());
+                qianTime=resource.get(logicStr[first]).toString();
             }else{
-                qianTime = importByExcelForDate(resource.get(logicStr[i-1]).toString());
+                qianTime = importByExcelForDate(resource.get(logicStr[first]).toString());
             }
 //            后面
-            int hou = getInteger(resource.get(logicStr[i]).toString());
+            int hou = getInteger(resource.get(logicStr[after]).toString());
             String houTime ="";
             if(hou==0){
-                hou = importByExcelForBack(resource.get(logicStr[i]).toString());
-                houTime=resource.get(logicStr[i]).toString();
+                hou = importByExcelForBack(resource.get(logicStr[after]).toString());
+                houTime=resource.get(logicStr[after]).toString();
             }else {
-                houTime=importByExcelForDate(resource.get(logicStr[i]).toString());
+                houTime=importByExcelForDate(resource.get(logicStr[after]).toString());
             }
             //开启自定义设置
             if(custom){
@@ -138,20 +150,16 @@ public class Logic implements AnalysisImp {
                      hou = Integer.parseInt(resource.get(logicStr[2]).toString());
                      houTime = importByExcelForDate(resource.get(logicStr[2]).toString());
                     if(qian>hou){
-                        countx++;
-                        list.add(titleMap.get(logicStr[i-1])+": "+qianTime+"  | 大于 |"+titleMap.get(logicStr[2])+"："+houTime);
+                        list.add(titleMap.get(logicStr[first])+": "+qianTime+"  | 大于 |"+titleMap.get(logicStr[2])+"："+houTime);
                     }
                 }else {
                     if(qian>hou){
-                        countx++;
-                        list.add(titleMap.get(logicStr[i-1])+": "+qianTime+"  | 大于 |"+titleMap.get(logicStr[i])+"："+houTime);
+                        list.add(titleMap.get(logicStr[first])+": "+qianTime+"  | 大于 |"+titleMap.get(logicStr[after])+"："+houTime);
                     }
                 }
-
             }else {
                 if(qian>hou){
-                    countx++;
-                    list.add(titleMap.get(logicStr[i-1])+": "+qianTime+"  | 大于 |"+titleMap.get(logicStr[i])+"："+houTime);
+                    list.add(titleMap.get(logicStr[first])+": "+qianTime+"  | 大于 |"+titleMap.get(logicStr[after])+"："+houTime);
                 }
             }
         }
@@ -165,7 +173,7 @@ public class Logic implements AnalysisImp {
             }
             meslist.add(message);
         }
-        return countx;
+        return meslist;
     }
 
     private final static String [] logic5g={"YD5-RFI-actualEndDate","YD5-MOS-actualEndDate","YD5-IC-actualEndDate","YD5-SC-actualEndDate"};
@@ -173,7 +181,7 @@ public class Logic implements AnalysisImp {
     private final static String [] logicFDD1800={"M1800-arrivalDateFDD","M1800-installationFDD","M1800-openedFDD","M1800-deliveryCompletionDateFFD","M1800-deliveryDateFDD"};
 
 
-    private final static ResultMessage getMessge(Map<String, Object> resource, List<Message> mes, long count){
+    private final static ResultMessage getMessge(Map<String, Object> resource, List<Message> mes, long count,ResultMessage resultm,long count5g,long count3d,long count1800fdd){
         resultm=new ResultMessage();
         resultm.setTError("逻辑性错误");
         resultm.setDUID(resource.get("YD5-dUID").toString());
@@ -181,6 +189,9 @@ public class Logic implements AnalysisImp {
         resultm.setDarea(resource.get("YD5-area").toString());
         resultm.setMessge(mes);
         resultm.setXcount(count);
+        resultm.setCount1800fdd(count1800fdd);
+        resultm.setCount5g(count5g);
+        resultm.setCount3d(count3d);
         return resultm;
     };
     private final static Message get5G(Message mes,List<String> list){

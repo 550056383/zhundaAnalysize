@@ -1,10 +1,15 @@
 package zd.zdcommons.analysis;
 
+import zd.zdcommons.pojo.ErrorCount;
 import zd.zdcommons.pojo.Message;
+import zd.zdcommons.pojo.ReverseMes;
 import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.pojo.ResultMessage;
 
+import javax.swing.plaf.basic.BasicScrollPaneUI;
 import java.util.*;
+
+import static zd.zdcommons.Utils.getInteger;
 
 public class Complete implements AnalysisImp {
     @Override
@@ -22,6 +27,7 @@ public class Complete implements AnalysisImp {
 
         //记录count数即错误数
         long count=0;
+        long count5g=0;
         //获取数据
         //第一个规则
         if(!resource.get("YD5-dUID").toString().isEmpty()) {
@@ -33,126 +39,116 @@ public class Complete implements AnalysisImp {
         if(!resource.get("YD5-RFI-actualEndDate").toString().isEmpty()) {
             HashMap<String,Object> map = getCO(icad,resource,list5g, count,titleMap);//返回的是为空的字段的集合
             list5g = (ArrayList<String>) map.get("error");
-            count = Long.parseLong(map.get("count").toString());
         }
         //第三个规则
         if(!resource.get("YD5-AAU-actualEndDate").toString().isEmpty()) {
             HashMap<String,Object> map = getCO(aau,resource,list5g, count,titleMap);//返回的是为空的字段的集合
             list5g = (ArrayList<String>) map.get("error");
-            count = Long.parseLong(map.get("count").toString());
         }
         //第四个规则
         if(!resource.get("YD5-receptionDate").toString().isEmpty()) {
             HashMap<String,Object> map = getCO(fiveg,resource,list5g, count,titleMap);//返回的是为空的字段的集合
             list5g = (ArrayList<String>) map.get("error");
-            count = Long.parseLong(map.get("count").toString());
         }
         //第五个规则
         if((!resource.get("YD5-AAU-actualEndDate").toString().isEmpty())&&(!resource.get("YD5-problemClassification").toString().isEmpty())) {
             if(!resource.get("YD5-AAU-actualEndDate").equals("已开通有告警")){
                 list5g.add(titleMap.get("YD5-problemClassification").toString());
-                count++;
             }
         }
         if((resource.get("YD5-AAU-actualEndDate").toString().isEmpty())&&(resource.get("YD5-problemClassification").toString().isEmpty())) {
             list5g.add(titleMap.get("YD5-problemClassification").toString());
-            count++;
         }
         //添加5g
         if (list5g.size()>0){
+            count5g=list5g.size();//填入构造
             message=get5G(message,list5g);
             meslist.add(message);
         }
-
+        long count1800fdd=0;
         //生成listAnchor
         ArrayList<String> listAnchor = new ArrayList<String>();
-        //第六个规则
-        if(!resource.get("M1800-installationFDD").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(fddanzhang,resource,listAnchor, count,titleMap);//返回的是为空的字段的集合
-            listAnchor = (ArrayList<String>) map.get("error");
-            count = Long.parseLong(map.get("count").toString());
-        }
-        //第七个规则
-        if(!resource.get("M1800-openedFDD").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(fddkt,resource,listAnchor, count,titleMap);//返回的是为空的字段的集合
-            listAnchor = (ArrayList<String>) map.get("error");
-            count = Long.parseLong(map.get("count").toString());
-        }
-
-        //第八个规则
-        if(!resource.get("M1800-deliveryDateFDD").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(fddjy,resource,listAnchor, count,titleMap);//返回的是为空的字段的集合
-            listAnchor = (ArrayList<String>) map.get("error");
-            //count = (long) map.get("count");
-        }
-        //第九个规则
-        if((!resource.get("M1800-openedFDD").toString().isEmpty())) {
-            if((!resource.get("M1800-questionClassificationFDD").toString().isEmpty())
-                    ||(!resource.get("M1800-nmNEIDFDD").toString().isEmpty())||(!resource.get("M1800-baseStationNameFDD").toString().isEmpty())){
-                listAnchor.add(titleMap.get("M1800-questionClassificationFDD").toString());
-                count++;
+        if (resource.get("M1800-whetherPlanningFDD").equals("是")){
+            //第六个规则
+            if(!resource.get("M1800-installationFDD").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(fddanzhang,resource,listAnchor, count,titleMap);//返回的是为空的字段的集合
+                listAnchor = (ArrayList<String>) map.get("error");
+            }
+            //第七个规则
+            if(!resource.get("M1800-openedFDD").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(fddkt,resource,listAnchor, count,titleMap);//返回的是为空的字段的集合
+                listAnchor = (ArrayList<String>) map.get("error");
             }
 
-        }
-        if((resource.get("M1800-openedFDD").toString().isEmpty())) {
-            if((resource.get("M1800-questionClassificationFDD").toString().isEmpty())
-                    ||(resource.get("M1800-nmNEIDFDD").toString().isEmpty())||(resource.get("M1800-baseStationNameFDD").toString().isEmpty())){
-                listAnchor.add(titleMap.get("M1800-questionClassificationFDD").toString());
-                count++;
+            //第八个规则
+            if(!resource.get("M1800-deliveryDateFDD").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(fddjy,resource,listAnchor, count,titleMap);//返回的是为空的字段的集合
+                listAnchor = (ArrayList<String>) map.get("error");
+                //count = (long) map.get("count");
+            }
+            //第九个规则
+            if((!resource.get("M1800-openedFDD").toString().isEmpty())) {
+                if((!resource.get("M1800-questionClassificationFDD").toString().isEmpty())
+                        ||(!resource.get("M1800-nmNEIDFDD").toString().isEmpty())||(!resource.get("M1800-baseStationNameFDD").toString().isEmpty())){
+                    listAnchor.add(titleMap.get("M1800-questionClassificationFDD").toString());
+                }
+
+            }
+            if((resource.get("M1800-openedFDD").toString().isEmpty())) {
+                if((resource.get("M1800-questionClassificationFDD").toString().isEmpty())
+                        ||(resource.get("M1800-nmNEIDFDD").toString().isEmpty())||(resource.get("M1800-baseStationNameFDD").toString().isEmpty())){
+                    listAnchor.add(titleMap.get("M1800-questionClassificationFDD").toString());
+                }
             }
         }
-
         //添加F1800
         if(listAnchor.size()>0){
+            count1800fdd=listAnchor.size();
             message = get1800Anchor(message, listAnchor);
             meslist.add(message);
         }
-
-
+        long count3d=0;
         //生成listMimo
         ArrayList<String> listMimo = new ArrayList<String>();
-        //第十个规则
-        if(!resource.get("MIMO-installationDate").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(mimoaz,resource,listMimo, count,titleMap);//返回的是为空的字段的集合
-            listMimo = (ArrayList<String>) map.get("error");
-            count = Long.parseLong(map.get("count").toString());
-        }
-        //第十一个规则
-        if(!resource.get("MIMO-completionDate").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(mimoawc,resource,listMimo, count,titleMap);//返回的是为空的字段的集合
-            listMimo = (ArrayList<String>) map.get("error");
-            count = Long.parseLong(map.get("count").toString());
-        }
-        //第十二个规则
-        if(!resource.get("MIMO-deliveryDate").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(mimojy,resource,listMimo, count,titleMap);//返回的是为空的字段的集合
-            listMimo = (ArrayList<String>) map.get("error");
-            count = Long.parseLong(map.get("count").toString());
-        }
-        //第十三个规则
-        if((!resource.get("MIMO-completionDate").toString().isEmpty())) {
-            if((!resource.get("MIMO-questionClassification").toString().isEmpty())
-                    ||(!resource.get("MIMO-nmNEID").toString().isEmpty())||(!resource.get("MIMO-baseStationName").toString().isEmpty())
-                    ||(!resource.get("MIMO-openTypeStandTarget").toString().isEmpty())||(!resource.get("MIMO-openTypeStand").toString().isEmpty())){
-                listMimo.add(titleMap.get("MIMO-questionClassification").toString());
-                count++;
+        if (getInteger(resource.get("MIMO-planningNumber").toString())>0){//有规划量才校验
+            //第十个规则
+            if(!resource.get("MIMO-installationDate").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(mimoaz,resource,listMimo, count,titleMap);//返回的是为空的字段的集合
+                listMimo = (ArrayList<String>) map.get("error");
             }
+            //第十一个规则
+            if(!resource.get("MIMO-completionDate").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(mimoawc,resource,listMimo, count,titleMap);//返回的是为空的字段的集合
+                listMimo = (ArrayList<String>) map.get("error");
+            }
+            //第十二个规则
+            if(!resource.get("MIMO-deliveryDate").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(mimojy,resource,listMimo, count,titleMap);//返回的是为空的字段的集合
+                listMimo = (ArrayList<String>) map.get("error");
+            }
+            //第十三个规则
+            if((!resource.get("MIMO-completionDate").toString().isEmpty())) {
+                if((!resource.get("MIMO-questionClassification").toString().isEmpty())
+                        ||(!resource.get("MIMO-nmNEID").toString().isEmpty())||(!resource.get("MIMO-baseStationName").toString().isEmpty())
+                        ||(!resource.get("MIMO-openTypeStandTarget").toString().isEmpty())||(!resource.get("MIMO-openTypeStand").toString().isEmpty())){
+                    listMimo.add(titleMap.get("MIMO-questionClassification").toString());
+                }
+            }
+            if((resource.get("MIMO-completionDate").toString().isEmpty())) {
+                if((resource.get("MIMO-questionClassification").toString().isEmpty())
+                        ||(resource.get("MIMO-nmNEID").toString().isEmpty())||(resource.get("MIMO-baseStationName").toString().isEmpty())
+                        ||(resource.get("MIMO-openTypeStandTarget").toString().isEmpty())||(resource.get("MIMO-openTypeStand").toString().isEmpty())){
+                    listMimo.add(titleMap.get("MIMO-questionClassification").toString());
+                }
+            }
+        }
 
-        }
-        if((resource.get("MIMO-completionDate").toString().isEmpty())) {
-            if((resource.get("MIMO-questionClassification").toString().isEmpty())
-                    ||(resource.get("MIMO-nmNEID").toString().isEmpty())||(resource.get("MIMO-baseStationName").toString().isEmpty())
-                    ||(resource.get("MIMO-openTypeStandTarget").toString().isEmpty())||(resource.get("MIMO-openTypeStand").toString().isEmpty())){
-                listMimo.add(titleMap.get("MIMO-questionClassification").toString());
-                count++;
-            }
-        }
         //添加3D-MIMO
         if (listMimo.size()>0){
+            count3d=listMimo.size();
             message=get3DMIMO(message,listMimo);
             meslist.add(message);
         }
-
         //添加最终数据
         if(meslist.size()>0){
             resultm=new ResultMessage();
@@ -161,11 +157,165 @@ public class Complete implements AnalysisImp {
             resultm.setDUID(resource.get("YD5-dUID").toString());
             resultm.setDUName(resource.get("YD5-dUName").toString());
             resultm.setMessge(meslist);
-            resultm.setXcount(count);
+            resultm.setXcount(count5g+count3d+count1800fdd);
+            resultm.setCount3d(count3d);
+            resultm.setCount5g(count5g);
+            resultm.setCount1800fdd(count1800fdd);
         }
         return resultm;
     }
+    public Map<String,Object> getIntegrityAnalysisTest(Map<String, Object> resource,Map<String,Object> titleMap) {
+        //结果信息的实体类
+        ResultMessage resultm = null;
+        Message message = null;
+        List<Message> meslist=new ArrayList<Message>();
+        ArrayList<String> list5g = new ArrayList<String>();
+        Map<String,Object> xmap =new HashMap<String,Object>();
+        ReverseMes reverseMes = new ReverseMes();
+        ErrorCount errorCount = new ErrorCount();
+        //记录count数即错误数
+        long count=0;
+        long count5g=0;
+        //获取数据
+        //第一个规则
+        if(!resource.get("YD5-dUID").toString().isEmpty()) {
+            HashMap<String,Object> map = getCO(duidstr,resource,list5g, count,titleMap);//返回的是为空的字段的集合
+            list5g = (ArrayList<String>) map.get("error");
+            count = Long.parseLong(map.get("count").toString());
+        }
+        //第二个规则
+        if(!resource.get("YD5-RFI-actualEndDate").toString().isEmpty()) {
+            HashMap<String,Object> map = getCO(icad,resource,list5g, count,titleMap);//返回的是为空的字段的集合
+            list5g = (ArrayList<String>) map.get("error");
+        }
+        //第三个规则
+        if(!resource.get("YD5-AAU-actualEndDate").toString().isEmpty()) {
+            HashMap<String,Object> map = getCO(aau,resource,list5g, count,titleMap);//返回的是为空的字段的集合
+            list5g = (ArrayList<String>) map.get("error");
+        }
+        //第四个规则
+        if(!resource.get("YD5-receptionDate").toString().isEmpty()) {
+            HashMap<String,Object> map = getCO(fiveg,resource,list5g, count,titleMap);//返回的是为空的字段的集合
+            list5g = (ArrayList<String>) map.get("error");
+        }
+        //第五个规则
+        if((!resource.get("YD5-AAU-actualEndDate").toString().isEmpty())&&(!resource.get("YD5-problemClassification").toString().isEmpty())) {
+            if(!resource.get("YD5-AAU-actualEndDate").equals("已开通有告警")){
+                list5g.add(titleMap.get("YD5-problemClassification").toString());
+            }
+        }
+        if((resource.get("YD5-AAU-actualEndDate").toString().isEmpty())&&(resource.get("YD5-problemClassification").toString().isEmpty())) {
+            list5g.add(titleMap.get("YD5-problemClassification").toString());
+        }
+        //添加5g
+        if (list5g.size()>0){
+            count5g=list5g.size();//填入构造
+            message=get5G(message,list5g);
+            meslist.add(message);
 
+            //test
+            errorCount.setComplete_err(count5g);
+        }
+        long count1800fdd=0;
+        //生成listAnchor
+        ArrayList<String> listAnchor = new ArrayList<String>();
+        if (resource.get("M1800-whetherPlanningFDD").equals("是")){
+            //第六个规则
+            if(!resource.get("M1800-installationFDD").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(fddanzhang,resource,listAnchor, count,titleMap);//返回的是为空的字段的集合
+                listAnchor = (ArrayList<String>) map.get("error");
+            }
+            //第七个规则
+            if(!resource.get("M1800-openedFDD").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(fddkt,resource,listAnchor, count,titleMap);//返回的是为空的字段的集合
+                listAnchor = (ArrayList<String>) map.get("error");
+            }
+
+            //第八个规则
+            if(!resource.get("M1800-deliveryDateFDD").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(fddjy,resource,listAnchor, count,titleMap);//返回的是为空的字段的集合
+                listAnchor = (ArrayList<String>) map.get("error");
+                //count = (long) map.get("count");
+            }
+            //第九个规则
+            if((!resource.get("M1800-openedFDD").toString().isEmpty())) {
+                if((!resource.get("M1800-questionClassificationFDD").toString().isEmpty())
+                        ||(!resource.get("M1800-nmNEIDFDD").toString().isEmpty())||(!resource.get("M1800-baseStationNameFDD").toString().isEmpty())){
+                    listAnchor.add(titleMap.get("M1800-questionClassificationFDD").toString());
+                }
+
+            }
+            if((resource.get("M1800-openedFDD").toString().isEmpty())) {
+                if((resource.get("M1800-questionClassificationFDD").toString().isEmpty())
+                        ||(resource.get("M1800-nmNEIDFDD").toString().isEmpty())||(resource.get("M1800-baseStationNameFDD").toString().isEmpty())){
+                    listAnchor.add(titleMap.get("M1800-questionClassificationFDD").toString());
+                }
+            }
+        }
+        //添加F1800
+        if(listAnchor.size()>0){
+            count1800fdd=listAnchor.size();
+            message = get1800Anchor(message, listAnchor);
+            meslist.add(message);
+        }
+        long count3d=0;
+        //生成listMimo
+        ArrayList<String> listMimo = new ArrayList<String>();
+        if (getInteger(resource.get("MIMO-planningNumber").toString())>0){//有规划量才校验
+            //第十个规则
+            if(!resource.get("MIMO-installationDate").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(mimoaz,resource,listMimo, count,titleMap);//返回的是为空的字段的集合
+                listMimo = (ArrayList<String>) map.get("error");
+            }
+            //第十一个规则
+            if(!resource.get("MIMO-completionDate").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(mimoawc,resource,listMimo, count,titleMap);//返回的是为空的字段的集合
+                listMimo = (ArrayList<String>) map.get("error");
+            }
+            //第十二个规则
+            if(!resource.get("MIMO-deliveryDate").toString().isEmpty()) {
+                HashMap<String,Object> map = getCO(mimojy,resource,listMimo, count,titleMap);//返回的是为空的字段的集合
+                listMimo = (ArrayList<String>) map.get("error");
+            }
+            //第十三个规则
+            if((!resource.get("MIMO-completionDate").toString().isEmpty())) {
+                if((!resource.get("MIMO-questionClassification").toString().isEmpty())
+                        ||(!resource.get("MIMO-nmNEID").toString().isEmpty())||(!resource.get("MIMO-baseStationName").toString().isEmpty())
+                        ||(!resource.get("MIMO-openTypeStandTarget").toString().isEmpty())||(!resource.get("MIMO-openTypeStand").toString().isEmpty())){
+                    listMimo.add(titleMap.get("MIMO-questionClassification").toString());
+                }
+            }
+            if((resource.get("MIMO-completionDate").toString().isEmpty())) {
+                if((resource.get("MIMO-questionClassification").toString().isEmpty())
+                        ||(resource.get("MIMO-nmNEID").toString().isEmpty())||(resource.get("MIMO-baseStationName").toString().isEmpty())
+                        ||(resource.get("MIMO-openTypeStandTarget").toString().isEmpty())||(resource.get("MIMO-openTypeStand").toString().isEmpty())){
+                    listMimo.add(titleMap.get("MIMO-questionClassification").toString());
+                }
+            }
+        }
+
+        //添加3D-MIMO
+        if (listMimo.size()>0){
+            count3d=listMimo.size();
+            message=get3DMIMO(message,listMimo);
+            meslist.add(message);
+        }
+        //添加最终数据
+        if(meslist.size()>0){
+            resultm=new ResultMessage();
+            resultm.setTError("完整性错误");
+            resultm.setDarea(resource.get("YD5-area").toString());
+            resultm.setDUID(resource.get("YD5-dUID").toString());
+            resultm.setDUName(resource.get("YD5-dUName").toString());
+            resultm.setMessge(meslist);
+            resultm.setXcount(count5g+count3d+count1800fdd);
+            resultm.setCount3d(count3d);
+            resultm.setCount5g(count5g);
+            resultm.setCount1800fdd(count1800fdd);
+        }
+        xmap.put("resultm",resultm);
+        return xmap;
+    }
     private static final String[] yuan = {"Customer Site ID","Customer Site Name","DU ID",
             "DU Name","行政区域","Subcontractor","督导单位","Software Commissioning-Baseline Start Date",
             "Software Commissioning-Baseline End Date",
@@ -248,10 +398,10 @@ public class Complete implements AnalysisImp {
     private static final String[] fddjy = {"M1800-openedFDD","M1800-deliveryCompletionDateFFD","M1800-deliveryDateFDD"};
     //第十个规则所需字段
     private static final String[] mimoaz = {"MIMO-miMO3DID","MIMO-planningNumber",
-            "MIMO-nmNEID","MIMO-openTypeStandTarget","MIMO-openTypeStand","MIMO-miMO3DGoodsQuantity","MIMO-installationDate"};
+            "MIMO-nmNEID","MIMO-miMO3DGoodsQuantity","MIMO-installationDate"};
     //第十一个规则
     private static final String[] mimoawc = {"MIMO-installationDate",
-            "MIMO-transmissionBandwidthe4G","MIMO-baseStationName","MIMO-completionDate"};
+            "MIMO-transmissionBandwidthe4G","MIMO-baseStationName","MIMO-completionDate","MIMO-openTypeStandTarget","MIMO-openTypeStand"};
     //第十二个规则
     private static final String[] mimojy = {"MIMO-completionDate","MIMO-deliveryDate","MIMO-miMO3DDate"};
 

@@ -426,14 +426,6 @@ public class Utils {
                 int i = areaIndex.get(rev.getArea());//得到当前地区下标
                 areacount.set((2*index)+i,rev);//得到该存入的下标，并存入
             }
-            int test=0;
-            for (ReverseMes rev:areacount){
-                if(rev.getId().equals("5G")){
-                    System.out.println(rev);
-                    test++;
-                }
-            };
-            System.out.println("ok="+test);
         }
         final String uuId = getUUId();
         // 写入流

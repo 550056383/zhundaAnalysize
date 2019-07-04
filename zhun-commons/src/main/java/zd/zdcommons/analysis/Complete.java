@@ -31,8 +31,8 @@ public class Complete implements AnalysisImp {
         long count5g=0;
         //获取数据
         //第一个规则
-        if(!resource.get("YD5-dUID").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(duidstr,resource,list5g, count,titleMap,false,"YD5-dUID",false);//返回的是为空的字段的集合
+        if(!resource.get("YD5-SC-actualEndDate").toString().isEmpty()) {
+            HashMap<String,Object> map = getCO(duidstr,resource,list5g, count,titleMap,false,"YD5-SC-actualEndDate",false);//返回的是为空的字段的集合
             list5g = (ArrayList<String>) map.get("error");
             count = Long.parseLong(map.get("count").toString());
         }
@@ -53,13 +53,14 @@ public class Complete implements AnalysisImp {
         }
         //第五个规则
         if((!resource.get("YD5-AAU-actualEndDate").toString().isEmpty())) {
-            if(!resource.get("YD5-problemClassification").equals("已开通有告警")||(!resource.get("YD5-problemClassification").toString().isEmpty())){
+            if(resource.get("YD5-problemClassification").equals("已开通有告警")||(!resource.get("YD5-problemClassification").toString().isEmpty())){
+                System.out.println("开通AUU，问题分类的值="+resource.get("YD5-problemClassification").toString()+" ：：：");
                 list5g.add(titleMap.get("YD5-problemClassification").toString()+"  --的值不是 空 或 已开通有告警 ，AUU开通已有值");
             }
 
         }
         if((resource.get("YD5-AAU-actualEndDate").toString().isEmpty())) {
-            if(resource.get("YD5-problemClassification").equals("已开通有告警")||(resource.get("YD5-problemClassification").toString().isEmpty())){
+            if(!resource.get("YD5-problemClassification").equals("已开通有告警")||(resource.get("YD5-problemClassification").toString().isEmpty())){
                 list5g.add(titleMap.get("YD5-problemClassification").toString()+"  --的值是 空 或 已开通有告警 ，AUU开通也没有值");
             }
             //list5g.add(titleMap.get("YD5-problemClassification").toString());
@@ -93,12 +94,17 @@ public class Complete implements AnalysisImp {
             }
             //第九个规则
             if((!resource.get("M1800-openedFDD").toString().isEmpty())) {
-                HashMap<String,Object> map = getCO(anchorType,resource,listAnchor, count,titleMap,true,"M1800-openedFDD",false);//返回的是为空的字段的集合
+                //isEmpty true 判断非空，false判断空
+                HashMap<String,Object> map = getCO(anchorType,resource,listAnchor, count,titleMap,false,"M1800-openedFDD",false);//返回的是为空的字段的集合
                 listAnchor = (ArrayList<String>) map.get("error");
+                HashMap<String,Object> map1 = getCO(anchorRevceType,resource,listAnchor, count,titleMap,true,"M1800-openedFDD",false);//返回的是为空的字段的集合
+                listAnchor = (ArrayList<String>) map1.get("error");
             }
             if((resource.get("M1800-openedFDD").toString().isEmpty())) {
-                HashMap<String,Object> map = getCO(anchorType,resource,listAnchor, count,titleMap,false,"M1800-openedFDD",true);//返回的是为空的字段的集合
+                HashMap<String,Object> map = getCO(anchorType1,resource,listAnchor, count,titleMap,true,"M1800-openedFDD",true);//返回的是为空的字段的集合
                 listAnchor = (ArrayList<String>) map.get("error");
+                HashMap<String,Object> map1 = getCO(anchorRevceType,resource,listAnchor, count,titleMap,false,"M1800-openedFDD",true);//返回的是为空的字段的集合
+                listAnchor = (ArrayList<String>) map1.get("error");
             }
         }
         //添加F1800
@@ -128,12 +134,17 @@ public class Complete implements AnalysisImp {
             }
             //第十三个规则
             if((!resource.get("MIMO-completionDate").toString().isEmpty())) {
-                HashMap<String,Object> map = getCO(mimoType,resource,listMimo, count,titleMap,true,"MIMO-completionDate",false);//返回的是为空的字段的集合
+                //isEmpty true判断非空 ，false判断空
+                HashMap<String,Object> map = getCO(mimoType,resource,listMimo, count,titleMap,false,"MIMO-completionDate",false);//返回的是为空的字段的集合
                 listMimo = (ArrayList<String>) map.get("error");
+                HashMap<String,Object> map1 = getCO(mimoRevceType,resource,listMimo, count,titleMap,true,"MIMO-completionDate",false);//返回的是为空的字段的集合
+                listMimo = (ArrayList<String>) map1.get("error");
             }
             if((resource.get("MIMO-completionDate").toString().isEmpty())) {
-                HashMap<String,Object> map = getCO(mimoType,resource,listMimo, count,titleMap,false,"MIMO-completionDate",true);//返回的是为空的字段的集合
+                HashMap<String,Object> map = getCO(mimoType1,resource,listMimo, count,titleMap,true,"MIMO-completionDate",true);//返回的是为空的字段的集合
                 listMimo = (ArrayList<String>) map.get("error");
+                HashMap<String,Object> map1 = getCO(mimoRevceType,resource,listMimo, count,titleMap,false,"MIMO-completionDate",true);//返回的是为空的字段的集合
+                listMimo = (ArrayList<String>) map1.get("error");
             }
         }
 
@@ -184,7 +195,7 @@ public class Complete implements AnalysisImp {
     private static final String[] fiveg = {"YD5-completionDate","YD5-AAU-actualEndDate","YD5-receptionDate"};
     //第六个规则所需字段
     private static final String[] fddanzhang = {"MIMO-transmissionAvailable4G","M1800-programNumberFDD",
-            "M1800-constructionPlanFDD","M1800-whetherPlanningFDD","M1800-nmNEIDFDD","M1800-arrivalDateFDD",
+            "M1800-constructionPlanFDD","M1800-whetherPlanningFDD","M1800-arrivalDateFDD",
             "M1800-installationFDD"};
     //第七个规则所需字段
     private static final String[] fddkt = {"M1800-installationFDD","M1800-baseStationNameFDD",
@@ -193,7 +204,7 @@ public class Complete implements AnalysisImp {
     private static final String[] fddjy = {"M1800-openedFDD","M1800-deliveryCompletionDateFFD","M1800-deliveryDateFDD"};
     //第十个规则所需字段
     private static final String[] mimoaz = {"MIMO-miMO3DID","MIMO-planningNumber",
-            "MIMO-nmNEID","MIMO-miMO3DGoodsQuantity","MIMO-installationDate"};
+            "MIMO-miMO3DGoodsQuantity","MIMO-installationDate"};
     //第十一个规则
     private static final String[] mimoawc = {"MIMO-installationDate",
             "MIMO-transmissionBandwidthe4G","MIMO-baseStationName","MIMO-completionDate","MIMO-openTypeStandTarget","MIMO-openTypeStand"};
@@ -202,8 +213,12 @@ public class Complete implements AnalysisImp {
 
     //双转规则
 
-    private static final String[] anchorType={"M1800-questionClassificationFDD","M1800-nmNEIDFDD","M1800-baseStationNameFDD"};
-    private static final String[] mimoType={"MIMO-questionClassification","MIMO-nmNEID","MIMO-baseStationName","MIMO-openTypeStandTarget","MIMO-openTypeStand"};
+    private static final String[] anchorType={"M1800-nmNEIDFDD","M1800-baseStationNameFDD"};
+    private static final String[] anchorType1={"M1800-nmNEIDFDD"};
+    private static final String[] anchorRevceType={"M1800-questionClassificationFDD"};
+    private static final String[] mimoType={"MIMO-nmNEID","MIMO-baseStationName","MIMO-openTypeStandTarget","MIMO-openTypeStand"};
+    private static final String[] mimoType1={"MIMO-nmNEID","MIMO-openTypeStandTarget","MIMO-openTypeStand"};
+    private static final String[] mimoRevceType={"MIMO-questionClassification"};
     /**
      * 得到错误信息和出错次数的方法
      *
@@ -213,11 +228,23 @@ public class Complete implements AnalysisImp {
      * @param count 出错的次数
      * @return 返回一个map集合包含错误信息和出错次数
      */
-    public static HashMap<String,Object> getCO(String [] s, Map<String, Object> map, List<String> befolist, long count,Map<String,Object> titleMap,boolean bothSwitch,String judge,boolean isnull) {
+    /***
+     *
+     * @param s 包含判断的字段的数组
+     * @param map 读取的表格数据
+     * @param befolist 错误信息的集合
+     * @param count 记录错误数
+     * @param titleMap 中文标题
+     * @param isEmpty 判断所需要字段(正确情况是否为空)
+     * @param judge 主条件所关联字段
+     * @param isnull 主条件是否为空
+     * @return
+     */
+    public static HashMap<String,Object> getCO(String [] s, Map<String, Object> map, List<String> befolist, long count,Map<String,Object> titleMap,boolean isEmpty,String judge,boolean isnull) {
         List<String> list = befolist;
         for(int i = 0;i<s.length;i++) {
-            if(bothSwitch?(!map.get(s[i]).toString().isEmpty()):(map.get(s[i]).toString().isEmpty())) {
-                list.add(titleMap.get(judge)+" -"+(isnull?"未录入":"已录入")+"，---"+titleMap.get(s[i]).toString()+(bothSwitch?"不为空":"为空"));
+            if(isEmpty?(!map.get(s[i]).toString().isEmpty()):(map.get(s[i]).toString().isEmpty())) {
+                list.add(titleMap.get(judge)+" -"+(isnull?"未录入":"已录入")+"，---"+titleMap.get(s[i]).toString()+(isEmpty?"不为空":"为空"));
                 count++;
             }
         }

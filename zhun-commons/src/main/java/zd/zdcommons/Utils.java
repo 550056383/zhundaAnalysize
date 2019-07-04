@@ -440,6 +440,8 @@ public class Utils {
         pt.setStrArea(strArea);
         return pt;
     }
+
+    //TempCount 临时拆分
     public void getTempCount(Map<String, TempCount> xun,ResultMessage result,String aType){
         if(xun.get(result.getDarea()+aType)!=null){
             TempCount tempCount= xun.get(result.getDarea()+aType);
@@ -452,6 +454,7 @@ public class Utils {
         }
     }
 
+    //得到输出类型
     public ReverseMes getRevMes(Long count,String areaName, String type,String staTepy){
         ReverseMes rev = new ReverseMes();
         if("5G".equals(staTepy)){
@@ -468,7 +471,7 @@ public class Utils {
         return rev;
     }
 
-
+    //得到记错类型
     public ErrorCount getError(ErrorCount error,Long count,String type){
         if(type.equals("c")){
             error.setComplete_err(count);

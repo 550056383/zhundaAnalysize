@@ -125,6 +125,11 @@ public class Logic implements AnalysisImp {
                 first--;//向前推时间
                 if (first<0)return meslist;
             }
+            if(resource.get(logicStr[after]).equals("NA"))continue;//如果现网已具备 则无法比较 后时间
+            while (resource.get(logicStr[first]).equals("NA")){
+                first--;//向前推时间
+                if (first<0)return meslist;
+            }
             int qian = getInteger(resource.get(logicStr[first]).toString());
             String qianTime="";
             //System.out.println("数组是："+logicStr[first]+"  first=:"+first);

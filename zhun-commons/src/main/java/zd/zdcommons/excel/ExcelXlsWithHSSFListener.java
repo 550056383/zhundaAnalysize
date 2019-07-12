@@ -1,11 +1,12 @@
-package com.test;
+package zd.zdcommons.excel;
 
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.apache.poi.hssf.eventusermodel.*;
 import org.apache.poi.hssf.eventusermodel.dummyrecord.LastCellOfRowDummyRecord;
 import org.apache.poi.hssf.record.*;
 import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import zd.zdcommons.resouce.ExceclResouce;
+import zd.zdcommons.serviceImp.ExcelDrivenImp;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +21,7 @@ import java.util.Map;
  * @TIME 2019/7/2 -11:27
  */
 
-public class ExcelXlsWithHSSFListener implements HSSFListener {
+public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
 
     private ArrayList boundSheetRecords = new ArrayList();
 
@@ -52,6 +53,9 @@ public class ExcelXlsWithHSSFListener implements HSSFListener {
     //设置读取配置
     private String[] ruleOverLay=null;
     private String[] ruleJoint=null;
+    //返回标题
+    private Boolean fagTitle=true;
+    @Override
     public int process(InputStream inputStream,int num,String[] read,String primarykey){
         try {
             //给标题行数赋值(默认从0开始为第一行)
@@ -72,7 +76,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener {
             request.addListenerForAllRecords(formatListener);
             factory.processWorkbookEvents(request,fileSystem);//执行(这里-开始执行 processRecord(Record record))
             //追加最后一行数据
-            ReadAndTest.getShow(rowBefore);
+            ExceclResouce.getResource(rowBefore);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -156,12 +160,17 @@ public class ExcelXlsWithHSSFListener implements HSSFListener {
         //换行
         if (record instanceof LastCellOfRowDummyRecord){
             if (curRow>titleNum) { //判断是否是第二条数据，我们返回前一条数据
+                if (fagTitle){//返回数据
+                    ExceclResouce.getTitle(rowTitle);
+                    fagTitle=false;
+                }
                 if(rowBefore.get(primaryKey)!=null&&rowBefore.get(primaryKey).equals(rowContents.get(primaryKey))){
                     //叠加，拼接
                     rowContents= getOverlay(ruleOverLay);
                     rowContents= getJoint(ruleJoint);
                 }else {
-                    ReadAndTest.getShow(rowBefore);//每条数据，则用getShow方法返回
+
+                    ExceclResouce.getResource(rowBefore);//每条数据，则用getShow方法返回
                 }
             }
             //给前一条数据赋值

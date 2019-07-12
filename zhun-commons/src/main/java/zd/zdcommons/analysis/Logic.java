@@ -80,12 +80,12 @@ public class Logic implements AnalysisImp {
             String mes = resource.get(logic[i]).toString();
             //开启填入
             if (lot){
-                if (StringUtils.isBlank(mes)||mes.equals("N/A")){
+                if (StringUtils.isBlank(mes)){
                     countx++;
                     list.add(titleMap.get(logic[i])+"为空");
                 }
             }
-            if(!StringUtils.isBlank(mes)&&!mes.equals("N/A")){
+            if(!StringUtils.isBlank(mes)){
                 //判断自定义、、时间靠后有值时候开启判断
                 if(custom){
                     if(lot==false&&i>1){
@@ -127,6 +127,11 @@ public class Logic implements AnalysisImp {
             }
             if(resource.get(logicStr[after]).equals("NA"))continue;//如果现网已具备 则无法比较 后时间
             while (resource.get(logicStr[first]).equals("NA")){
+                first--;//向前推时间
+                if (first<0)return meslist;
+            }
+            if(resource.get(logicStr[after]).equals("N/A"))continue;//如果现网已具备 则无法比较 后时间
+            while (resource.get(logicStr[first]).equals("N/A")){
                 first--;//向前推时间
                 if (first<0)return meslist;
             }

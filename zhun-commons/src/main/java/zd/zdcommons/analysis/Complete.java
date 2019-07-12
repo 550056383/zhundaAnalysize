@@ -31,8 +31,8 @@ public class Complete implements AnalysisImp {
         long count5g=0;
         //获取数据
         //第一个规则
-        if(!resource.get("YD5-SC-actualEndDate").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(duidstr,resource,list5g, count,titleMap,false,"YD5-SC-actualEndDate",false);//返回的是为空的字段的集合
+        if(!resource.get("YD5-dUID").toString().isEmpty()) {
+            HashMap<String,Object> map = getCO(duidstr,resource,list5g, count,titleMap,false,"YD5-dUID",false);//返回的是为空的字段的集合
             list5g = (ArrayList<String>) map.get("error");
             count = Long.parseLong(map.get("count").toString());
         }
@@ -42,7 +42,9 @@ public class Complete implements AnalysisImp {
             list5g = (ArrayList<String>) map.get("error");
         }
         //第三个规则
-        if(!resource.get("YD5-AAU-actualEndDate").toString().isEmpty()) {
+        if(!resource.get("YD5-AAU-actualEndDate").toString().isEmpty()
+                &&!resource.get("YD5-AAU-actualEndDate").equals("N/A")
+                &&!resource.get("YD5-AAU-actualEndDate").equals("NA")) {
             HashMap<String,Object> map = getCO(aau,resource,list5g, count,titleMap,false,"YD5-AAU-actualEndDate",false);//返回的是为空的字段的集合
             list5g = (ArrayList<String>) map.get("error");
         }
@@ -51,16 +53,22 @@ public class Complete implements AnalysisImp {
             HashMap<String,Object> map = getCO(fiveg,resource,list5g, count,titleMap,false,"YD5-receptionDate",false);//返回的是为空的字段的集合
             list5g = (ArrayList<String>) map.get("error");
         }
+        if(!resource.get("YD5-SC-actualEndDate").toString().isEmpty()) {
+            HashMap<String,Object> map = getCO(scStr,resource,list5g, count,titleMap,false,"YD5-SC-actualEndDate",false);//返回的是为空的字段的集合
+            list5g = (ArrayList<String>) map.get("error");
+            count = Long.parseLong(map.get("count").toString());
+        }
         //第五个规则
         if((!resource.get("YD5-AAU-actualEndDate").toString().isEmpty())) {
-            if(resource.get("YD5-problemClassification").equals("已开通有告警")||(!resource.get("YD5-problemClassification").toString().isEmpty())){
-                System.out.println("开通AUU，问题分类的值="+resource.get("YD5-problemClassification").toString()+" ：：：");
-                list5g.add(titleMap.get("YD5-problemClassification").toString()+"  --的值不是 空 或 已开通有告警 ，AUU开通已有值");
+            if(!resource.get("YD5-problemClassification").equals("已开通有告警")&&(!resource.get("YD5-problemClassification").toString().isEmpty())){
+                //System.out.println("开通AUU，问题分类的值="+resource.get("YD5-problemClassification").toString()+" ：：：");
+                list5g.add(titleMap.get("YD5-problemClassification").toString()+"  --的值不是 空 或 没有已开通有告警 ，AUU开通已有值");
             }
 
         }
         if((resource.get("YD5-AAU-actualEndDate").toString().isEmpty())) {
-            if(!resource.get("YD5-problemClassification").equals("已开通有告警")||(resource.get("YD5-problemClassification").toString().isEmpty())){
+            if(resource.get("YD5-problemClassification").equals("已开通有告警")&&(resource.get("YD5-problemClassification").toString().isEmpty())){
+                //System.out.println(resource.get("YD5-problemClassification"));
                 list5g.add(titleMap.get("YD5-problemClassification").toString()+"  --的值是 空 或 已开通有告警 ，AUU开通也没有值");
             }
             //list5g.add(titleMap.get("YD5-problemClassification").toString());
@@ -80,11 +88,11 @@ public class Complete implements AnalysisImp {
                 HashMap<String,Object> map = getCO(fddanzhang,resource,listAnchor, count,titleMap,false,"M1800-installationFDD",false);//返回的是为空的字段的集合
                 listAnchor = (ArrayList<String>) map.get("error");
             }
-            //第七个规则
-            if(!resource.get("M1800-openedFDD").toString().isEmpty()) {
-                HashMap<String,Object> map = getCO(fddkt,resource,listAnchor, count,titleMap,false,"M1800-openedFDD",false);//返回的是为空的字段的集合
-                listAnchor = (ArrayList<String>) map.get("error");
-            }
+            //第七个规则（后面更新）
+//            if(!resource.get("M1800-openedFDD").toString().isEmpty()) {
+//                HashMap<String,Object> map = getCO(fddkt,resource,listAnchor, count,titleMap,false,"M1800-openedFDD",false);//返回的是为空的字段的集合
+//                listAnchor = (ArrayList<String>) map.get("error");
+//            }
 
             //第八个规则
             if(!resource.get("M1800-deliveryDateFDD").toString().isEmpty()) {
@@ -101,8 +109,6 @@ public class Complete implements AnalysisImp {
                 listAnchor = (ArrayList<String>) map1.get("error");
             }
             if((resource.get("M1800-openedFDD").toString().isEmpty())) {
-                HashMap<String,Object> map = getCO(anchorType1,resource,listAnchor, count,titleMap,true,"M1800-openedFDD",true);//返回的是为空的字段的集合
-                listAnchor = (ArrayList<String>) map.get("error");
                 HashMap<String,Object> map1 = getCO(anchorRevceType,resource,listAnchor, count,titleMap,false,"M1800-openedFDD",true);//返回的是为空的字段的集合
                 listAnchor = (ArrayList<String>) map1.get("error");
             }
@@ -122,11 +128,11 @@ public class Complete implements AnalysisImp {
                 HashMap<String,Object> map = getCO(mimoaz,resource,listMimo, count,titleMap,false,"MIMO-installationDate",false);//返回的是为空的字段的集合
                 listMimo = (ArrayList<String>) map.get("error");
             }
-            //第十一个规则
-            if(!resource.get("MIMO-completionDate").toString().isEmpty()) {
-                HashMap<String,Object> map = getCO(mimoawc,resource,listMimo, count,titleMap,false,"MIMO-completionDate",false);//返回的是为空的字段的集合
-                listMimo = (ArrayList<String>) map.get("error");
-            }
+            //第十一个规则->(跟双向重复)
+//            if(!resource.get("MIMO-completionDate").toString().isEmpty()) {
+//                HashMap<String,Object> map = getCO(mimoawc,resource,listMimo, count,titleMap,false,"MIMO-completionDate",false);//返回的是为空的字段的集合
+//                listMimo = (ArrayList<String>) map.get("error");
+//            }
             //第十二个规则
             if(!resource.get("MIMO-deliveryDate").toString().isEmpty()) {
                 HashMap<String,Object> map = getCO(mimojy,resource,listMimo, count,titleMap,false,"MIMO-deliveryDate",false);//返回的是为空的字段的集合
@@ -141,8 +147,6 @@ public class Complete implements AnalysisImp {
                 listMimo = (ArrayList<String>) map1.get("error");
             }
             if((resource.get("MIMO-completionDate").toString().isEmpty())) {
-                HashMap<String,Object> map = getCO(mimoType1,resource,listMimo, count,titleMap,true,"MIMO-completionDate",true);//返回的是为空的字段的集合
-                listMimo = (ArrayList<String>) map.get("error");
                 HashMap<String,Object> map1 = getCO(mimoRevceType,resource,listMimo, count,titleMap,false,"MIMO-completionDate",true);//返回的是为空的字段的集合
                 listMimo = (ArrayList<String>) map1.get("error");
             }
@@ -177,7 +181,7 @@ public class Complete implements AnalysisImp {
 
     //第一个规则所需要判断的字段
     private static final String[] duidstr = {"YD5-dUID","YD5-customerSiteID","YD5-customerSiteName",
-            "YD5-dUName","YD5-area","YD5-Subcontractor","YD5-spectrum","YD5-nroServiceContract",
+            "YD5-dUName","YD5-area","YD5-Subcontractor","YD5-spectrum",
             "YD5-scenario","YD5-standingType","YD5-engineeringServiceMode",
             //2019/6/10检查之后对这个字段添加了一个YD5-deliveryRegion和其他几个字段
             "YD5-contractConnection","YD5-standingType2","YD5-standard","YD5-deliveryRegion"};
@@ -186,17 +190,18 @@ public class Complete implements AnalysisImp {
             "YD5-remoteStationType","YD5-planningNumber","YD5-tianmianTransformation","YD5-dcFuse",
             "YD5-acInduction","YD5-design","YD5-rruHardwareNumber","YD5-IC-actualEndDate"};
     //第三个规则所需字段
-    private static final String[] aau = {"YD5-IC-actualEndDate","YD5-deliveryType",
-            "YD5-nROPO","YD5-rruToneNumber","YD5-residentialBroadband","YD5-transmissionEquipped",
+    private static final String[] aau = {"YD5-IC-actualEndDate","YD5-deliveryType","YD5-rruToneNumber",
+            "YD5-residentialBroadband","YD5-transmissionEquipped",
             "YD5-bbuESN","YD5-bbuSiteID","YD5-bbuSiteName","YD5-rruScenario","YD5-nmNEName","YD5-rruSiteID",
             "YD5-rruSiteName","YD5-rruScenario","YD5-transmissionBandwidth",
             "YD5-nroSubcontractor","YD5-AAU-actualEndDate"};//2019/6/10检查之后对这个字段添加了D5-AAU-actualEndDate
     //第四个规则所需字段
     private static final String[] fiveg = {"YD5-completionDate","YD5-AAU-actualEndDate","YD5-receptionDate"};
+    //5G新增
+    private static final String[] scStr={"YD5-nROPO","YD5-nroServiceContract"};
     //第六个规则所需字段
-    private static final String[] fddanzhang = {"MIMO-transmissionAvailable4G","M1800-programNumberFDD",
-            "M1800-constructionPlanFDD","M1800-whetherPlanningFDD","M1800-arrivalDateFDD",
-            "M1800-installationFDD"};
+    private static final String[] fddanzhang = {"M1800-programNumberFDD",
+            "M1800-constructionPlanFDD","M1800-whetherPlanningFDD","M1800-arrivalDateFDD"};
     //第七个规则所需字段
     private static final String[] fddkt = {"M1800-installationFDD","M1800-baseStationNameFDD",
             "MIMO-transmissionBandwidthe4G","M1800-openedFDD"};
@@ -204,20 +209,19 @@ public class Complete implements AnalysisImp {
     private static final String[] fddjy = {"M1800-openedFDD","M1800-deliveryCompletionDateFFD","M1800-deliveryDateFDD"};
     //第十个规则所需字段
     private static final String[] mimoaz = {"MIMO-miMO3DID","MIMO-planningNumber",
-            "MIMO-miMO3DGoodsQuantity","MIMO-installationDate"};
+            "MIMO-miMO3DGoodsQuantity"};
     //第十一个规则
-    private static final String[] mimoawc = {"MIMO-installationDate",
-            "MIMO-transmissionBandwidthe4G","MIMO-baseStationName","MIMO-completionDate","MIMO-openTypeStandTarget","MIMO-openTypeStand"};
+//    private static final String[] mimoawc = {"MIMO-installationDate",
+//            "MIMO-transmissionBandwidthe4G","MIMO-baseStationName","MIMO-completionDate","MIMO-openTypeStandTarget","MIMO-openTypeStand"};
     //第十二个规则
     private static final String[] mimojy = {"MIMO-completionDate","MIMO-deliveryDate","MIMO-miMO3DDate"};
 
     //双转规则
 
-    private static final String[] anchorType={"M1800-nmNEIDFDD","M1800-baseStationNameFDD"};
-    private static final String[] anchorType1={"M1800-nmNEIDFDD"};
+    private static final String[] anchorType={"M1800-nmNEIDFDD","M1800-installationFDD","M1800-baseStationNameFDD",
+            "MIMO-transmissionBandwidthe4G","M1800-openedFDD"};
     private static final String[] anchorRevceType={"M1800-questionClassificationFDD"};
-    private static final String[] mimoType={"MIMO-nmNEID","MIMO-baseStationName","MIMO-openTypeStandTarget","MIMO-openTypeStand"};
-    private static final String[] mimoType1={"MIMO-nmNEID","MIMO-openTypeStandTarget","MIMO-openTypeStand"};
+    private static final String[] mimoType={"MIMO-nmNEID","MIMO-baseStationName","MIMO-openTypeStandTarget","MIMO-openTypeStand","MIMO-transmissionBandwidthe4G","MIMO-installationDate"};
     private static final String[] mimoRevceType={"MIMO-questionClassification"};
     /**
      * 得到错误信息和出错次数的方法

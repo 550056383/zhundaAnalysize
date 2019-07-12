@@ -138,6 +138,7 @@ public class Utils {
         valuedate = (int) ((date.getTime() / 1000 / 60 / 60 / 24)+25568);
         return valuedate;
     };
+
     public static Date getFormate_A(String value){
         SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd");
         Date date =null;
@@ -167,7 +168,7 @@ public class Utils {
         //第一步，创建一个workbook对应一个excel文件
         HSSFWorkbook workbook = new HSSFWorkbook();
         //第二部，在workbook中创建一个sheet对应excel中的sheet
-        HSSFSheet sheet = workbook.createSheet("病例日期表");
+        HSSFSheet sheet = workbook.createSheet("分析列表");
         //第三部，在sheet表中添加表头第0行，老版本的poi对sheet的行列有限制
         HSSFRow row = sheet.createRow(0);
         //第四步，创建单元格，设置表头
@@ -183,7 +184,6 @@ public class Utils {
         cell.setCellValue("所属类型");
         cell = row.createCell(5);
         cell.setCellValue("错误信息");
-        System.out.println("回传多少数据"+rem.size());
 
         int cellsum=0;
         //第五步，写入数据
@@ -192,7 +192,6 @@ public class Utils {
             for (int z=0;z<mes.size();z++){
                 //拿取错误类型5g，3D,1800瞄点
                 List<String> messages = mes.get(z).getMessages();
-
                 for (int j=0;j<messages.size();j++){
                     List<String> oneData=new ArrayList<String>();
                     //封装每一个属性
@@ -210,16 +209,12 @@ public class Utils {
                         row1.createCell(x).setCellValue(oneData.get(x));
                     }
                 }
-
             }
-
-
         }
 
         //将文件保存到指定的位置
         try {
             String save=getOS();
-
             System.out.println("save==="+save);
             System.out.println("file save address::"+save+name+".xls");
             FileOutputStream fos = new FileOutputStream(save+name+".xls");
@@ -744,4 +739,5 @@ public class Utils {
             return i;
         }
     }
+
 }

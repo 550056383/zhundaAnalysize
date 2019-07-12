@@ -4,6 +4,7 @@ import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
 import zd.zdcommons.read.ReadIntegrityExcel;
 import zd.zdcommons.read.ReadclockExcel;
 import zd.zdcommons.serviceImp.AnalysisImp;
+import zd.zdcommons.serviceImp.ExcelDrivenImp;
 import zd.zdcommons.serviceImp.ReadExcelImp;
 
 public class ReadFacotory extends AnalysisAbstractFactory {
@@ -21,6 +22,12 @@ public class ReadFacotory extends AnalysisAbstractFactory {
         }
         return null;
     }
+
+    @Override
+    public ExcelDrivenImp getDriver(String EndName) {
+        return null;
+    }
+
     @Override
     public AnalysisImp getAnalysis(String analysis) {
         return null;

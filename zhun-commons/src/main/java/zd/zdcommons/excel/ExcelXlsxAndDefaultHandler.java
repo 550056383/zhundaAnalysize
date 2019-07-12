@@ -1,13 +1,18 @@
-package com.test;
+package zd.zdcommons.excel;
 
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.model.SharedStringsTable;
 import org.apache.poi.xssf.model.StylesTable;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
-import org.xml.sax.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+import zd.zdcommons.resouce.ExceclResouce;
+import zd.zdcommons.serviceImp.ExcelDrivenImp;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -21,7 +26,7 @@ import java.util.Map;
  * @TIME 2019/7/1 0001-9:33
  */
 
-public class ExcelXlsxAndDefaultHandler extends DefaultHandler {
+public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelDrivenImp {
     //记录数据总条数
     private int total=0;
     //判断单元格是否有值
@@ -37,7 +42,10 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler {
     //数据的存放
     private LinkedHashMap<String, String> rowContents=new LinkedHashMap<String, String>();
     //数据的存放
-    private LinkedHashMap<String, String> rowBefore=new LinkedHashMap<String, String>();
+    private LinkedHashMap<String, String> rowBefore=null;
+
+    //是否返回标题
+    private Boolean fagTitle=true;
     /*
      * 第二次改进
      */
@@ -81,7 +89,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler {
             InputStream sheet = r.getSheet("rId1");
             InputSource sheetSource = new InputSource(sheet);
             parser.parse(sheetSource);
-            ReadAndTest.getShow(rowBefore);//最后一条数据调回
+            ExceclResouce.getResource(rowBefore);//最后一条数据调回
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -115,28 +123,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler {
         lastContents="";
     }
 
-    public void  getNextType(Attributes attributes){
-        cellPosition = attributes.getValue("r");//得到单元格编号 如 AF12
-        String cellType = attributes.getValue("t");//是否存在值(s,null 为返回值)
-        //System.out.println("编号："+cellPosition+"\t 是否存在："+cellType);
-        if (cellType.equals("b")){
-            cellDataType= CellDataType.BOOL;
-        }else if (cellType.equals("e")){
-            cellDataType=CellDataType.ERROR;
-        }else if (cellType.equals("inlineStr")){
-            cellDataType=CellDataType.INLINESTR;
-        }else if (cellType.equals("s")){
-            cellDataType=CellDataType.SSTINDEX;
-        }else if(cellType.equals("str")){
-            cellDataType=CellDataType.FORMULA;
-        }
-        //处理日期
-        if(cellType!=null&& cellType.equals("s")){
-            isValueCell = true;
-        } else {
-            isValueCell = false;
-        }
-    }
     /***
      * 执行顺序 - 第三
      * third
@@ -158,10 +144,14 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler {
         if (qName.equals("v")){
             //System.out.println("cellPosition:"+cellPosition+" and value:"+lastContents.trim());
             //数据读取结束后，将单元格坐标,内容存入map中
-
-            if (total>titleNum){
+            //把数据装在Map里
+            if (total>titleNum){//拿取数据
+                if(fagTitle){//返回标题
+                    ExceclResouce.getTitle(rowTitle);
+                    fagTitle=false;
+                }
                 rowContents.put(rowTitle.get(getStr(cellPosition)),lastContents);
-            }else {
+            }else {//拿取表头
                 if (rowTitle.get(getStr(cellPosition))!=null){
                     rowTitle.put(getStr(cellPosition),rowTitle.get(getStr(cellPosition))+"--"+lastContents);
                 }else {
@@ -175,7 +165,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler {
                 rowContents= getOverlay(ruleOverLay);
                 rowContents= getJoint(ruleJoint);
             }else {
-                ReadAndTest.getShow(rowBefore);//每条数据，则用getShow方法返回
+                ExceclResouce.getResource(rowBefore);//每条数据，则用getShow方法返回
             }
             total++;
             rowBefore=rowContents;
@@ -210,27 +200,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler {
         ruleOverLay = overlay.toArray(new String[overlay.size()]);
         ruleJoint  = joint.toArray(new String[joint.size()]);
     }
-
-
-    public int getRowsNum(String maxRef){
-        //去除数字
-        String s = getStr(maxRef);
-        //记录第几个空格
-        int len = s.length();
-        //确定多少列
-        int sum=0;
-        for (int i=len;i>0;i--){
-            //获取字母，转ascll码,计算(A是65，所以模上64)
-            int c=((int)s.charAt(i-1))%64;
-            //如果不是最后一位字母我们就*26 个字母，否则拼加
-            if(i>len){
-                sum+=(c*26);
-            }else{
-                sum+=c;
-            }
-        }
-        return sum;
-    }
     //得到非数字部分
     public String getStr(String ref){
         String s = ref.replaceAll("\\d+", "");
@@ -264,4 +233,47 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler {
         }
         return map;
     }
+    /*
+    public void  getNextType(Attributes attributes){
+        cellPosition = attributes.getValue("r");//得到单元格编号 如 AF12
+        String cellType = attributes.getValue("t");//是否存在值(s,null 为返回值)
+        //System.out.println("编号："+cellPosition+"\t 是否存在："+cellType);
+        if (cellType.equals("b")){
+            cellDataType= CellDataType.BOOL;
+        }else if (cellType.equals("e")){
+            cellDataType= CellDataType.ERROR;
+        }else if (cellType.equals("inlineStr")){
+            cellDataType= CellDataType.INLINESTR;
+        }else if (cellType.equals("s")){
+            cellDataType= CellDataType.SSTINDEX;
+        }else if(cellType.equals("str")){
+            cellDataType= CellDataType.FORMULA;
+        }
+        //处理日期
+        if(cellType!=null&& cellType.equals("s")){
+            isValueCell = true;
+        } else {
+            isValueCell = false;
+        }
+    }
+    public int getRowsNum(String maxRef){
+        //去除数字
+        String s = getStr(maxRef);
+        //记录第几个空格
+        int len = s.length();
+        //确定多少列
+        int sum=0;
+        for (int i=len;i>0;i--){
+            //获取字母，转ascll码,计算(A是65，所以模上64)
+            int c=((int)s.charAt(i-1))%64;
+            //如果不是最后一位字母我们就*26 个字母，否则拼加
+            if(i>len){
+                sum+=(c*26);
+            }else{
+                sum+=c;
+            }
+        }
+        return sum;
+    }
+     */
 }

@@ -16,7 +16,7 @@ public class GlobalCorsConfig {
         config.addAllowedOrigin("http://192.168.43.64:8080");
         config.addAllowedOrigin("http://localhost:8080");
         config.addAllowedOrigin("http://47.101.215.117:8080");
-        config.addAllowedOrigin("http://192.168.0.101:8080");
+        config.addAllowedOrigin("http://192.168.1.6:8080");
         config.addAllowedOrigin("http://192.168.8.116:8080");
         //2) 是否发送Cookie信息
         config.setAllowCredentials(true);

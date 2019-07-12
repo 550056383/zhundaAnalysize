@@ -5,9 +5,15 @@ import zd.zdcommons.analysis.ClockAnalysis;
 import zd.zdcommons.analysis.Complete;
 import zd.zdcommons.analysis.Logic;
 import zd.zdcommons.serviceImp.AnalysisImp;
+import zd.zdcommons.serviceImp.ExcelDrivenImp;
 import zd.zdcommons.serviceImp.ReadExcelImp;
 
 public class AnalysisFactory extends AnalysisAbstractFactory {
+    @Override
+    public ExcelDrivenImp getDriver(String EndName) {
+        return null;
+    }
+
     @Override
     public AnalysisImp getAnalysis(String analysis) {
         if(analysis == null){

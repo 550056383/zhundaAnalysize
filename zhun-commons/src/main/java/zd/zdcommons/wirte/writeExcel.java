@@ -1,9 +1,11 @@
 package zd.zdcommons.wirte;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import jxl.write.WritableCellFormat;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class writeExcel {
         HSSFSheet sheet = workbook.createSheet(shteeName!=""?shteeName:"分析结果表");
         //第三部，在sheet表中添加表头第0行，老版本的poi对sheet的行列有限制
         HSSFRow row = sheet.createRow(0);
+        //HSSFCellStyle style =workbook.createCellStyle();
         //第四步，创建单元格，设置表头
         HSSFCell cell =null;
         for (int i=0;i<titles.length;i++){
@@ -35,12 +38,17 @@ public class writeExcel {
             for (Map.Entry<String,Object> entry:objectMap.entrySet()){
                 oneData.add(entry.getValue().toString().trim());
             }
-
+            WritableCellFormat format = new WritableCellFormat();
             //添加一行
             HSSFRow row1 = sheet.createRow(cellsum + 1);
+            CellStyle style = workbook.createCellStyle();
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            style.setFillForegroundColor(IndexedColors.AQUA.index);
             for (int j=0;j<oneData.size();j++){
                 //System.out.println(oneData.get(j));
-                row1.createCell(j).setCellValue(oneData.get(j));
+                HSSFCell cellx = row1.createCell(j);
+                cellx.setCellValue(oneData.get(j));
+                cellx.setCellStyle(style);
             }
             //追加行数
             cellsum++;

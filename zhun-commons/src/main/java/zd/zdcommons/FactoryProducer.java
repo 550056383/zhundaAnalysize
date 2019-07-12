@@ -2,6 +2,7 @@ package zd.zdcommons;
 
 import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
 import zd.zdcommons.facotry.AnalysisFactory;
+import zd.zdcommons.facotry.ExcelDriverFactory;
 import zd.zdcommons.facotry.ReadFacotory;
 
 public class FactoryProducer {
@@ -10,6 +11,8 @@ public class FactoryProducer {
             return new AnalysisFactory();
         } else if(choice.equalsIgnoreCase("Read")){
             return new ReadFacotory();
+        } else if (choice.equalsIgnoreCase("ExcelDriver")){
+            return new ExcelDriverFactory();
         }
         return null;
     }

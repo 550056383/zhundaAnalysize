@@ -13,4 +13,9 @@ public class EnginnerService {
         List<String> title = utils.getLotTitle(file);
         return title;
     }
+    public String [] getMove(MultipartFile file,int num,String[] readrules,String primarykey){
+        Utils utils = new Utils();
+        String[] excelResource = utils.getExcelResource(file, num, readrules, primarykey);
+        return excelResource;
+    }
 }

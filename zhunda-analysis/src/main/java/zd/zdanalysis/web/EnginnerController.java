@@ -20,8 +20,8 @@ public class EnginnerController {
         return ResponseEntity.ok(enginnerService.getMessage(file));
     };
     @PostMapping()
-    public ResponseEntity<List<String>> getTest(@RequestParam("file") MultipartFile file,int num,String[] readrules,String primarykey){
-
-        return null;
+    public ResponseEntity<String[]> getTest(@RequestParam("file") MultipartFile file,int num,String[] readrules,String primarykey){
+        //String[] move = enginnerService.getMove(file, num, readrules, primarykey);
+        return ResponseEntity.ok(enginnerService.getMove(file, num, readrules, primarykey));
     };
 }

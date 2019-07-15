@@ -29,7 +29,9 @@ import zd.zdcommons.analysis.Logic;
 import zd.zdcommons.excel.ExcelEventParser;
 import zd.zdcommons.pojo.*;
 
+import zd.zdcommons.resouce.ExceclResouce;
 import zd.zdcommons.serviceImp.AnalysisImp;
+import zd.zdcommons.serviceImp.ExcelDrivenImp;
 import zd.zdcommons.serviceImp.ReadExcelImp;
 
 public class Utils {
@@ -296,6 +298,22 @@ public class Utils {
         return resourcemap;
     }
 
+    //半自动读取数据
+    public String[] getExcelResource(MultipartFile file,int num,String[] readrules,String primarykey){
+        int total=0;
+        String filename = file.getOriginalFilename();
+        //创建读取抽象工厂
+        AnalysisAbstractFactory analysisAbstractFactory = FactoryProducer.getFactory("ExcelDriver");
+        if(filename.endsWith(xls)){
+            ExcelDrivenImp xlsDriver = analysisAbstractFactory.getDriver("XLS");
+            total=xlsDriver.process(getFileInputStream(file),num,readrules,primarykey);
+        }else if (filename.endsWith(xlsx)){
+            ExcelDrivenImp xlsxDriver = analysisAbstractFactory.getDriver("XLSX");
+            total = xlsxDriver.process(getFileInputStream(file), num, readrules, primarykey);
+        }
+        //拿取标题头
+        return ExceclResouce.getStrTitle();
+    }
 
     //进行分析
     public Pageto getPageto(Map<String,List<Map<String, Object>>> reeouce){

@@ -24,4 +24,12 @@ public class ExceclResouce {
     public static void  getResource(Map<String,String> map){
 
     }
+
+    public static String[] getStrTitle() {
+        return strTitle;
+    }
+
+    public static void setStrTitle(String[] strTitle) {
+        ExceclResouce.strTitle = strTitle;
+    }
 }

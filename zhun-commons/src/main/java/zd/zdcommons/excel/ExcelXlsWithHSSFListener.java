@@ -166,7 +166,9 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
                     ExceclResouce.getTitle(rowTitle);
                     fagTitle=false;
                 }
-                if(StringUtils.isNotBlank(rowBefore.get(primaryKey)) &&rowBefore.get(primaryKey).equals(rowContents.get(primaryKey))){
+                String beValue = rowBefore.get(primaryKey);
+                String conValue = rowContents.get(primaryKey);
+                if(StringUtils.isNotBlank(beValue) &&beValue.equals(conValue)){
                     //叠加，拼接
                     rowContents= getOverlay(ruleOverLay);
                     rowContents= getJoint(ruleJoint);

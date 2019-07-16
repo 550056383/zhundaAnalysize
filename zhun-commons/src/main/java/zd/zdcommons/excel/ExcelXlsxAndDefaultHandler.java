@@ -1,5 +1,6 @@
 package zd.zdcommons.excel;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
@@ -47,6 +48,8 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
 
     //是否返回标题
     private Boolean fagTitle=true;
+    //判断是否是空字段
+    String Cellpx=null;
     /*
      * 第二次改进
      */
@@ -142,30 +145,31 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             //关闭isValueCell
             isValueCell=false;
         }
+        //System.out.println("cellPosition = " + cellPosition+" qName"+qName);
         if (qName.equals("v")){
-            //System.out.println("cellPosition:"+cellPosition+" and value:"+lastContents.trim());
+            //判断有值坐标
+             Cellpx=cellPosition;
             //数据读取结束后，将单元格坐标,内容存入map中
             //把数据装在Map里
+            String cellPost = getStr(cellPosition);//拿取坐标列
             if (total>titleNum){//拿取数据
                 if(fagTitle){//返回标题
                     ExceclResouce.getTitle(rowTitle);
                     fagTitle=false;
                 }
-                String value = rowTitle.get(getStr(cellPosition));
-                if(StringUtils.isBlank(value)){
-
-                }
-                rowContents.put(rowTitle.get(getStr(cellPosition)),lastContents);
+                rowContents.put(rowTitle.get(cellPost),lastContents);
             }else {//拿取表头
-                if (rowTitle.get(getStr(cellPosition))!=null){
-                    rowTitle.put(getStr(cellPosition),rowTitle.get(getStr(cellPosition))+"--"+lastContents);
+                if (rowTitle.get(cellPost)!=null){
+                    rowTitle.put(cellPost,rowTitle.get(cellPost)+"--"+lastContents);
                 }else {
-                    rowTitle.put(getStr(cellPosition),lastContents);
+                    rowTitle.put(cellPost,lastContents);
                 }
             }
         }else if (qName.equals("row")){//换行
             //System.out.println("ok");
-            if(StringUtils.isNotBlank( rowBefore.get(primaryKey))&&rowBefore.get(primaryKey).equals(rowContents.get(primaryKey))){
+            String beValue=rowBefore.get(primaryKey);
+            String conValue = rowContents.get(primaryKey);
+            if(StringUtils.isNotBlank(beValue)&&beValue.equals(conValue)){
                 //叠加，拼接
                 rowContents= getOverlay(ruleOverLay);
                 rowContents= getJoint(ruleJoint);
@@ -175,6 +179,10 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             total++;
             rowBefore=rowContents;
             rowContents= new LinkedHashMap<String, String>();
+        }else if (qName.equals("c")){
+            if(!Cellpx.equals(cellPosition)){
+                rowContents.put(rowTitle.get(getStr(cellPosition)),"");
+            }
         }
     }
 

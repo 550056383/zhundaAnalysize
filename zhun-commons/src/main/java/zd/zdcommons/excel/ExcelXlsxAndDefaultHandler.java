@@ -1,5 +1,6 @@
 package zd.zdcommons.excel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.model.SharedStringsTable;
@@ -42,7 +43,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     //数据的存放
     private LinkedHashMap<String, String> rowContents=new LinkedHashMap<String, String>();
     //数据的存放
-    private LinkedHashMap<String, String> rowBefore=null;
+    private LinkedHashMap<String, String> rowBefore=new LinkedHashMap<String, String>();
 
     //是否返回标题
     private Boolean fagTitle=true;
@@ -150,6 +151,10 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                     ExceclResouce.getTitle(rowTitle);
                     fagTitle=false;
                 }
+                String value = rowTitle.get(getStr(cellPosition));
+                if(StringUtils.isBlank(value)){
+
+                }
                 rowContents.put(rowTitle.get(getStr(cellPosition)),lastContents);
             }else {//拿取表头
                 if (rowTitle.get(getStr(cellPosition))!=null){
@@ -160,7 +165,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             }
         }else if (qName.equals("row")){//换行
             //System.out.println("ok");
-            if(rowBefore.get(primaryKey)!=null&&rowBefore.get(primaryKey).equals(rowContents.get(primaryKey))){
+            if(StringUtils.isNotBlank( rowBefore.get(primaryKey))&&rowBefore.get(primaryKey).equals(rowContents.get(primaryKey))){
                 //叠加，拼接
                 rowContents= getOverlay(ruleOverLay);
                 rowContents= getJoint(ruleJoint);

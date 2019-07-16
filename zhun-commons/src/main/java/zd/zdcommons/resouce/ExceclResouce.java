@@ -22,7 +22,10 @@ public class ExceclResouce {
     }
     //存入数据库
     public static void  getResource(Map<String,String> map){
-
+        for (Map.Entry<String,String> entry :map.entrySet()){
+            System.out.println("标题：="+entry.getKey()+":::值="+entry.getValue());
+        }
+        System.out.println("=================================================================");
     }
 
     public static String[] getStrTitle() {

@@ -1,7 +1,9 @@
 package zd.zdcommons.excel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.eventusermodel.*;
 import org.apache.poi.hssf.eventusermodel.dummyrecord.LastCellOfRowDummyRecord;
+import org.apache.poi.hssf.eventusermodel.dummyrecord.MissingCellDummyRecord;
 import org.apache.poi.hssf.record.*;
 import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -37,7 +39,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
     //数据的存放
     private LinkedHashMap<String, String> rowContents=new LinkedHashMap<String, String>();
     //上条数据返回数据
-    private LinkedHashMap<String, String> rowBefore=null;
+    private LinkedHashMap<String, String> rowBefore=new LinkedHashMap<String, String>();
     //POIFS文件系统
     private POIFSFileSystem fileSystem;
     //HSSF监听对象
@@ -150,13 +152,13 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
                 break;
         }
         //空值的操作
-//        if (record instanceof MissingCellDummyRecord) {
-//            MissingCellDummyRecord mc = (MissingCellDummyRecord) record;
-//            curRow  = mc.getRow();
-//            curColumn = mc.getColumn();
-//            //给空填值
-//            rowContents.put(rowTitle.get(curColumn+""),"");
-//        }
+        if (record instanceof MissingCellDummyRecord) {
+            MissingCellDummyRecord mc = (MissingCellDummyRecord) record;
+            curRow  = mc.getRow();
+            curColumn = mc.getColumn();
+            //给空填值
+            rowContents.put(rowTitle.get(curColumn+""),"");
+        }
         //换行
         if (record instanceof LastCellOfRowDummyRecord){
             if (curRow>titleNum) { //判断是否是第二条数据，我们返回前一条数据
@@ -164,7 +166,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
                     ExceclResouce.getTitle(rowTitle);
                     fagTitle=false;
                 }
-                if(rowBefore.get(primaryKey)!=null&&rowBefore.get(primaryKey).equals(rowContents.get(primaryKey))){
+                if(StringUtils.isNotBlank(rowBefore.get(primaryKey)) &&rowBefore.get(primaryKey).equals(rowContents.get(primaryKey))){
                     //叠加，拼接
                     rowContents= getOverlay(ruleOverLay);
                     rowContents= getJoint(ruleJoint);

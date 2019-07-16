@@ -225,7 +225,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             for (String strTitle:str){
                 if(entry.getKey().equals(strTitle)){
                     double beforeValue = Double.parseDouble(rowBefore.get(strTitle));
-                    double contenValue = Double.parseDouble(entry.getValue());
+                    double contenValue = Double.parseDouble("".equals(entry.getValue())?"0.00":entry.getValue());
                     map.put(strTitle,(contenValue+beforeValue)+"");
                 };
             }

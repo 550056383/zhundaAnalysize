@@ -10,6 +10,9 @@
     <version>1.0.0-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mysql.version>5.1.6</mysql.version>
+        <mapper.starter.version>2.1.5</mapper.starter.version>
+
     </properties>
     <modules>
         <module>zhunda-analysis</module>

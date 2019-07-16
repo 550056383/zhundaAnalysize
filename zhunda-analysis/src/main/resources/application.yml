@@ -8,7 +8,18 @@ spring:
     multipart:
       max-file-size: 100MB #文件大小
       max-request-size: 100MB #总文件大小
+  datasource:
+    username: root
+    password: chen
+    url: jdbc:mysql://localhost:3306/demo
+    driver-class-name: com.mysql.jdbc.Driver
 
 savefile:
   windos: F:\\test\\
   linux: /opt/zhundaSave
+
+
+  ## Mybatis 配置
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  config-location: classpath:mybatis/mybatis-config.xml

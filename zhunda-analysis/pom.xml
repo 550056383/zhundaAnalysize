@@ -99,7 +99,16 @@
             <version>4.4.9</version>
             <scope>test</scope>
         </dependency>
-
+        <!--mysql-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <!--通用Mapper-->
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

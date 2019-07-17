@@ -29,8 +29,12 @@ import java.util.Map;
  */
 
 public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelDrivenImp {
-    //记录数据总条数
+    //记录数据总条数；当前行
     private int total=0;
+    //当前列
+    private int cellCor=0;
+    //最大列数
+    private int cellCorMax=0;
     //判断单元格是否有值
     private boolean isValueCell;
     //缓存及下标
@@ -39,6 +43,11 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     private SharedStringsTable sst;
     //单元格编号
     private String cellPosition;
+    //标题列的最后一列单元编号
+    private String cellMax=null;
+    //序列号和标题字段和反序列
+    private LinkedHashMap<String, Integer> cellPx=new LinkedHashMap<String, Integer>();
+    private LinkedHashMap<Integer, String> cellPy=new LinkedHashMap<Integer, String>();
     //字段标题
     private LinkedHashMap<String, String> rowTitle=new LinkedHashMap<String, String>();
     //数据的存放
@@ -146,14 +155,16 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             isValueCell=false;
         }
         //System.out.println("cellPosition = " + cellPosition+" qName"+qName);
+
         if (qName.equals("v")){
             //判断有值坐标
              Cellpx=cellPosition;
             //数据读取结束后，将单元格坐标,内容存入map中
             //把数据装在Map里
-            String cellPost = getStr(cellPosition);//拿取坐标列
+            String cellPost = getStr(cellPosition); //拿取坐标列
             if (total>titleNum){//拿取数据
                 if(fagTitle){//返回标题
+                    cellMax=cellPosition;
                     ExceclResouce.getTitle(rowTitle);
                     fagTitle=false;
                 }
@@ -166,7 +177,9 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 }
             }
         }else if (qName.equals("row")){//换行
-            //System.out.println("ok");
+            if(total==0){
+                cellCorMax=cellCor;
+            }
             String beValue=rowBefore.get(primaryKey);
             String conValue = rowContents.get(primaryKey);
             if(StringUtils.isNotBlank(beValue)&&beValue.equals(conValue)){
@@ -176,13 +189,32 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             }else {
                 ExceclResouce.getResource(rowBefore);//每条数据，则用getShow方法返回
             }
+            //补全后面的空格
+            if(cellCorMax!=0&&cellCor<cellCorMax&&total>titleNum){
+                String cellPost = getStr(cellPosition); //拿取坐标列
+                //拿取下标
+                int inx = cellPx.get(cellPost);
+                int len=cellCorMax - inx;
+                for (int i=1;i<len;i++){
+                    rowContents.put(rowTitle.get(cellPy.get(inx+i)),"");
+                }
+            }
             total++;
+            cellCor=0;
             rowBefore=rowContents;
             rowContents= new LinkedHashMap<String, String>();
         }else if (qName.equals("c")){
+            String cellPost = getStr(cellPosition); //拿取坐标列
             if(!Cellpx.equals(cellPosition)){
-                rowContents.put(rowTitle.get(getStr(cellPosition)),"");
+
+                rowContents.put(rowTitle.get(cellPost),"");
             }
+            //给定一行默认列数
+            if(total==0){
+                cellPx.put(cellPost,cellCor);
+                cellPy.put(cellCor,cellPost);
+            }
+            cellCor++;
         }
     }
 

@@ -12,6 +12,7 @@ import zd.zdcommons.Utils;
 import zd.zdcommons.resouce.ExceclResouce;
 import zd.zdcommons.utils.PinYinUtils;
 
+import javax.sound.midi.Soundbank;
 import java.net.SocketTimeoutException;
 import java.util.*;
 
@@ -21,34 +22,45 @@ public class EnginnerController {
     @Autowired
     private EnginnerService enginnerService;
     @Autowired
-    private  DataService dataService;
-    @PutMapping("title")
-    public ResponseEntity<List<String>> getTitle(@RequestParam("file") MultipartFile file){
-        System.out.println("file.getName() = " + file.getName());
-        return ResponseEntity.ok(enginnerService.getMessage(file));
-    };
-    @PostMapping()
-    public ResponseEntity<String[]> getTest(@RequestParam("file") MultipartFile file,int num,String[] readrules,String primarykey){
-        String[] move = enginnerService.getMove(file, num, readrules, primarykey);
-        //汉字转拼音字母
-        int length = move.length;
-        String[] str=new String[length];
-        for(int i=0;i<length;i++){
-            String s1 = PinYinUtils.hanziToPinyin(move[i],"");
-            str[i]=s1;
-           //System.out.println(str[i]);
-        }
-        String string = UUID.randomUUID().toString();
-        String uuid = string.substring(0, 8);
-        //创建临时表
-        dataService.createTables(uuid,str);
-        //拿到map数据
-      Map<Integer,List<String>> maps= ExceclResouce.getResources();
-      //存入数据到临时表
-        dataService.insetData(uuid,str,maps);
-        //查询
-        List<Map<String, String>> maps1 = dataService.selectResult(uuid);
-        return ResponseEntity.ok(move);
-    };
+    private DataService dataService;
 
+    @PutMapping("title")
+    public ResponseEntity<List<String>> getTitle(@RequestParam("file") MultipartFile file) {
+        System.out.println("file.getName() = " + file.getName());
+
+        return ResponseEntity.ok(enginnerService.getMessage(file));
+    }
+
+    ;
+
+    @PostMapping()
+    public synchronized  ResponseEntity<String[]> getTest(@RequestParam("file") MultipartFile file, int num, String[] readrules, String primarykey) {
+
+            String[] move = enginnerService.getMove(file, num, readrules, primarykey);
+
+            //汉字转拼音字母
+            int length = move.length;
+            String[] str=new String[length];
+            for(int i=0;i<length;i++){
+                String s1 = PinYinUtils.hanziToPinyin(move[i],"");
+                str[i]=s1;
+               // System.out.println(str[i]);
+            }
+
+            String string = UUID.randomUUID().toString();
+            String uuid = "ch"+string.substring(0, 8)+"en";
+            System.out.println(uuid);
+            //创建临时表
+            dataService.createTables(uuid,str);
+
+            //拿到map数据
+            Map<Integer,List<String>> maps= ExceclResouce.getResources();
+
+            //存入数据到临时表
+            dataService.insetData(uuid,str,maps);
+
+            //查询
+            List<Map<String, String>> maps1 = dataService.selectResult(uuid);
+       return ResponseEntity.ok(move);
+    }
 }

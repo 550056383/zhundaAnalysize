@@ -299,7 +299,7 @@ public class Utils {
     }
 
     //半自动读取数据
-    public String[] getExcelResource(MultipartFile file,int num,String[] readrules,String primarykey){
+    public synchronized String[]  getExcelResource(MultipartFile file,int num,String[] readrules,String primarykey){
         int total=0;
         String filename = file.getOriginalFilename();
         //创建读取抽象工厂

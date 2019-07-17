@@ -14,7 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ExceclResouce {
     private static String[] strTitle;
     private static Map<Integer,List<String>> maps=new HashMap<Integer, List<String>>();
-    static Integer count=-2;
+    static Integer count=1;
     public  static void getTitle(Map<String,String> map){
         List<String> list = new CopyOnWriteArrayList<String>();
         for (Map.Entry<String,String> entry :map.entrySet()){
@@ -25,17 +25,23 @@ public class ExceclResouce {
     }
     //存入数据库
 
-    public static void  getResource(Map<String,String> map){
+    public  static void  getResource(Map<String,String> map){
         count++;
      List<String> list=new ArrayList<String>();
+
         for (Map.Entry<String,String> entry :map.entrySet()){
-         // System.out.println("标题：="+entry.getKey()+":::值="+entry.getValue());
-            list.add(entry.getValue());
+         System.out.println("标题：="+entry.getKey()+":::值="+entry.getValue());
+             list.add(entry.getValue());
         }
        // System.out.println("---------------------------");
-        if (count>=1) {
+        if (list.isEmpty()){
+           count=1;
+           maps.clear();
+           list.clear();
+        }else {
             maps.put(count, list);
         }
+
     }
 
     public static String[] getStrTitle() {

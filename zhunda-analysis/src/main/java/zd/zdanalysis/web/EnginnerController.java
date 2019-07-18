@@ -44,7 +44,7 @@ public class EnginnerController {
             for(int i=0;i<length;i++){
                 String s1 = PinYinUtils.hanziToPinyin(move[i],"");
                 str[i]=s1;
-               // System.out.println(str[i]);
+               //System.out.println(str[i]);
             }
 
             String string = UUID.randomUUID().toString();

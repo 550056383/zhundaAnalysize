@@ -7,6 +7,8 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Jack Chen
@@ -132,10 +134,15 @@ public class PinYinUtils {
             try {
                 pinyingStr = PinyinHelper.toHanyuPinyinString(hanzi, defaultFormat,
                         separator);
+                String   regEx  =  "[^a-zA-Z0-9]";
+                Pattern p = Pattern.compile(regEx);
+                Matcher m = p.matcher(pinyingStr);//这里把想要替换的字符串传进来
+                 pinyingStr = m.replaceAll("").trim();
             } catch (BadHanyuPinyinOutputFormatCombination e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+
             return pinyingStr;
         }
 
@@ -317,9 +324,20 @@ public class PinYinUtils {
             String s4 ="长";
             System.out.println(Arrays.toString(stringToPinyin(s4,true,",")));
 
-            String s5 = "PO长春123";
+            String s5 = "()成都132";
             System.out.println(hanziToPinyin(s5,""));
+
+            String regEx="[\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}——_-【】‘；：”“’。， 、？]";
+            String   regExs  =  "[^a-zA-Z]";
+            String aa = "";//这里是将特殊字符换为aa字符串,""代表直接去掉
+            Pattern p = Pattern.compile(regExs);
+            Matcher m = p.matcher("(提醒)虚拟__PO未及+时冲销PO单数");//这里把想要替换的字符串传进来
+            String newString = m.replaceAll(aa).trim();
+            System.out.println(newString);
+
         }
+
+
     }
 
 

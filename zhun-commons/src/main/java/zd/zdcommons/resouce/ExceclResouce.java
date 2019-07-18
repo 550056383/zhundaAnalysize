@@ -30,7 +30,7 @@ public class ExceclResouce {
      List<String> list=new ArrayList<String>();
 
         for (Map.Entry<String,String> entry :map.entrySet()){
-         System.out.println("标题：="+entry.getKey()+":::值="+entry.getValue());
+         //System.out.println("标题：="+entry.getKey()+":::值="+entry.getValue());
              list.add(entry.getValue());
         }
        // System.out.println("---------------------------");

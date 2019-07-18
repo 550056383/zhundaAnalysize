@@ -173,7 +173,6 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
                     rowContents= getOverlay(ruleOverLay);
                     rowContents= getJoint(ruleJoint);
                 }else {
-
                     ExceclResouce.getResource(rowBefore);//每条数据，则用getShow方法返回
                 }
             }

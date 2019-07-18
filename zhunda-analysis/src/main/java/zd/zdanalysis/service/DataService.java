@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service;
 import zd.zdanalysis.mapper.ProjectInfoMapper;
 import zd.zdanalysis.pojo.ProjectInfo;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Jack Chen
@@ -24,16 +22,16 @@ public class DataService {
     }
 
     //查询临时表中的数据
-    public  List<Map<String,String>>  selectResult(String table){
-        List<Map<String,String>> list = projectInfoMapper.selectResult(table);
-        for (Map<String,String> s:list){
-            if(s==null|| "".equals(s)){
+    public  List<Map<String,Object>>  selectResult(String table){
+        List<Map<String,Object>> list = projectInfoMapper.selectResult(table);
+        for (Map<String,Object> map:list) {
+            if (map == null || "".equals(map)) {
                 continue;
             }
-          /*  for (Map.Entry<String,String> entry:s.entrySet()){
-                System.out.println(entry.getKey()+"==="+entry.getValue());
+        /*   for (Map.Entry<String, Object> entry : map.entrySet()) {
+                System.out.println(entry.getKey() + "===" + entry.getValue());
             }
-           System.out.println("---------------------");*/
+            System.out.println("----------查询临时表数据-----------");*/
         }
         return list;
     }
@@ -46,22 +44,15 @@ public class DataService {
     }
 
     //插入数据到临时表
-    public  void insetData(String table,String[] str,Map<Integer,List<String>> maps){
-        for (Map.Entry<Integer,List<String>>  s:maps.entrySet()){
-            List<String> list = s.getValue();
-            Map<Integer, String> map = new HashMap<>();
-            Integer count=0;
-            for (String li:list){
-                map.put(count,li);
-                count++;
+    public  void insetData(String table,Map<Integer,List<String>> maps) {
+        for (Map.Entry<Integer, List<String>> s : maps.entrySet()) {
+            List<String> list=s.getValue();
+         /*   if (list.size()<10){
+                list.add(3,"");
             }
-          /*  for (Map.Entry<Integer,String> entry:map.entrySet()){
-                System.out.println(entry.getKey()+"-----insert--------"+entry.getValue());
-            }
-            System.out.println("------------------------");*/
-            projectInfoMapper.insetData(table,str,map);
+            System.out.println("标题是:" + s.getKey() + "-------" + "结果是:" + s.getValue());*/
+            projectInfoMapper.insetData(table, list);
         }
-        maps.clear();
-    }
-
+            maps.clear();
+        }
 }

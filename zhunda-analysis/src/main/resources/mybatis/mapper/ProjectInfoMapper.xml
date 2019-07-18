@@ -5,8 +5,8 @@
 <mapper namespace="zd.zdanalysis.mapper.ProjectInfoMapper">
     <update id="createTables" parameterType="string">
         create TEMPORARY table  ${param1} (
-        <foreach collection="param2" item="listItem" separator=",">
-            ${listItem} varchar(100)
+         <foreach collection="param2" item="Item" separator=",">
+            ${Item} varchar(100)
         </foreach>
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     </update>
@@ -14,12 +14,12 @@
     <insert id="insetData" parameterType="string">
         insert  ${param1}()
         values (
-        <foreach collection="param3" item="listItems" separator=",">
+        <foreach collection="param2"  item="listItems" separator=",">
             " ${listItems} "
         </foreach>
         )
     </insert >
-    <select id="selectResult"  resultType="map" parameterType="string">
+    <select id="selectResult"  resultType="java.util.LinkedHashMap" parameterType="string">
         select * from ${tables}
     </select>
     <select id="selectResults"  resultType="int" parameterType="string">

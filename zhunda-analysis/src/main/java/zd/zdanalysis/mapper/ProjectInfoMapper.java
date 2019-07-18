@@ -20,10 +20,10 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     void createTables(String table, String[] cloums);
 
     //查询临时表中的数据
-    List<Map<String,String>>   selectResult(@Param("tables") String table);
+    List<Map<String,Object>>   selectResult(@Param("tables") String table);
 
     //插入数据到临时表
-    void insetData(String table,String[] array,Map<Integer,String> map);
+    void insetData(String table,List<String> list);
 
       int selectResults(@Param("tables") String table);
 }

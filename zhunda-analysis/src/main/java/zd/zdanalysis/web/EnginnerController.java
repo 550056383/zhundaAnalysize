@@ -11,6 +11,7 @@ import zd.zdanalysis.service.EnginnerService;
 import zd.zdcommons.Utils;
 import zd.zdcommons.resouce.ExceclResouce;
 import zd.zdcommons.utils.PinYinUtils;
+import zd.zdcommons.wirte.WriteNewExcel;
 
 import javax.sound.midi.Soundbank;
 import java.net.SocketTimeoutException;
@@ -49,7 +50,7 @@ public class EnginnerController {
 
             String string = UUID.randomUUID().toString();
             String uuid = "ch"+string.substring(0, 8)+"en";
-            System.out.println(uuid);
+
             //创建临时表
             dataService.createTables(uuid,str);
 
@@ -57,10 +58,14 @@ public class EnginnerController {
             Map<Integer,List<String>> maps= ExceclResouce.getResources();
 
             //存入数据到临时表
-            dataService.insetData(uuid,str,maps);
+            dataService.insetData(uuid,maps);
 
-            //查询
-            List<Map<String, String>> maps1 = dataService.selectResult(uuid);
+        //查询
+            List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
+         //写入Excel
+        WriteNewExcel writeNewExcel=new WriteNewExcel();
+        System.out.println("开始写入数据");
+        writeNewExcel.writeExcecl(move,maps1,"准达","");
        return ResponseEntity.ok(move);
     }
 }

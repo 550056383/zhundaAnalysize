@@ -55,4 +55,7 @@ public class DataService {
         }
             maps.clear();
         }
+
+    public void insetData(String uuid, String[] str, Map<Integer, List<String>> maps) {
+    }
 }

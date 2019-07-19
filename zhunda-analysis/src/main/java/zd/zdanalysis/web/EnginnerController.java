@@ -68,4 +68,9 @@ public class EnginnerController {
         writeNewExcel.writeExcecl(move,maps1,"准达","");
        return ResponseEntity.ok(move);
     }
+    @PostMapping("/cond")
+    public ResponseEntity<String> getSetup(@RequestBody Map<String,Object> map){
+        System.out.println(map.size());
+        return null;
+    }
 }

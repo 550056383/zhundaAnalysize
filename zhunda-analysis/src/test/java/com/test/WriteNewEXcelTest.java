@@ -15,9 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import zd.zdanalysis.AnalysisApplication;
 import zd.zdcommons.wirte.WriteNewExcel;
 
-import javax.lang.model.element.VariableElement;
 import java.io.FileOutputStream;
-import java.time.temporal.ValueRange;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +97,7 @@ public class WriteNewEXcelTest {
     @Test
     public void test(){
         String []titles={"PO号","部门","地址","时间","金额"};
-        List<Map<String,Object>> lisMap=new ArrayList<>();
+        List<Map<String,Object>> lisMap=new ArrayList<Map<String,Object>>();
         String fileName ="准达";
         for(int i=0;i<5;i++) {
             Map<String, Object> map = new HashMap<String, Object>();

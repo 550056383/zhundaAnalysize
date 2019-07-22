@@ -1,5 +1,7 @@
 package zd.zdanalysis.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.jndi.toolkit.url.UrlUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,9 @@ import zd.zdcommons.resouce.ExceclResouce;
 import zd.zdcommons.utils.PinYinUtils;
 import zd.zdcommons.wirte.WriteNewExcel;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.sound.midi.Soundbank;
+import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.util.*;
 
@@ -30,44 +34,14 @@ public class EnginnerController {
         System.out.println("file.getName() = " + file.getName());
 
         return ResponseEntity.ok(enginnerService.getMessage(file));
-    }
+    };
+@PostMapping()
+public   ResponseEntity<String[]> getTest(@RequestParam("files") MultipartFile[] files,String reads){
+    HashMap<String, Object> map = new HashMap<String, Object>();
 
-    ;
-
-    @PostMapping()
-    public synchronized  ResponseEntity<String[]> getTest(@RequestParam("file") MultipartFile file, int num, String[] readrules, String primarykey) {
-
-            String[] move = enginnerService.getMove(file, num, readrules, primarykey);
-
-            //汉字转拼音字母
-            int length = move.length;
-            String[] str=new String[length];
-            for(int i=0;i<length;i++){
-                String s1 = PinYinUtils.hanziToPinyin(move[i],"");
-                str[i]=s1;
-               //System.out.println(str[i]);
-            }
-
-            String string = UUID.randomUUID().toString();
-            String uuid = "ch"+string.substring(0, 8)+"en";
-
-            //创建临时表
-            dataService.createTables(uuid,str);
-
-            //拿到map数据
-            Map<Integer,List<String>> maps= ExceclResouce.getResources();
-
-            //存入数据到临时表
-            dataService.insetData(uuid,maps);
-
-        //查询
-            List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
-         //写入Excel
-        WriteNewExcel writeNewExcel=new WriteNewExcel();
-        System.out.println("开始写入数据");
-        writeNewExcel.writeExcecl(move,maps1,"准达","");
-       return ResponseEntity.ok(move);
-    }
+    System.out.println("");
+    return null;
+}
     @PostMapping("/cond")
     public ResponseEntity<String> getSetup(@RequestBody Map<String,Object> map){
         System.out.println(map.size());

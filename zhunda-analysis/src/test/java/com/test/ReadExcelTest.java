@@ -21,7 +21,7 @@ import java.io.*;
 public class ReadExcelTest {
     @Test
     public void  Test1() throws Exception {
-        File file = new File("E:\\Zhunda\\工程\\PURCHASE_ORDER_20190611150319（华为系统订单信息）.xlsx");
+        File file = new File("E:\\Zhunda\\测试\\问题PO单（7.04）.xlsx");
         FileInputStream fileInput = new FileInputStream(file);
         MultipartFile toMultipartFile = new MockMultipartFile("file",file.getName(),"text/plain", IOUtils.toByteArray(fileInput));
         toMultipartFile.getInputStream();

@@ -6,12 +6,14 @@ import org.apache.poi.hssf.eventusermodel.dummyrecord.LastCellOfRowDummyRecord;
 import org.apache.poi.hssf.eventusermodel.dummyrecord.MissingCellDummyRecord;
 import org.apache.poi.hssf.record.*;
 import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import zd.zdcommons.resouce.ExceclResouce;
 import zd.zdcommons.serviceImp.ExcelDrivenImp;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,7 +25,7 @@ import java.util.Map;
  * @TIME 2019/7/2 -11:27
  */
 
-public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
+public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
 
     private ArrayList boundSheetRecords = new ArrayList();
 
@@ -31,6 +33,8 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
     private int curRow=0;
     //当前列
     private int curColumn=0;
+    //总列数
+    private int contMaxCol=0;
     //2003工作簿的sst记录
     private SSTRecord sstRecord;
 
@@ -48,6 +52,20 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
     private final HSSFDataFormatter formatter = new HSSFDataFormatter();
     //Miss记录监听对象
     private MissingRecordAwareHSSFListener listener;
+    /**
+     * 用于转换formulas
+     */
+    private EventWorkbookBuilder.SheetRecordCollectingListener workbookBuildingListener;
+    //excel2003工作簿
+    private HSSFWorkbook stubWorkbook;
+    //表索引
+    private int sheetIndex = 0;
+    /**
+     * 是否输出formula，还是它对应的值
+     */
+    private Boolean outputFormulaValues=true;
+
+    private BoundSheetRecord[] orderedBSRs;
     //设置标题头长短
     private int titleNum=0;
     //设置主键
@@ -55,8 +73,10 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
     //设置读取配置
     private String[] ruleOverLay=null;
     private String[] ruleJoint=null;
-    //返回标题
-    private Boolean fagTitle=true;
+    //返回标题(如果sheetName 改变，则返回)
+    private String sxName;
+    //表名
+    private String sheetName;
     @Override
     public int process(InputStream inputStream,int num,String[] read,String primarykey){
         try {
@@ -76,6 +96,12 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
             HSSFRequest request = new HSSFRequest();
             //添加监听（必须进行格式化，不然没数据）
             request.addListenerForAllRecords(formatListener);
+            if (outputFormulaValues) {
+                request.addListenerForAllRecords(formatListener);
+            } else {
+                workbookBuildingListener = new EventWorkbookBuilder.SheetRecordCollectingListener(formatListener);
+                request.addListenerForAllRecords(workbookBuildingListener);
+            }
             factory.processWorkbookEvents(request,fileSystem);//执行(这里-开始执行 processRecord(Record record))
             //追加最后一行数据
             ExceclResouce.getResource(rowBefore);
@@ -91,6 +117,17 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
                 break;
             case BOFRecord.sid:
                 BOFRecord br = (BOFRecord) record;
+                if (br.getType() == BOFRecord.TYPE_WORKSHEET) {
+                    //如果有需要，则建立子工作簿
+                    if (workbookBuildingListener != null && stubWorkbook == null) {
+                        stubWorkbook = workbookBuildingListener.getStubHSSFWorkbook();
+                    }
+                    if (orderedBSRs == null) {
+                        orderedBSRs = BoundSheetRecord.orderByBofPosition(boundSheetRecords);
+                    }
+                    sheetName = orderedBSRs[sheetIndex].getSheetname();
+                    sheetIndex++;
+                }
                 break;
             case SSTRecord.sid://sstRecord SST记录（需要初始化，不然不知道存哪里，导致没数据）
                 sstRecord=(SSTRecord)record;
@@ -119,7 +156,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
                 curColumn = lsrec.getColumn();//列
                 //在共享表获取值
                 String value = sstRecord.getString(lsrec.getSSTIndex()).toString().trim();
-                if(curRow==titleNum){//默认第一行未标题
+                if(curRow<=titleNum){//默认第一行为标题
                     if(rowTitle.get(curColumn)!=null){
                         rowTitle.put(curColumn+"",value+"--"+rowTitle.get(curColumn));
                     }else {
@@ -139,9 +176,13 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
                 String formatString=formatListener.getFormatString(numrec);
                 //判断是否存在这种日期天数类型
                 if (formatString.contains("m/d/yy") || formatString.contains("yyyy/mm/dd") || formatString.contains("yyyy/m/d")){
-                    formatString="yyyy-MM-dd hh:mm:ss";
+                    formatString="yyyy-MM-dd";
                 }
                 int formatIndex=formatListener.getFormatIndex(numrec);
+
+                //保留两位
+                BigDecimal b = new BigDecimal(valueDouble);
+                valueDouble=b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 value=formatter.formatRawCellContents(valueDouble, formatIndex, formatString).trim();
                 //判断是否为空
                 value = value.equals("") ? "" : value;
@@ -162,19 +203,36 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
         //换行
         if (record instanceof LastCellOfRowDummyRecord){
             if (curRow>titleNum) { //判断是否是第二条数据，我们返回前一条数据
-                if (fagTitle){//返回数据
+                if (sxName!=sheetName){//返回数据
                     ExceclResouce.getTitle(rowTitle);
-                    fagTitle=false;
+                    sxName=sheetName;
                 }
                 String beValue = rowBefore.get(primaryKey);
                 String conValue = rowContents.get(primaryKey);
                 if(StringUtils.isNotBlank(beValue) &&beValue.equals(conValue)){
-                    //叠加，拼接
-                    rowContents= getOverlay(ruleOverLay);
-                    rowContents= getJoint(ruleJoint);
+                    //叠加，拼接，覆盖
+                    for (Map.Entry<String,String> entry:rowContents.entrySet()){
+                        getOverlay(entry);
+                        getJoint(entry);
+                        //如果是空
+                        if(StringUtils.isBlank(entry.getValue())){
+                            rowContents.put(entry.getKey(),rowBefore.get(entry.getKey()));
+                        }
+                    }
                 }else {
                     ExceclResouce.getResource(rowBefore);//每条数据，则用getShow方法返回
                 }
+                //末尾为空补全
+                if(contMaxCol>curColumn){
+                    for (int i=0;i<(contMaxCol-curColumn);i++){
+                        String title = rowTitle.get((curColumn + i + 1)+"");
+                        rowContents.put(title,"");
+                    }
+                }
+            }
+            //得到最大列数
+            if (curRow==0){
+                contMaxCol=curColumn;
             }
             //给前一条数据赋值
             rowBefore=rowContents;
@@ -183,32 +241,24 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
         }
     }
     //叠加
-    public LinkedHashMap<String,String> getOverlay(String[]str){
-        LinkedHashMap<String,String> map=rowBefore;
-        for (Map.Entry<String,String> entry:rowContents.entrySet()){
-            for (String strTitle:str){
-                if(entry.getKey().equals(strTitle)){
-                    double beforeValue = Double.parseDouble(rowBefore.get(strTitle));
-                    double contenValue = Double.parseDouble(entry.getValue());
-                    map.put(strTitle,(contenValue+beforeValue)+"");
-                };
-            }
+    public void getOverlay(Map.Entry<String,String> entry){
+        for (String strTitle:ruleOverLay){
+            if(entry.getKey().equals(strTitle)){
+                double beforeValue = Double.parseDouble(rowBefore.get(strTitle));
+                double contenValue = Double.parseDouble(entry.getValue());
+                rowContents.put(strTitle,String.format("%.2f",(contenValue+beforeValue)));
+            };
         }
-        return map;
-    }
+    };
     //拼接
-    public LinkedHashMap<String,String> getJoint(String[]str){
-        LinkedHashMap<String,String> map=rowBefore;
-        for (Map.Entry<String,String> entry:rowContents.entrySet()){
-            for (String strTitle:str){
-                if(entry.getKey().equals(strTitle)){
-                    String beforeValue = rowBefore.get(strTitle);
-                    String contenValue = entry.getValue();
-                    map.put(strTitle,(contenValue+","+beforeValue));
-                };
-            }
+    public void getJoint(Map.Entry<String,String> entry){
+        for (String strTitle:ruleJoint){
+            if(entry.getKey().equals(strTitle)){
+                String beforeValue = rowBefore.get(strTitle);
+                String contenValue = entry.getValue();
+                rowContents.put(strTitle,(contenValue+","+beforeValue));
+            };
         }
-        return map;
     }
     //特殊读取解析
     public void  getRuleRead(String[] read){

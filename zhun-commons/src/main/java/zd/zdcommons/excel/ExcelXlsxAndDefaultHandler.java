@@ -111,9 +111,11 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 sheetName = sheets.getSheetName();
                 InputSource sheetSource = new InputSource(sheet);
                 parser.parse(sheetSource); //解析excel的每条记录，在这个过程中startElement()、characters()、endElement()这三个函数会依次执行
+                ExceclResouce.getResource(rowBefore);//最后一条数据调回
                 sheet.close();
+                titlFlag=true;
             }
-            ExceclResouce.getResource(rowBefore);//最后一条数据调回
+
         } catch (Exception e) {
             e.printStackTrace();
         }

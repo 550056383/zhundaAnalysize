@@ -88,7 +88,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
 
     private int sheetIndex=0;
     private String sheetName="";
-    private Boolean titlFlag=false;
+    private Boolean titlFlag=true;
     @Override
     public int process(InputStream inputStream,int num,String[] read,String primarykey){
         OPCPackage pkg =null;
@@ -204,7 +204,8 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             if (value != null && !"".equals(value)) {
                 flag = true;
             }
-        }else if (qName.equals("v")){
+        }
+        else if (qName.equals("v")){
             String value = this.getDataValue(lastContents.trim(), "");
             if(!ref.equals(preRef)){
                 int len = countNullCell(ref , preRef);
@@ -227,7 +228,8 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             if (value != null && !"".equals(value)) {
                 flag = true;
             }
-        } else if (qName.equals("row")){//换行
+        }
+        else if (qName.equals("row")){//换行
             if (total==0) {
                  maxRef= ref;
             }

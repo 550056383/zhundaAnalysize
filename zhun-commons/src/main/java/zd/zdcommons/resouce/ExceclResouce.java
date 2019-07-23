@@ -13,19 +13,32 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ExceclResouce {
     private static String[] strTitle;
+    private static String sheetNamex;
     private static Map<Integer,List<String>> maps=new HashMap<Integer, List<String>>();
     static Integer count=1;
-    public  static void getTitle(Map<String,String> map){
+    public  static void getTitle(Map<String,String> map,String sheetName){
         List<String> list = new CopyOnWriteArrayList<String>();
         for (Map.Entry<String,String> entry :map.entrySet()){
             //System.out.println("entry.getValue() = " + entry.getValue());
             list.add(entry.getValue());
         }
+        sheetNamex=sheetName;
         strTitle=list.toArray(new String[list.size()]);
     }
     //存入数据库
 
-    public  static void  getResource(Map<String,String> map){
+    public  static void  getResource(Map<String,String> map,String SheetName){
+
+        if(sheetNamex!=SheetName){
+            List<String> list = new CopyOnWriteArrayList<String>();
+            for (Map.Entry<String,String> entry :map.entrySet()){
+                //System.out.println("entry.getValue() = " + entry.getValue());
+                list.add(entry.getValue());
+            }
+            new CopyOnWriteArrayList<String>();
+            String []str= new  String[10];
+        }
+            sheetNamex=SheetName;
         count++;
      /*
         String[] strings=getStrTitle();*/

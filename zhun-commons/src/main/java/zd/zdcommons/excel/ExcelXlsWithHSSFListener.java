@@ -28,7 +28,7 @@ import java.util.Map;
 public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
 
     private ArrayList boundSheetRecords = new ArrayList();
-
+    private  int total=0;
     //当前行
     private int curRow=0;
     //当前列
@@ -77,7 +77,6 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
     private String sxName;
     //表名
     private String sheetName;
-    @Override
     public int process(InputStream inputStream,int num,String[] read,String primarykey){
         try {
             //给标题行数赋值(默认从0开始为第一行)
@@ -104,7 +103,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
             }
             factory.processWorkbookEvents(request,fileSystem);//执行(这里-开始执行 processRecord(Record record))
             //追加最后一行数据
-            ExceclResouce.getResource(rowBefore);
+            ExceclResouce.getResource(rowBefore,sheetName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -127,6 +126,8 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                     }
                     sheetName = orderedBSRs[sheetIndex].getSheetname();
                     sheetIndex++;
+                    curRow=0;
+                    rowTitle=new LinkedHashMap<String, String>();
                 }
                 break;
             case SSTRecord.sid://sstRecord SST记录（需要初始化，不然不知道存哪里，导致没数据）
@@ -186,6 +187,9 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                 value=formatter.formatRawCellContents(valueDouble, formatIndex, formatString).trim();
                 //判断是否为空
                 value = value.equals("") ? "" : value;
+                if(value.contains("\"")){
+                    value=value.substring(1,value.length()-1);
+                }
                 //添加值
                 rowContents.put(rowTitle.get(curColumn+""),value);
                 break;
@@ -204,7 +208,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
         if (record instanceof LastCellOfRowDummyRecord){
             if (curRow>titleNum) { //判断是否是第二条数据，我们返回前一条数据
                 if (sxName!=sheetName){//返回数据
-                    ExceclResouce.getTitle(rowTitle);
+                    ExceclResouce.getTitle(rowTitle,sheetName);
                     sxName=sheetName;
                 }
                 String beValue = rowBefore.get(primaryKey);
@@ -220,7 +224,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                         }
                     }
                 }else {
-                    ExceclResouce.getResource(rowBefore);//每条数据，则用getShow方法返回
+                    ExceclResouce.getResource(rowBefore,sheetName);//每条数据，则用getShow方法返回
                 }
                 //末尾为空补全
                 if(contMaxCol>curColumn){
@@ -238,6 +242,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
             rowBefore=rowContents;
             rowContents= new LinkedHashMap<String, String>();
             curRow++;
+            total++;
         }
     }
     //叠加

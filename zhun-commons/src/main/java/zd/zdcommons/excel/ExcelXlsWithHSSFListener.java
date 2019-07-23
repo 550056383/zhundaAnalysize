@@ -103,7 +103,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
             }
             factory.processWorkbookEvents(request,fileSystem);//执行(这里-开始执行 processRecord(Record record))
             //追加最后一行数据
-            ExceclResouce.getResource(rowBefore);
+            ExceclResouce.getResource(rowBefore,sheetName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -205,7 +205,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
         if (record instanceof LastCellOfRowDummyRecord){
             if (curRow>titleNum) { //判断是否是第二条数据，我们返回前一条数据
                 if (sxName!=sheetName){//返回数据
-                    ExceclResouce.getTitle(rowTitle);
+                    ExceclResouce.getTitle(rowTitle,sheetName);
                     sxName=sheetName;
                 }
                 String beValue = rowBefore.get(primaryKey);
@@ -221,7 +221,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
                         }
                     }
                 }else {
-                    ExceclResouce.getResource(rowBefore);//每条数据，则用getShow方法返回
+                    ExceclResouce.getResource(rowBefore,sheetName);//每条数据，则用getShow方法返回
                 }
                 //末尾为空补全
                 if(contMaxCol>curColumn){

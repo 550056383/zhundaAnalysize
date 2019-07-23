@@ -110,13 +110,13 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 sheetName = sheets.getSheetName();
                 InputSource sheetSource = new InputSource(sheet);
                 parser.parse(sheetSource); //解析excel的每条记录，在这个过程中startElement()、characters()、endElement()这三个函数会依次执行
-                ExceclResouce.getResource(rowBefore);//最后一条数据调回
+                ExceclResouce.getResource(rowBefore,sheetName);//最后一条数据调回
                 sheet.close();
                 rowTitle=new LinkedHashMap<String, String>();
                 total=0;
                 titlFlag=true;
             }
-            ExceclResouce.getResource(rowBefore);//最后一条数据调回
+            ExceclResouce.getResource(rowBefore,sheetName);//最后一条数据调回
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -236,7 +236,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             }
             if(total>titleNum+1){
                 if (titlFlag){//返回数据
-                    ExceclResouce.getTitle(rowTitle);
+                    ExceclResouce.getTitle(rowTitle,sheetName);
                     titlFlag=false;
                 }
                 String beValue = rowBefore.get(primaryKey);
@@ -253,7 +253,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                     }
                 }else {
                     if(flag){
-                        ExceclResouce.getResource(rowBefore);//每条数据，则用getShow方法返回
+                        ExceclResouce.getResource(rowBefore,sheetName);//每条数据，则用getShow方法返回
                     }
                 }
             }

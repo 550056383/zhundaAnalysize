@@ -15,7 +15,7 @@ public class ExceclResouce {
     private static String[] strTitle;
     private static Map<Integer,List<String>> maps=new HashMap<Integer, List<String>>();
     static Integer count=1;
-    public  static void getTitle(Map<String,String> map){
+    public  static void getTitle(Map<String,String> map,String SheetName){
         List<String> list = new CopyOnWriteArrayList<String>();
         for (Map.Entry<String,String> entry :map.entrySet()){
             //System.out.println("entry.getValue() = " + entry.getValue());
@@ -25,7 +25,7 @@ public class ExceclResouce {
     }
     //存入数据库
 
-    public  static void  getResource(Map<String,String> map){
+    public  static void  getResource(Map<String,String> map,String SheetName){
         count++;
      /*
         String[] strings=getStrTitle();*/

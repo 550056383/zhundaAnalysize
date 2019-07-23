@@ -28,10 +28,10 @@ public class DataService {
             if (map == null || "".equals(map)) {
                 continue;
             }
-        /*   for (Map.Entry<String, Object> entry : map.entrySet()) {
+           for (Map.Entry<String, Object> entry : map.entrySet()) {
                 System.out.println(entry.getKey() + "===" + entry.getValue());
             }
-            System.out.println("----------查询临时表数据-----------");*/
+            System.out.println("----------查询临时表数据-----------");
         }
         return list;
     }

@@ -27,20 +27,11 @@ public class ExceclResouce {
 
     public  static void  getResource(Map<String,String> map){
         count++;
-     /*
-        String[] strings=getStrTitle();*/
      List<String> list=new ArrayList<String>();
         int i=0;
         for (Map.Entry<String,String> entry :map.entrySet()){
          System.out.println("标题：="+entry.getKey()+":::值="+entry.getValue());
-          /* if (strTitle[i] != entry.getKey()) {
-                list.add(" ");
-                list.add(entry.getValue());
-                i++;
-            }else {
-                list.add(entry.getValue());
-            }
-            i++;*/
+
        list.add(entry.getValue());
         }
         System.out.println("---------------------------");

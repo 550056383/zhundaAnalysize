@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zd.zdanalysis.mapper.ProjectInfoMapper">
+    <update id="createTables" parameterType="string">
+        create TEMPORARY table  ${param1} (
+         <foreach collection="param2" item="Item" separator=",">
+            ${Item} varchar(100)
+        </foreach>
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    </update>
+
+    <insert id="insetData" parameterType="string">
+        insert  ${param1}()
+        values (
+        <foreach collection="param2"  item="listItems" separator=",">
+            " ${listItems} "
+        </foreach>
+        )
+    </insert >
+    <select id="selectResult"  resultType="java.util.LinkedHashMap" parameterType="string">
+        select * from ${tables}
+    </select>
+    <select id="selectResults"  resultType="int" parameterType="string">
+        select count(*) from ${tables}
+    </select>
+</mapper>

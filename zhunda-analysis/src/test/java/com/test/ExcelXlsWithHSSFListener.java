@@ -28,7 +28,7 @@ import java.util.Map;
 public class ExcelXlsWithHSSFListener implements HSSFListener  {
 
     private ArrayList boundSheetRecords = new ArrayList();
-
+    private  int total=0;
     //当前行
     private int curRow=0;
     //当前列
@@ -126,6 +126,8 @@ public class ExcelXlsWithHSSFListener implements HSSFListener  {
                     }
                     sheetName = orderedBSRs[sheetIndex].getSheetname();
                     sheetIndex++;
+                    curRow=0;
+                    rowTitle=new LinkedHashMap<String, String>();
                 }
                 break;
             case SSTRecord.sid://sstRecord SST记录（需要初始化，不然不知道存哪里，导致没数据）
@@ -237,6 +239,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener  {
             rowBefore=rowContents;
             rowContents= new LinkedHashMap<String, String>();
             curRow++;
+            total++;
         }
     }
     //叠加

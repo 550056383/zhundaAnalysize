@@ -89,7 +89,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     private int sheetIndex=0;
     private String sheetName="";
     private Boolean titlFlag=true;
-    @Override
     public int process(InputStream inputStream,int num,String[] read,String primarykey){
         OPCPackage pkg =null;
         try {
@@ -113,9 +112,11 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 parser.parse(sheetSource); //解析excel的每条记录，在这个过程中startElement()、characters()、endElement()这三个函数会依次执行
                 ExceclResouce.getResource(rowBefore);//最后一条数据调回
                 sheet.close();
+                rowTitle=new LinkedHashMap<String, String>();
+                total=0;
                 titlFlag=true;
             }
-
+            ExceclResouce.getResource(rowBefore);//最后一条数据调回
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -206,8 +207,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             if (value != null && !"".equals(value)) {
                 flag = true;
             }
-        }
-        else if (qName.equals("v")){
+        }else if (qName.equals("v")){
             String value = this.getDataValue(lastContents.trim(), "");
             if(!ref.equals(preRef)){
                 int len = countNullCell(ref , preRef);
@@ -230,8 +230,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             if (value != null && !"".equals(value)) {
                 flag = true;
             }
-        }
-        else if (qName.equals("row")){//换行
+        } else if (qName.equals("row")){//换行
             if (total==0) {
                  maxRef= ref;
             }

@@ -25,10 +25,10 @@ import java.util.Map;
  * @TIME 2019/7/2 -11:27
  */
 
-public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
+public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
 
     private ArrayList boundSheetRecords = new ArrayList();
-
+    private  int total=0;
     //当前行
     private int curRow=0;
     //当前列
@@ -77,7 +77,6 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
     private String sxName;
     //表名
     private String sheetName;
-    @Override
     public int process(InputStream inputStream,int num,String[] read,String primarykey){
         try {
             //给标题行数赋值(默认从0开始为第一行)
@@ -127,6 +126,8 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                     }
                     sheetName = orderedBSRs[sheetIndex].getSheetname();
                     sheetIndex++;
+                    curRow=0;
+                    rowTitle=new LinkedHashMap<String, String>();
                 }
                 break;
             case SSTRecord.sid://sstRecord SST记录（需要初始化，不然不知道存哪里，导致没数据）
@@ -238,6 +239,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
             rowBefore=rowContents;
             rowContents= new LinkedHashMap<String, String>();
             curRow++;
+            total++;
         }
     }
     //叠加

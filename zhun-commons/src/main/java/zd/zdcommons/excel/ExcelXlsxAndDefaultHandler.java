@@ -110,7 +110,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 sheetName = sheets.getSheetName();
                 InputSource sheetSource = new InputSource(sheet);
                 parser.parse(sheetSource); //解析excel的每条记录，在这个过程中startElement()、characters()、endElement()这三个函数会依次执行
-                ExceclResouce.getResource(rowBefore,sheetName);//最后一条数据调回
                 sheet.close();
                 rowTitle=new LinkedHashMap<String, String>();
                 total=0;
@@ -209,6 +208,9 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             }
         }else if (qName.equals("v")){
             String value = this.getDataValue(lastContents.trim(), "");
+            if(value.contains("\"")){
+                value=value.substring(1,value.length()-1);
+            }
             if(!ref.equals(preRef)){
                 int len = countNullCell(ref , preRef);
                 for (int i = 0; i < len; i++) {

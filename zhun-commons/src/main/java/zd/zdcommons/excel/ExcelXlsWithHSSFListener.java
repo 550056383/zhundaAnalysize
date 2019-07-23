@@ -25,7 +25,7 @@ import java.util.Map;
  * @TIME 2019/7/2 -11:27
  */
 
-public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
+public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
 
     private ArrayList boundSheetRecords = new ArrayList();
     private  int total=0;
@@ -187,6 +187,9 @@ public class ExcelXlsWithHSSFListener implements HSSFListener , ExcelDrivenImp {
                 value=formatter.formatRawCellContents(valueDouble, formatIndex, formatString).trim();
                 //判断是否为空
                 value = value.equals("") ? "" : value;
+                if(value.contains("\"")){
+                    value=value.substring(1,value.length()-1);
+                }
                 //添加值
                 rowContents.put(rowTitle.get(curColumn+""),value);
                 break;

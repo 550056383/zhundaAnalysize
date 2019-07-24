@@ -1,9 +1,9 @@
 package zd.zdcommons.resouce;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import org.springframework.core.env.MapPropertySource;
+
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -12,69 +12,81 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @TIME 2019/7/12 0012-9:55
  */
 public class ExceclResouce {
-    private static String[] strTitle;
+
+    private static List<String[]> strTitle=new LinkedList<String[]>();
     private static String sheetNamex;
     private static Map<Integer,List<String>> maps=new HashMap<Integer, List<String>>();
     static Integer count=1;
+    private  static  Boolean tag=false;
+    private  static  String[] str=new String[strTitle.size()];
+    private  static List<Map<Integer,List<String>>> listmap=new LinkedList<Map<Integer, List<String>>>();
+
     public  static void getTitle(Map<String,String> map,String sheetName){
         List<String> list = new CopyOnWriteArrayList<String>();
         for (Map.Entry<String,String> entry :map.entrySet()){
-            //System.out.println("entry.getValue() = " + entry.getValue());
+            System.out.println(entry.getKey()+"====================="+entry.getValue());
             list.add(entry.getValue());
         }
+        System.out.println("sheetName"+sheetName);
+
+        String[] strings=list.toArray(new String[list.size()]);
+        strTitle.add(strings);
         sheetNamex=sheetName;
-        strTitle=list.toArray(new String[list.size()]);
+        tag=!tag;
+        //list.clear();
     }
+
     //存入数据库
 
     public  static void  getResource(Map<String,String> map,String SheetName){
 
-        if(sheetNamex!=SheetName){
-            List<String> list = new CopyOnWriteArrayList<String>();
-            for (Map.Entry<String,String> entry :map.entrySet()){
-                //System.out.println("entry.getValue() = " + entry.getValue());
-                list.add(entry.getValue());
-            }
-            new CopyOnWriteArrayList<String>();
-            String []str= new  String[10];
-        }
-            sheetNamex=SheetName;
-        count++;
-     /*
-        String[] strings=getStrTitle();*/
-     List<String> list=new ArrayList<String>();
-        int i=0;
-        for (Map.Entry<String,String> entry :map.entrySet()){
-         System.out.println("标题：="+entry.getKey()+":::值="+entry.getValue());
-          /* if (strTitle[i] != entry.getKey()) {
-                list.add(" ");
-                list.add(entry.getValue());
-                i++;
-            }else {
-                list.add(entry.getValue());
-            }
-            i++;*/
-       list.add(entry.getValue());
-        }
-        System.out.println("---------------------------");
-        if (list.isEmpty()){
-            count=1;
-            maps.clear();
-            list.clear();
-        }else {
-            maps.put(count, list);
-        }
+        System.out.println(sheetNamex);
+        System.out.println(SheetName);
+       if (tag){
+           listmap.add(maps);
+           maps.clear();
+           List<String> list = new CopyOnWriteArrayList<String>();
+           for (Map.Entry<String,String> entry :map.entrySet()){
+               System.out.println("entry.getValue() = " + entry.getValue());
+               list.add(entry.getValue());
+           }
+           System.out.println("---------------------------------");
+           if(list.isEmpty()){
+               count=1;
+               maps.clear();
+               list.clear();
+           }else {
+               maps.put(count, list);
+           }
+       }else {
+           listmap.add(maps);
+           maps.clear();
+           List<String> list = new CopyOnWriteArrayList<String>();
+           for (Map.Entry<String,String> entry :map.entrySet()){
+               System.out.println("entry.getValue() = " + entry.getValue());
+               list.add(entry.getValue());
+           }
+           System.out.println("---------------------------------");
+           if(list.isEmpty()){
+               count=1;
+               maps.clear();
+               list.clear();
+           }else {
+               maps.put(count, list);
+           }
+       }
+            count++;
     }
 
-    public static String[] getStrTitle() {
+    public static List<String[]> getStrTitle() {
         return strTitle;
     }
 
-    public static void setStrTitle(String[] strTitle) {
+    public static void setStrTitle(List<String[]> strTitle) {
         ExceclResouce.strTitle = strTitle;
     }
 
-   public static Map<Integer,List<String>> getResources(){
-        return maps;
+   public static List<Map<Integer, List<String>>> getResources(){
+        return listmap;
    }
 }

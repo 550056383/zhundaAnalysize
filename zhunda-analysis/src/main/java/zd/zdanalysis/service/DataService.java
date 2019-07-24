@@ -47,11 +47,9 @@ public class DataService {
     public  void insetData(String table,Map<Integer,List<String>> maps) {
         for (Map.Entry<Integer, List<String>> s : maps.entrySet()) {
             List<String> list=s.getValue();
-         /*   if (list.size()<10){
-                list.add(3,"");
-            }
-            System.out.println("标题是:" + s.getKey() + "-------" + "结果是:" + s.getValue());*/
-            projectInfoMapper.insetData(table, list);
+
+          System.out.println("标题是:" + s.getKey() + "-------" + "结果是:" + s.getValue());
+            //projectInfoMapper.insetData(table, list);
         }
             maps.clear();
         }

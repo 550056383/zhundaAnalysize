@@ -36,11 +36,11 @@ public class EnginnerController {
         return ResponseEntity.ok(enginnerService.getMessage(file));
     };
 @PostMapping()
-public   ResponseEntity<String[]> getTest(@RequestParam("files") MultipartFile[] files,String reads){
-    HashMap<String, Object> map = new HashMap<String, Object>();
+public   ResponseEntity<List<String[]>> getTest(@RequestParam("files") MultipartFile[] files,String reads){
+    //HashMap<String, Object> map = new HashMap<String, Object>();
+    List<String[]> move = enginnerService.getMove(files, reads);
 
-    System.out.println("");
-    return null;
+    return ResponseEntity.ok(move);
 }
     @PostMapping("/cond")
     public ResponseEntity<String> getSetup(@RequestBody Map<String,Object> map){

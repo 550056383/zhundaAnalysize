@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import zd.zdanalysis.service.DataService;
 import zd.zdanalysis.service.EnginnerService;
 import zd.zdcommons.Utils;
+import zd.zdcommons.pojo.ExcelTable;
 import zd.zdcommons.resouce.ExceclResouce;
 import zd.zdcommons.utils.PinYinUtils;
 import zd.zdcommons.wirte.WriteNewExcel;
@@ -36,11 +37,10 @@ public class EnginnerController {
         return ResponseEntity.ok(enginnerService.getMessage(file));
     };
 @PostMapping()
-public   ResponseEntity<List<String[]>> getTest(@RequestParam("files") MultipartFile[] files,String reads){
+public   ResponseEntity<List<ExcelTable>> getTest(@RequestParam("files") MultipartFile[] files, String reads){
     //HashMap<String, Object> map = new HashMap<String, Object>();
-    List<String[]> move = enginnerService.getMove(files, reads);
 
-    return ResponseEntity.ok(move);
+    return ResponseEntity.ok(enginnerService.getMove(files, reads));
 }
     @PostMapping("/cond")
     public ResponseEntity<String> getSetup(@RequestBody Map<String,Object> map){

@@ -299,7 +299,7 @@ public class Utils {
     }
 
     //半自动读取数据
-    public synchronized List<String[]>  getExcelResource(MultipartFile file, int num, String[] readrules, String primarykey){
+    public synchronized List<ExcelTable>  getExcelResource(MultipartFile file, int num, String[] readrules, String primarykey){
         int total=0;
         String filename = file.getOriginalFilename();
         //创建读取抽象工厂
@@ -312,7 +312,7 @@ public class Utils {
             total = xlsxDriver.process(getFileInputStream(file), num, readrules, primarykey);
         }
         //拿取标题头
-        return ExceclResouce.getStrTitle();
+        return ExceclResouce.getListExcel();
     }
 
     //进行分析

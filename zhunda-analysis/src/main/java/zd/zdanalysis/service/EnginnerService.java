@@ -1,10 +1,8 @@
 package zd.zdanalysis.service;
 
 import net.sf.json.JSONArray;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import zd.zdcommons.Utils;
 import zd.zdcommons.pojo.ExcelTable;
@@ -29,7 +27,7 @@ public class EnginnerService {
         List<String> title = utils.getLotTitle(file);
         return title;
     }
-    public List<ExcelTable>  getMove( MultipartFile[] files,String reads){
+    public List<ExcelTable>  getMove(MultipartFile[] files, String reads) {
 
 
         MultipartFile file = null;
@@ -37,11 +35,10 @@ public class EnginnerService {
         String[] rules = null;
         String primarykey = null;
         String name = null;
-        List<String[]> listTitle=new ArrayList<String[]>();
+        List<String[]> listTitle = new ArrayList<String[]>();
         Utils utils = new Utils();
-        List<ExcelTable> listEx=new CopyOnWriteArrayList<ExcelTable>();
+        List<ExcelTable> listEx = new CopyOnWriteArrayList<ExcelTable>();
         JSONArray jsonArray = JSONArray.fromObject(reads);
-        if (jsonArray.size() > 0) {
             //遍历每一个数组
             for (int i = 0; i < jsonArray.size(); i++) {
                 file = files[i];
@@ -49,56 +46,38 @@ public class EnginnerService {
                 Object[] objects = jsonArrays.toArray();
 
                 num = Integer.parseInt(String.valueOf(objects[0]));
-                rules= objects[1].toString().replace("[", "").replace("]", "").split(",");
-                System.out.println("规则:"+rules);
+                rules = objects[1].toString().replace("[", "").replace("]", "").split(",");
                 primarykey = (String) objects[2];
                 name = (String) objects[3];
                 List<ExcelTable> list = utils.getExcelResource(file, num, rules, primarykey);
                 ((CopyOnWriteArrayList<ExcelTable>) listEx).addAllAbsent(list);
-            }
-        }
-        return listEx;
-    }
-}
-                //listTitle.add(titles);
-                /*for (String s:titles){
-                    System.out.println(s);
-                }*/
-                /*
-                for (String[] strings:titles){
-                       //汉字转拼音字母
-                       int length = strings.length;
-                       String[] str = new String[length];
-                       for (int j = 0; j < length; j++) {
-                           String s1 = PinYinUtils.hanziToPinyin(strings[j], "");
-                           str[j] = s1;
-                           System.out.println(s1);
-                       }
-                    String uuid ="ch" + UUID.randomUUID().toString().substring(0, 8) + "en";
+                for (ExcelTable s : list) {
 
-//                    //创建临时表
-//                    System.out.println("创建临时表");
-//                    dataService.createTables(uuid, str);
-//
-//                    //拿到map数据
-//                   List< Map<Integer, List<String>>> maps = ExceclResouce.getResources();
-//                    for (Map<Integer, List<String>> map:maps){
-//
-//                        //存入数据到临时表
-//                        System.out.println("存入");
-//                        dataService.insetData(uuid, map);
-//                    }
-//
-//
-//                    //查询
-//                    System.out.println("查询临时表");
-//                    //List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
-//                    //写入Excel
-//                    WriteNewExcel writeNewExcel=new WriteNewExcel();
-//                    System.out.println("开始写入数据");
+                    //汉字转拼音字母
+                    String[] sTitle = s.getTitle();
+                    int length = sTitle.length;
+                    String[] str = new String[length];
+                    for (int j = 0; j < length; j++) {
+                        String s1 = PinYinUtils.hanziToPinyin(sTitle[j], "");
+                        str[j] = s1;
+                    }
+                        String uuid = "ch" + UUID.randomUUID().toString().substring(0, 8) + "en";
+                        //创建临时表
+                        dataService.createTables(uuid, str);
 
-                    //WriteNewExcel.writeExcecl(strings,maps1,uuid,"");
+                        //存入数据到临时表
+                    List<List<String>> resource = s.getResource();
+                        dataService.insetData(uuid,resource);
+
+                        List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
+                        //写入Excel
+                        WriteNewExcel writeNewExcel = new WriteNewExcel();
+                        WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");
+                    }
+                list=null;
+                ExceclResouce.clear();
                 }
+            return listEx;
+        }
 
-            }
-            */
+    }

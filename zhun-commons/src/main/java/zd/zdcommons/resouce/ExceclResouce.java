@@ -1,10 +1,9 @@
 package zd.zdcommons.resouce;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import org.springframework.core.env.MapPropertySource;
 import zd.zdcommons.pojo.ExcelTable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -43,7 +42,12 @@ public class ExceclResouce {
         }
         recources.add(recource);
     }
-
+    public static void clear(){
+        listExcel.clear();
+        sheetNamex="";
+        recources=null;
+        table=null;
+    }
     public static List<ExcelTable> getListExcel() {
         return listExcel;
     }

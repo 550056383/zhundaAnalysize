@@ -1,10 +1,8 @@
 package zd.zdanalysis.mapper;
 
 import org.apache.ibatis.annotations.Param;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
-import tk.mybatis.spring.annotation.MapperScan;
 import zd.zdanalysis.pojo.ProjectInfo;
 
 import java.util.List;
@@ -22,10 +20,10 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     void createTables(String table, String[] cloums);
 
     //查询临时表中的数据
-    List<Map<String,Object>>   selectResult(@Param("tables") String table);
+    List<Map<String,Object>>  selectResult(@Param("tables") String table);
 
     //插入数据到临时表
-    void insetData(String table,List<String> list);
+    void insetData(String table, List<String> list);
 
       int selectResults(@Param("tables") String table);
 }

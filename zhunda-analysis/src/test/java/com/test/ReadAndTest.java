@@ -70,7 +70,7 @@ public class ReadAndTest {
             totalRows =excelXls.process(inputStream,1,new String[]{"回款金额","叠加"},"PO号");
         } else if (fileName.endsWith(EXCEL07_EXTENSION)) {//处理excel2007文件
             ExcelXlsxAndDefaultHandler excelXlsxReader = new ExcelXlsxAndDefaultHandler();
-            totalRows = excelXlsxReader.process(inputStream,1,new String[]{},"PO号");
+            totalRows = excelXlsxReader.process(inputStream,1,new String[]{},"PO号",fileName);
         } else {
             throw new Exception("文件格式错误，fileName的扩展名只能是xls或xlsx。");
         }

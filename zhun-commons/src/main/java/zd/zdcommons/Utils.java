@@ -306,10 +306,10 @@ public class Utils {
         AnalysisAbstractFactory analysisAbstractFactory = FactoryProducer.getFactory("ExcelDriver");
         if(filename.endsWith(xls)){
             ExcelDrivenImp xlsDriver = analysisAbstractFactory.getDriver("XLS");
-            total=xlsDriver.process(getFileInputStream(file),num,readrules,primarykey);
+            total=xlsDriver.process(getFileInputStream(file),num,readrules,primarykey,filename);
         }else if (filename.endsWith(xlsx)){
             ExcelDrivenImp xlsxDriver = analysisAbstractFactory.getDriver("XLSX");
-            total = xlsxDriver.process(getFileInputStream(file), num, readrules, primarykey);
+            total = xlsxDriver.process(getFileInputStream(file), num, readrules, primarykey,filename);
         }
         //拿取标题头
         return ExceclResouce.getListExcel();

@@ -77,11 +77,14 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
     private String sxName;
     //表名
     private String sheetName;
-    public int process(InputStream inputStream,int num,String[] read,String primarykey){
+    private String fileNamex;
+    @Override
+    public int process(InputStream inputStream,int num,String[] read,String primarykey,String fileName){
         try {
             //给标题行数赋值(默认从0开始为第一行)
             titleNum=num-1;
             primaryKey=primarykey;
+            fileNamex=fileName;
             getRuleRead(read);//读取规则
             //POIFS文件系统创建
             fileSystem = new POIFSFileSystem(inputStream);
@@ -124,7 +127,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                     if (orderedBSRs == null) {
                         orderedBSRs = BoundSheetRecord.orderByBofPosition(boundSheetRecords);
                     }
-                    sheetName = orderedBSRs[sheetIndex].getSheetname();
+                    sheetName = fileNamex+"--"+ orderedBSRs[sheetIndex].getSheetname();
                     sheetIndex++;
                     curRow=0;
                     rowTitle=new LinkedHashMap<String, String>();

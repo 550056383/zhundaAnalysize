@@ -51,30 +51,30 @@ public class EnginnerService {
                 name = (String) objects[3];
                 List<ExcelTable> list = utils.getExcelResource(file, num, rules, primarykey);
                 ((CopyOnWriteArrayList<ExcelTable>) listEx).addAllAbsent(list);
-                for (ExcelTable s : list) {
-
-                    //汉字转拼音字母
-                    String[] sTitle = s.getTitle();
-                    int length = sTitle.length;
-                    String[] str = new String[length];
-                    for (int j = 0; j < length; j++) {
-                        String s1 = PinYinUtils.hanziToPinyin(sTitle[j], "");
-                        str[j] = s1;
-                    }
-                        String uuid = "ch" + UUID.randomUUID().toString().substring(0, 8) + "en";
-                        //创建临时表
-                        dataService.createTables(uuid, str);
-
-                        //存入数据到临时表
-                    List<List<String>> resource = s.getResource();
-                        dataService.insetData(uuid,resource);
-
-                        List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
-                        //写入Excel
-                        WriteNewExcel writeNewExcel = new WriteNewExcel();
-                        WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");
-                    }
-                list=null;
+//                for (ExcelTable s : list) {
+//
+//                    //汉字转拼音字母
+//                    String[] sTitle = s.getTitle();
+//                    int length = sTitle.length;
+//                    String[] str = new String[length];
+//                    for (int j = 0; j < length; j++) {
+//                        String s1 = PinYinUtils.hanziToPinyin(sTitle[j], "");
+//                        str[j] = s1;
+//                    }
+//                        String uuid = "ch" + UUID.randomUUID().toString().substring(0, 8) + "en";
+//                        //创建临时表
+//                        dataService.createTables(uuid, str);
+//
+//                        //存入数据到临时表
+//                    List<List<String>> resource = s.getResource();
+//                        dataService.insetData(uuid,resource);
+//
+//                        List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
+//                        //写入Excel
+//                        WriteNewExcel writeNewExcel = new WriteNewExcel();
+//                        WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");
+//                    }
+//                list=null;
                 ExceclResouce.clear();
                 }
             return listEx;

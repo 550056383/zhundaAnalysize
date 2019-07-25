@@ -88,13 +88,15 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
 
     private int sheetIndex=0;
     private String sheetName="";
+    private String fileNamex="";
     private Boolean titlFlag=true;
-    public int process(InputStream inputStream,int num,String[] read,String primarykey){
+    public int process(InputStream inputStream,int num,String[] read,String primarykey,String fileName){
         OPCPackage pkg =null;
         try {
             //给标题行数赋值(默认从0开始为第一行)
             titleNum=num-1;
             primaryKey=primarykey;
+            fileNamex=fileName;
             getRuleRead(read);//读取规则
             pkg = OPCPackage.open(inputStream);
             XSSFReader r = new XSSFReader(pkg);
@@ -107,7 +109,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 curColumn = 0; //标记初始行为第一行
                 sheetIndex++;
                 InputStream sheet = sheets.next(); //sheets.next()和sheets.getSheetName()不能换位置，否则sheetName报错
-                sheetName = sheets.getSheetName();
+                sheetName = fileNamex+"--"+ sheets.getSheetName();
                 InputSource sheetSource = new InputSource(sheet);
                 parser.parse(sheetSource); //解析excel的每条记录，在这个过程中startElement()、characters()、endElement()这三个函数会依次执行
                 sheet.close();

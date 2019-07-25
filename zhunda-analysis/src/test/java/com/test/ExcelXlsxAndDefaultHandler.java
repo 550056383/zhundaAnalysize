@@ -89,7 +89,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     private int sheetIndex=0;
     private String sheetName="";
     private Boolean titlFlag=true;
-    public int process(InputStream inputStream,int num,String[] read,String primarykey){
+    public int process(InputStream inputStream,int num,String[] read,String primarykey,String fileName){
         OPCPackage pkg =null;
         try {
             //给标题行数赋值(默认从0开始为第一行)

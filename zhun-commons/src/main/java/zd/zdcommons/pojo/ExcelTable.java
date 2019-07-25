@@ -15,6 +15,7 @@ public class ExcelTable {
     private String sheetName;
     private String[] title;
     private List<List<String>> resource;
+    private String uuid;
 
     @Override
     public String toString() {
@@ -22,6 +23,7 @@ public class ExcelTable {
                 "sheetName='" + sheetName + '\'' +
                 ", title=" + Arrays.toString(title) +
                 ", resource=" + resource +
+                ", uuid='" + uuid + '\'' +
                 '}';
     }
 }

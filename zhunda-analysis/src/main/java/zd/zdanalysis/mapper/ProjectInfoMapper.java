@@ -26,4 +26,5 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     void insetData(String table, List<String> list);
 
       int selectResults(@Param("tables") String table);
+
 }

@@ -34,6 +34,9 @@ public   ResponseEntity<List<ExcelTable>> getTest(@RequestParam("files") Multipa
     @PostMapping("/cond")
     public ResponseEntity<String> getSetup(@RequestBody Map<String,Object> map){
         System.out.println(map.size());
+        for (Map.Entry<String,Object> entry:map.entrySet()){
+            System.out.println(entry.getKey()+"---------"+entry.getValue());
+        }
         return null;
     }
 }

@@ -6,7 +6,7 @@
     <update id="createTables" parameterType="string">
         create TEMPORARY table  ${param1} (
          <foreach collection="param2" item="Item" separator=",">
-            ${Item} varchar(100)
+             ${Item} varchar(500)
         </foreach>
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     </update>
@@ -24,5 +24,21 @@
     </select>
     <select id="selectResults"  resultType="int" parameterType="string">
         select count(*) from ${tables}
+    </select>
+
+    <!--关联设置项表查询-->
+    <select id="selectTables" resultType="java.util.LinkedHashMap">
+        select * from ${param1},${param3} where ${param1}.${param2}=${param3}.${param4}
+    </select>
+
+    <!--输出表字段-->
+    <select id="selectTableCell" resultType="string">
+        select ${param2} from ${param1}
+    </select>
+
+    <!--条件设置-->
+    <select id="selectByWriteRules" resultType="string">
+        select  ${param2},${param5} from  ${param1},${param4} where ${param1}.${param2}>${param4}.${param5} and
+        ${param1}.${param2}-${param4}.${param5}>${param6} and ${param1}.id=${param4}.id
     </select>
 </mapper>

@@ -7,13 +7,13 @@ import org.springframework.web.multipart.MultipartFile;
 import zd.zdcommons.Utils;
 import zd.zdcommons.pojo.ExcelTable;
 import zd.zdcommons.resouce.ExceclResouce;
+import zd.zdcommons.utils.Md5;
 import zd.zdcommons.utils.PinYinUtils;
 import zd.zdcommons.wirte.WriteNewExcel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
@@ -53,7 +53,7 @@ public class EnginnerService {
                 ((CopyOnWriteArrayList<ExcelTable>) listEx).addAllAbsent(list);
                for (ExcelTable s : list) {
 
-                    //汉字转拼音字母
+                   //汉字转拼音字母
                     String[] sTitle = s.getTitle();
                     int length = sTitle.length;
                     String[] str = new String[length];
@@ -61,8 +61,7 @@ public class EnginnerService {
                         String s1 = PinYinUtils.hanziToPinyin(sTitle[j], "");
                         str[j] = s1;
                     }
-                        String uuid = "ch" + UUID.randomUUID().toString().substring(0, 8) + "en";
-                          s.setUuid(uuid);
+                   String uuid = "ch" + Md5.md5(s.getSheetName()).substring(0, 8) + "en";
                         // 创建临时表
                         dataService.createTables(uuid, str);
 
@@ -74,6 +73,7 @@ public class EnginnerService {
                         //写入Excel
                         WriteNewExcel writeNewExcel = new WriteNewExcel();
                         WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");
+                   s.setResource(null);
                     }
                 list=null;
                 ExceclResouce.clear();
@@ -81,4 +81,16 @@ public class EnginnerService {
             return listEx;
         }
 
+    public String getSetup(Map<String, Object> map) {
+
+        //关联设置项表查询
+        // List<Map<String, Object>> mapList = dataService.selectTables(map);
+
+        //输出表字段
+        List<String> arrr = dataService.selectTableCell(map);
+
+        //条件设置
+        List<String> list = dataService.selectByWriteRules(map);
+        return null;
+    }
     }

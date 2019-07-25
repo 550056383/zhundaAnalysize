@@ -37,6 +37,7 @@ public   ResponseEntity<List<ExcelTable>> getTest(@RequestParam("files") Multipa
         for (Map.Entry<String,Object> entry:map.entrySet()){
             System.out.println(entry.getKey()+"---------"+entry.getValue());
         }
+        enginnerService.getSetup(map);
         return null;
     }
 }

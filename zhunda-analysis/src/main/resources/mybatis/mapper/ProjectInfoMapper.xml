@@ -3,6 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="zd.zdanalysis.mapper.ProjectInfoMapper">
+    <!--查询是否存在该表-->
+    <select id="selectTableByName" parameterType="string" resultType="string">
+         show TABLES like #{tablename}
+    </select>
+    <!--临时表存在则删除-->
+    <delete id="deleteTableByName" parameterType="string">
+       drop temporary table #{deletename}
+    </delete>
     <update id="createTables" parameterType="string">
         create TEMPORARY table  ${param1} (
          <foreach collection="param2" item="Item" separator=",">
@@ -36,9 +44,25 @@
         select ${param2} from ${param1}
     </select>
 
-    <!--条件设置-->
-    <select id="selectByWriteRules" resultType="string">
-        select  ${param2},${param5} from  ${param1},${param4} where ${param1}.${param2}>${param4}.${param5} and
-        ${param1}.${param2}-${param4}.${param5}>${param6} and ${param1}.id=${param4}.id
+    <!--条件设置"a", "zje", ">", "b", "hk", "10")-->
+    <select id="selectByWriteRules" resultType="java.util.LinkedHashMap">
+        select * from
+        <if test="param1!=null  and param4!=null ">
+            ${param1},${param4}
+        </if>
+        <if test="param4=null">
+            ${param1}
+        </if>
+        <where>
+            <if test="param1!=null  and param4!=null ">
+                and ${param1}.${param2}>${param4}.${param5}
+                and (${param1}.${param2}-${param4}.${param5})>${param6}
+                and ${param1}.aid=${param4}.bid
+            </if>
+            <if test="param4=null ">
+                and ${param1}.${param2}>${param6}
+            </if>
+        </where>
+
     </select>
 </mapper>

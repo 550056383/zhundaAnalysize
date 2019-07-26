@@ -16,6 +16,11 @@ import java.util.Map;
 @Repository
 @org.apache.ibatis.annotations.Mapper
 public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
+    //查询是否存在该表名
+    String selectTableByName(@Param("tablename") String name);
+
+    //删除临时表
+    String deleteTableByName(@Param("deletename") String name);
     //动态创建临时表
     void createTables(String table, String[] cloums);
 
@@ -33,5 +38,5 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     List<String> selectTableCell(String s0, String s1);
 
     //条件设置
-    List<String> selectByWriteRules(String s0, String s1, String s2, String s3, String s4, String s5);
+    List<Map<String, Object>> selectByWriteRules(String s0, String s1, String s2, String s3, String s4, String s5);
 }

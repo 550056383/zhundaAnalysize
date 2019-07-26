@@ -280,6 +280,6 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
             }
         }
         ruleOverLay = overlay.toArray(new String[overlay.size()]);
-        ruleJoint  = joint.toArray(new String[joint.size()]);
+        ruleJoint = joint.toArray(new String[joint.size()]);
     }
 }

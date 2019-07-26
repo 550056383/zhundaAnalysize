@@ -88,7 +88,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
 
     private int sheetIndex=0;
     private String sheetName="";
-    private String fileNamex="";
     private Boolean titlFlag=true;
     public int process(InputStream inputStream,int num,String[] read,String primarykey,String fileName){
         OPCPackage pkg =null;
@@ -96,7 +95,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             //给标题行数赋值(默认从0开始为第一行)
             titleNum=num-1;
             primaryKey=primarykey;
-            fileNamex=fileName;
             getRuleRead(read);//读取规则
             pkg = OPCPackage.open(inputStream);
             XSSFReader r = new XSSFReader(pkg);
@@ -109,7 +107,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 curColumn = 0; //标记初始行为第一行
                 sheetIndex++;
                 InputStream sheet = sheets.next(); //sheets.next()和sheets.getSheetName()不能换位置，否则sheetName报错
-                sheetName = fileNamex+"--"+ sheets.getSheetName();
+                sheetName = sheets.getSheetName();
                 InputSource sheetSource = new InputSource(sheet);
                 parser.parse(sheetSource); //解析excel的每条记录，在这个过程中startElement()、characters()、endElement()这三个函数会依次执行
                 sheet.close();
@@ -139,6 +137,15 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
         if(qName.equals("c")){
             if(preRef==null){
                 preRef=attributes.getValue("r");
+                if(!getStr(preRef).equals("A")){
+                    String tempRef="A"+getInt(preRef);
+                    int len = countNullCell(preRef , tempRef);
+                    for (int i = 0; i < len; i++) {
+                        String value=rowBefore.get(rowTitle.get(curColumn+""));
+                        rowContents.put(rowTitle.get(curColumn+""),value);
+                        curColumn++;
+                    }
+                }
             }else{
                 //拿取上次的值
                 if(isPreFlag){
@@ -147,9 +154,9 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             }
             ref = attributes.getValue("r");//得到单元格编号 如 AF12
             this.setNextDataType(attributes);//设置读取方式
-            String cellType = attributes.getValue("t");//是否存在值(s,null 为返回值)
+            //String cellType = attributes.getValue("t");//是否存在值(s,null 为返回值)
             //判断值是否存在
-            if(cellType!=null&& cellType.equals("s")){
+            if("t".equals(qName)){
                 isValueCell = true;
             } else {
                 isValueCell = false;
@@ -208,11 +215,13 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             if (value != null && !"".equals(value)) {
                 flag = true;
             }
-        }else if (qName.equals("v")){
+        }
+        else if (qName.equals("v")){
             String value = this.getDataValue(lastContents.trim(), "");
             if(value.contains("\"")){
                 value=value.substring(1,value.length()-1);
             }
+            //补全中间
             if(!ref.equals(preRef)){
                 int len = countNullCell(ref , preRef);
                 for (int i = 0; i < len; i++) {
@@ -234,7 +243,8 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             if (value != null && !"".equals(value)) {
                 flag = true;
             }
-        } else if (qName.equals("row")){//换行
+        }
+        else if (qName.equals("row")){//换行
             if (total==0) {
                  maxRef= ref;
             }
@@ -304,6 +314,10 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     public String getStr(String ref){
         String s = ref.replaceAll("\\d+", "");
         return s;
+    }
+    public int getInt(String ref){
+        int i = Integer.parseInt(ref.replaceAll("[^0-9]", ""));
+        return i;
     }
     //叠加
     public void getOverlay(Map.Entry<String,String> entry){
@@ -401,7 +415,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                     int idx = Integer.parseInt(sstIndex);
                     XSSFRichTextString rtss = new XSSFRichTextString(sst.getEntryAt(idx));//根据idx索引值获取内容值
                     thisStr = rtss.toString();
-                    System.out.println(thisStr);
                     //有些字符串是文本格式的，但内容却是日期
 
                     rtss = null;

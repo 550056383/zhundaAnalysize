@@ -6,7 +6,7 @@
     <update id="createTables" parameterType="string">
         create TEMPORARY table  ${param1} (
          <foreach collection="param2" item="Item" separator=",">
-            ${Item} varchar(100)
+            ${Item} varchar(800)
         </foreach>
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     </update>

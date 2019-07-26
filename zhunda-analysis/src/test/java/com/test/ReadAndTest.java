@@ -25,7 +25,7 @@ public class ReadAndTest {
         //String fileName="E:/Zhunda/工程/工程所有Test.xls";
         //String fileName="E:/Zhunda/工程/PURCHASE_ORDER_20190611150319（华为系统订单信息）.xlsx";
         //String fileName="E:/Zhunda/测试/问题PO单（7.04）.xlsx";
-        String fileName="E:/Zhunda/测试/2.xlsx";
+        String fileName="E:/Zhunda/测试/test.xlsx";
         readExcel(fileName);
     }
     public static LinkedList<Map<String,String>> resouces=new LinkedList<Map<String, String>>();

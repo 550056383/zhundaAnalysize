@@ -64,16 +64,16 @@ public class EnginnerService {
                         String uuid = "ch" + UUID.randomUUID().toString().substring(0, 8) + "en";
                           s.setUuid(uuid);
                         // 创建临时表
-                        dataService.createTables(uuid, str);
-
-                        //存入数据到临时表
-                    List<List<String>> resource = s.getResource();
-                        dataService.insetData(uuid,resource);
-
-                        List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
-                        //写入Excel
-                        WriteNewExcel writeNewExcel = new WriteNewExcel();
-                        WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");
+//                        dataService.createTables(uuid, str);
+//
+//                        //存入数据到临时表
+//                    List<List<String>> resource = s.getResource();
+//                        dataService.insetData(uuid,resource);
+//
+//                        List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
+//                        //写入Excel
+//                        WriteNewExcel writeNewExcel = new WriteNewExcel();
+//                        WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");
                     }
                 list=null;
                 ExceclResouce.clear();

@@ -256,7 +256,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                     ExceclResouce.getTitle(rowTitle,sheetName);
                     titlFlag=false;
                 }
-                String beValue = rowBefore.get(primaryKey)+"xx";
+                String beValue = rowBefore.get(primaryKey);
                 String conValue = rowContents.get(primaryKey);
                 if(StringUtils.isNotBlank(beValue) &&beValue.equals(conValue)){
                     //叠加，拼接，覆盖

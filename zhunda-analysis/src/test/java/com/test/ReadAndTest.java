@@ -25,7 +25,7 @@ public class ReadAndTest {
         //String fileName="E:/Zhunda/工程/工程所有Test.xls";
         //String fileName="E:/Zhunda/工程/PURCHASE_ORDER_20190611150319（华为系统订单信息）.xlsx";
         //String fileName="E:/Zhunda/测试/问题PO单（7.04）.xlsx";
-        String fileName="E:/Zhunda/测试/test.xlsx";
+        String fileName="E:/Zhunda/测试/工程所有Test.xls";
         readExcel(fileName);
     }
     public static LinkedList<Map<String,String>> resouces=new LinkedList<Map<String, String>>();
@@ -67,7 +67,7 @@ public class ReadAndTest {
         FileInputStream inputStream = new FileInputStream(file);
         if (fileName.endsWith(EXCEL03_EXTENSION)) { //处理excel2003文件
             ExcelXlsWithHSSFListener excelXls=new ExcelXlsWithHSSFListener();
-            totalRows =excelXls.process(inputStream,1,new String[]{"回款金额","叠加"},"PO号");
+            totalRows =excelXls.process(inputStream,1,new String[]{"回款金额","叠加"},"PO号",fileName);
         } else if (fileName.endsWith(EXCEL07_EXTENSION)) {//处理excel2007文件
             ExcelXlsxAndDefaultHandler excelXlsxReader = new ExcelXlsxAndDefaultHandler();
             totalRows = excelXlsxReader.process(inputStream,1,new String[]{},"PO号",fileName);

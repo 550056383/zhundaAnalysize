@@ -78,7 +78,6 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
     //表名
     private String sheetName;
     private String fileNamex;
-    @Override
     public int process(InputStream inputStream,int num,String[] read,String primarykey,String fileName){
         try {
             //给标题行数赋值(默认从0开始为第一行)
@@ -105,8 +104,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                 request.addListenerForAllRecords(workbookBuildingListener);
             }
             factory.processWorkbookEvents(request,fileSystem);//执行(这里-开始执行 processRecord(Record record))
-            //追加最后一行数据
-            ExceclResouce.getResource(rowBefore,sheetName);
+            ExceclResouce.getResource(rowBefore,sheetName);//每条数据，则用getShow方法返回
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,9 +133,13 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                 break;
             case SSTRecord.sid://sstRecord SST记录（需要初始化，不然不知道存哪里，导致没数据）
                 sstRecord=(SSTRecord)record;
+
                 break;
             case BlankRecord.sid: //单元格为空白
                 BlankRecord brec = (BlankRecord) record;
+                curColumn = brec.getColumn();
+                String s = rowTitle.get(curColumn + "");
+                rowContents.put(s, "");
                 break;
             case BoolErrRecord.sid: //单元格为布尔类型
                 BoolErrRecord berec = (BoolErrRecord) record;
@@ -226,7 +228,7 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                             rowContents.put(entry.getKey(),rowBefore.get(entry.getKey()));
                         }
                     }
-                }else {
+                }else if(rowBefore.size()!=0) {
                     ExceclResouce.getResource(rowBefore,sheetName);//每条数据，则用getShow方法返回
                 }
                 //末尾为空补全
@@ -240,6 +242,9 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
             //得到最大列数
             if (curRow==0){
                 contMaxCol=curColumn;
+                if(rowBefore.size()>0){
+                    ExceclResouce.getResource(rowBefore,sheetName);//每条数据，则用getShow方法返回
+                }
             }
             //给前一条数据赋值
             rowBefore=rowContents;

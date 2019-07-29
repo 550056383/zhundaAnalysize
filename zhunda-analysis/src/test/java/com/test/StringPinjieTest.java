@@ -32,8 +32,8 @@ public class StringPinjieTest {
                 " [1.xlsx--Sheet1, 回款金额, 大于, 1.xlsx--Sheet2, 回款金额, 500]], " +
 
                 "title=多少, xshow=true}]";
-        List<String[]> list = new ArrayList<>();
-        List<List<String[]>> listList = new ArrayList<>();
+        List<String[]> list = new ArrayList<String[]>();
+        List<List<String[]>> listList = new ArrayList<List<String[]>>();
         String[] split = s.split("]],");
         for (String s1 : split) {
             String[] arr = s1.replace("[", "").replace("]", "").replace("{", "").replace("}", "").split(",");

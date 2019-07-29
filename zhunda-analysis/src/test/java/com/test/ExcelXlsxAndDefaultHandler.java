@@ -85,6 +85,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     private Boolean isPreFlag=false;
     private Boolean isEndFlag=false;
     private Boolean flag=true;
+    private Boolean firstFag=false;
 
     private int sheetIndex=0;
     private String sheetName="";
@@ -138,9 +139,10 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             if(preRef==null){
                 preRef=attributes.getValue("r");
                 if(!getStr(preRef).equals("A")){
+                    firstFag=true;
                     String tempRef="A"+getInt(preRef);
                     int len = countNullCell(preRef , tempRef);
-                    for (int i = 0; i < len; i++) {
+                    for (int i = 0; i < len+1; i++) {
                         String value=rowBefore.get(rowTitle.get(curColumn+""));
                         rowContents.put(rowTitle.get(curColumn+""),value);
                         curColumn++;
@@ -224,10 +226,11 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             //补全中间
             if(!ref.equals(preRef)){
                 int len = countNullCell(ref , preRef);
-                for (int i = 0; i < len; i++) {
+                for (int i = 0; i < (firstFag?(len+1):len); i++) {
                     rowContents.put(rowTitle.get(curColumn+""),"");
                     curColumn++;
                 }
+                firstFag=false;
             }
             if(total>titleNum){
                 rowContents.put(rowTitle.get(curColumn+""),value);
@@ -253,7 +256,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                     ExceclResouce.getTitle(rowTitle,sheetName);
                     titlFlag=false;
                 }
-                String beValue = rowBefore.get(primaryKey);
+                String beValue = rowBefore.get(primaryKey)+"xx";
                 String conValue = rowContents.get(primaryKey);
                 if(StringUtils.isNotBlank(beValue) &&beValue.equals(conValue)){
                     //叠加，拼接，覆盖

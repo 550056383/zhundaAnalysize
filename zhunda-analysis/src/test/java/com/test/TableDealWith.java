@@ -30,44 +30,6 @@ public class TableDealWith {
     private static String[] realRules=null;
     private static int interva=0;
     private static String[] sheetNames=null;
-    private TableDealWith(){}
-
-    public static void getResource(List<String> list, String sheetName){
-        String[] strs = list.toArray(new String[list.size()]);
-        if(count<titleNum){
-            if(count==0){
-                preStrs=strs;
-            }
-            else {
-                for (int i=0;i<strs.length;i++){
-                    preStrs[i]=strs[i]!=""?preStrs[i]+"--"+strs[i]:preStrs[i];
-                }
-                titleStr=preStrs;
-            }
-        }
-        else if (count>(titleNum+interva-1)){
-            for (int i=0;i<strs.length;i++){
-                resource.put(titleStr[i],strs[i]);
-            }
-            listRsourcecs.add(resource);
-            resource= new LinkedHashMap<String, Object>();
-        }
-        //赋值
-        if (sheetName!=sheetx){
-            sheetx=sheetName;
-            count=0;
-        }
-        count++;
-    }
-
-    public static final TableDealWith getInstance(int titleNumx, String[] realRulesx,int intervax,String[] sheetNamesx) {
-        titleNum=titleNumx;
-        realRules=realRulesx;
-        interva=intervax;
-        sheetNames=sheetNamesx;
-        return LayHolder.INSTANCE;
-    }
-
     @Test
     public void  Test(){
         String filePath="E:\\Zhunda\\测试\\工程所有信息表2019-01-02.xls";
@@ -101,11 +63,49 @@ public class TableDealWith {
         return inputStream;
     }
 
-    public  List<Map<String, Object>> getListRsourcecs() {
-        return listRsourcecs;
+    public static void getResource(List<String> list, String sheetName){
+        String[] strs = list.toArray(new String[list.size()]);
+        if(count<titleNum){
+            if(count==0){
+                preStrs=strs;
+            }
+            else {
+                for (int i=0;i<strs.length;i++){
+                    preStrs[i]=strs[i]!=""?preStrs[i]+"--"+strs[i]:preStrs[i];
+                }
+                titleStr=preStrs;
+            }
+        }
+        else if (count>(titleNum+interva-1)){
+            for (int i=0;i<strs.length;i++){
+                resource.put(titleStr[i],strs[i]);
+            }
+            listRsourcecs.add(resource);
+            resource= new LinkedHashMap<String, Object>();
+        }
+        //赋值
+        if (sheetName!=sheetx){
+            sheetx=sheetName;
+            count=0;
+        }
+        count++;
     }
 
     private static class LayHolder{
         private static final TableDealWith INSTANCE= new TableDealWith();
+    }
+
+    private TableDealWith(){}
+
+    public static final TableDealWith getInstance(int titleNumx, String[] realRulesx,int intervax,String[] sheetNamesx) {
+        titleNum=titleNumx;
+        realRules=realRulesx;
+        interva=intervax;
+        sheetNames=sheetNamesx;
+        return LayHolder.INSTANCE;
+    }
+
+    public  List<Map<String, Object>> getListRsourcecs() {
+        return listRsourcecs;
     }
 }

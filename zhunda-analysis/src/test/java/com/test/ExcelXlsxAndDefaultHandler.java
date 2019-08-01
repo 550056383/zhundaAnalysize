@@ -1,5 +1,6 @@
 package com.test;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -14,10 +15,15 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+import zd.zdcommons.resouce.ExceclResouce;
+import zd.zdcommons.serviceImp.ExcelDrivenImp;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @ClassName ExcelXlsxAndDefaultHandler
@@ -30,7 +36,8 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler  {
     private int total=0;
     //当前列
     private int curColumn=0;
-    String dataValue="";
+    //当前行
+    private int curRow=0;
     //判断单元格是否有值
     private boolean isValueCell;
     //缓存及下标
@@ -40,8 +47,8 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler  {
     //坐标前后
     private String ref=null; private String preRef=null;
     private String maxRef=null;
-    //当前行
-    private int curRow=0;
+    //数据的存放
+    private List<String> rowResource=new ArrayList<String>();
 
     /*
      * 第二次改进
@@ -66,15 +73,13 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler  {
 
     //判断是否填入一个坐标
     private Boolean isPreFlag=false;
-    //数据的存放
-    private List<String> rowResource=new ArrayList<String>();
     //是否开始列为空
     private Boolean isStartFlag=false;
     //是否末尾列余存
     private Boolean isEndFlag=false;
+    String dataValue="";
     private int sheetIndex=0;
     private String sheetName="";
-
     public int process(InputStream inputStream,String sheetNamex,String fileName){
         OPCPackage pkg =null;
         try {

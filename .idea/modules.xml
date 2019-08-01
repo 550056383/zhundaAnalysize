@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/zhun-item/zhun-item.iml" filepath="$PROJECT_DIR$/zhun-item/zhun-item.iml" />
-      <module fileurl="file://$PROJECT_DIR$/zhun-item/zhun-item-interface/zhun-item-interface.iml" filepath="$PROJECT_DIR$/zhun-item/zhun-item-interface/zhun-item-interface.iml" />
-      <module fileurl="file://$PROJECT_DIR$/zhun-item/zhun-item-service/zhun-item-service.iml" filepath="$PROJECT_DIR$/zhun-item/zhun-item-service/zhun-item-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/zhunda-item/zhunda-interface/zhunda-interface.iml" filepath="$PROJECT_DIR$/zhunda-item/zhunda-interface/zhunda-interface.iml" />
     </modules>
   </component>

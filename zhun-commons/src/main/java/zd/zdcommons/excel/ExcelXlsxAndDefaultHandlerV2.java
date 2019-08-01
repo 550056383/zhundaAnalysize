@@ -27,9 +27,6 @@ import java.util.List;
  */
 
 public class ExcelXlsxAndDefaultHandlerV2 extends DefaultHandler  {
-    //日期类型转换
-    private final DataFormatter formatter = new DataFormatter();
-    String dataValue="";
     //记录条数
     private int total=0;
     //当前列
@@ -38,15 +35,23 @@ public class ExcelXlsxAndDefaultHandlerV2 extends DefaultHandler  {
     private int curRow=0;
     //判断单元格是否有值
     private boolean isValueCell;
-        //缓存及下标
-    private String lastContents;     //共享表
+    //缓存及下标
+    private String lastContents;
+    //共享表
     private SharedStringsTable sst;
-//坐标前后
-    private String ref=null;
-private String preRef=null;
+    //坐标前后
+    private String ref=null; private String preRef=null;
     private String maxRef=null;
     //数据的存放
     private List<String> rowResource=new ArrayList<String>();
+
+    /*
+     * 第二次改进
+     */
+    //Cell的类型
+    enum CellDataType{
+        BOOL, ERROR, FORMULA, INLINESTR, SSTINDEX, NUMBER, DATE, NULL
+    }
     //Cell的类型及默认类型
     private ExcelXlsxAndDefaultHandler.CellDataType cellDataType= ExcelXlsxAndDefaultHandler.CellDataType.SSTINDEX;
     //单元格
@@ -57,16 +62,19 @@ private String preRef=null;
     private String formatString;
     //单元格类型
     private CellDataType nextDataType = CellDataType.SSTINDEX;
+    //日期类型转换
+    private final DataFormatter formatter = new DataFormatter();
     //定义该文档一行最大的单元格数，用来补全一行最后可能缺失的单元格
+
     //判断是否填入一个坐标
     private Boolean isPreFlag=false;
     //是否开始列为空
     private Boolean isStartFlag=false;
     //是否末尾列余存
     private Boolean isEndFlag=false;
+    String dataValue="";
     private int sheetIndex=0;
     private String sheetName="";
-
     public int process(InputStream inputStream,String sheetNamex,String fileName){
         OPCPackage pkg =null;
         try {
@@ -96,7 +104,6 @@ private String preRef=null;
         }
         return total;
     }
-
     public int process(InputStream inputStream,String[] sheetNames,String fileName){
         OPCPackage pkg =null;
         try {
@@ -128,7 +135,6 @@ private String preRef=null;
         }
         return total;
     }
-
     public int process(InputStream inputStream,String fileName){
         OPCPackage pkg =null;
         try {
@@ -156,7 +162,6 @@ private String preRef=null;
         }
         return total;
     }
-
     /***
      * 执行顺序 - 第一
      * frist
@@ -187,7 +192,6 @@ private String preRef=null;
         isPreFlag=false;
         lastContents="";
     }
-
     /***
      * 执行顺序 - 第二
      * second
@@ -201,7 +205,6 @@ private String preRef=null;
     public void characters(char[] ch, int start, int length) throws SAXException {
         lastContents+=new String(ch,start,length);
     }
-
     /***
      * 执行顺序 - 第三
      * third
@@ -261,18 +264,15 @@ private String preRef=null;
             total++;
         }
     }
-
     //得到非数字部分
     public String getStr(String ref){
         String s = ref.replaceAll("\\d+", "");
         return s;
     }
-
     public int getInt(String ref){
         int i = Integer.parseInt(ref.replaceAll("[^0-9]", ""));
         return i;
     }
-
     // 处理数据类型
     public void setNextDataType(Attributes attributes) {
         nextDataType = CellDataType.NUMBER; //cellType为空，则表示该单元格类型为数字
@@ -311,7 +311,6 @@ private String preRef=null;
             }
         }
     }
-
     /**
      * 对解析出来的数据进行类型处理
      * @param value   单元格的值，
@@ -404,13 +403,5 @@ private String preRef=null;
             }
         }
         return str;
-    }
-
-    /*
-     * 第二次改进
-     */
-    //Cell的类型
-    enum CellDataType{
-        BOOL, ERROR, FORMULA, INLINESTR, SSTINDEX, NUMBER, DATE, NULL
     }
 }

@@ -95,8 +95,40 @@ public class StringFormat {
                 list.add(arr);
             }
         }
-
         return list;
+    }
+    /**
+     *方法描述 : 处理条件设置无规则字符串,主要条件和次要条件分别对应一个数组
+     * @author Jack Chen
+     * @date 2019/7/30 11:31
+     * @param s
+     * @return java.util.List<java.lang.String[]>
+     **/
+    public static List<String[]> getString4(String s) {
+        List<String[]> list = new ArrayList<String[]>();
+        String[] split = s.split("]],");
+        for (String s1 : split) {
+            String[] split1 = s1.split("],");
+            for (int i = 0; i < split1.length; i++){
+                String replace = split1[i].replace("[", "").replace("]", "").replace("{", "").replace("}", "");
+                String substring1 = replace.substring(replace.indexOf("=") + 1);
+                split1[i] = substring1.trim();
+            }
+          list.add(split1);
+        }
+        return list;
+    }
+
+    public  static List<String[]> stringToArr(String s){
+        List<String[]> newlist=new ArrayList<String[]>();
+        String[] split = s.split(",");
+            split[0] = StringFormat.uuid(split[0].trim());
+            split[3] = StringFormat.uuid(split[3].trim());
+            split[1] = PinYinUtils.hanziToPinyin(split[1], "");
+            split[4] = PinYinUtils.hanziToPinyin(split[4], "");
+            newlist.add(split);
+
+        return newlist;
     }
 
     public static String md5(String str) {

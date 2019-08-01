@@ -1,6 +1,5 @@
 package com.test;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -15,14 +14,10 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
-import zd.zdcommons.resouce.ExceclResouce;
-import zd.zdcommons.serviceImp.ExcelDrivenImp;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName ExcelXlsxAndDefaultHandler
@@ -30,11 +25,12 @@ import java.util.Map;
  * @TIME 2019/7/1 0001-9:33
  */
 
-public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelDrivenImp {
+public class ExcelXlsxAndDefaultHandler extends DefaultHandler  {
     //记录条数
     private int total=0;
     //当前列
     private int curColumn=0;
+    String dataValue="";
     //判断单元格是否有值
     private boolean isValueCell;
     //缓存及下标
@@ -44,14 +40,8 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     //坐标前后
     private String ref=null; private String preRef=null;
     private String maxRef=null;
-    //字段标题
-    private LinkedHashMap<String, String> rowTitle=new LinkedHashMap<String, String>();
-    //数据的存放
-    private LinkedHashMap<String, String> rowContents=new LinkedHashMap<String, String>();
-    //数据的存放
-    private LinkedHashMap<String, String> rowBefore=new LinkedHashMap<String, String>();
-
-
+    //当前行
+    private int curRow=0;
 
     /*
      * 第二次改进
@@ -72,31 +62,23 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     private CellDataType nextDataType = CellDataType.SSTINDEX;
     //日期类型转换
     private final DataFormatter formatter = new DataFormatter();
-    //设置标题头长短
-    private int titleNum=0;
-    //设置主键
-    private String primaryKey="";
-    //设置读取配置
-    private String[] ruleOverLay=null;
-    private String[] ruleJoint=null;
     //定义该文档一行最大的单元格数，用来补全一行最后可能缺失的单元格
 
     //判断是否填入一个坐标
     private Boolean isPreFlag=false;
+    //数据的存放
+    private List<String> rowResource=new ArrayList<String>();
+    //是否开始列为空
+    private Boolean isStartFlag=false;
+    //是否末尾列余存
     private Boolean isEndFlag=false;
-    private Boolean flag=true;
-    private Boolean firstFag=false;
-
     private int sheetIndex=0;
     private String sheetName="";
-    private Boolean titlFlag=true;
-    public int process(InputStream inputStream,int num,String[] read,String primarykey,String fileName){
+
+    public int process(InputStream inputStream,String sheetNamex,String fileName){
         OPCPackage pkg =null;
         try {
             //给标题行数赋值(默认从0开始为第一行)
-            titleNum=num-1;
-            primaryKey=primarykey;
-            getRuleRead(read);//读取规则
             pkg = OPCPackage.open(inputStream);
             XSSFReader r = new XSSFReader(pkg);
             stylesTable = r.getStylesTable();
@@ -109,20 +91,77 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 sheetIndex++;
                 InputStream sheet = sheets.next(); //sheets.next()和sheets.getSheetName()不能换位置，否则sheetName报错
                 sheetName = sheets.getSheetName();
-                InputSource sheetSource = new InputSource(sheet);
-                parser.parse(sheetSource); //解析excel的每条记录，在这个过程中startElement()、characters()、endElement()这三个函数会依次执行
-                sheet.close();
-                rowTitle=new LinkedHashMap<String, String>();
+                if (sheetNamex.equals(sheetName)){
+                    sheetName+="--"+fileName;
+                    InputSource sheetSource = new InputSource(sheet);
+                    parser.parse(sheetSource); //解析excel的每条记录，在这个过程中startElement()、characters()、endElement()这三个函数会依次执行
+                    sheet.close();
+                }
                 total=0;
-                titlFlag=true;
             }
-            ExceclResouce.getResource(rowBefore,sheetName);//最后一条数据调回
         } catch (Exception e) {
             e.printStackTrace();
         }
         return total;
     }
-
+    public int process(InputStream inputStream,String[] sheetNames,String fileName){
+        OPCPackage pkg =null;
+        try {
+            //给标题行数赋值(默认从0开始为第一行)
+            pkg = OPCPackage.open(inputStream);
+            XSSFReader r = new XSSFReader(pkg);
+            stylesTable = r.getStylesTable();
+            sst = r.getSharedStringsTable();
+            XMLReader parser =XMLReaderFactory.createXMLReader("com.sun.org.apache.xerces.internal.parsers.SAXParser");
+            parser.setContentHandler(this);
+            XSSFReader.SheetIterator sheets = (XSSFReader.SheetIterator) r.getSheetsData();
+            while (sheets.hasNext()) { //遍历sheet
+                curColumn = 0; //标记初始行为第一行
+                sheetIndex++;
+                InputStream sheet = sheets.next(); //sheets.next()和sheets.getSheetName()不能换位置，否则sheetName报错
+                sheetName = sheets.getSheetName();
+                for (String sheetNamex:sheetNames){
+                    if (sheetNamex.equals(sheetName)){
+                        sheetName+="--"+fileName;
+                        InputSource sheetSource = new InputSource(sheet);
+                        parser.parse(sheetSource); //解析excel的每条记录，在这个过程中startElement()、characters()、endElement()这三个函数会依次执行
+                        sheet.close();
+                    }
+                }
+                total=0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+    public int process(InputStream inputStream,String fileName){
+        OPCPackage pkg =null;
+        try {
+            //给标题行数赋值(默认从0开始为第一行)
+            pkg = OPCPackage.open(inputStream);
+            XSSFReader r = new XSSFReader(pkg);
+            stylesTable = r.getStylesTable();
+            sst = r.getSharedStringsTable();
+            XMLReader parser =XMLReaderFactory.createXMLReader("com.sun.org.apache.xerces.internal.parsers.SAXParser");
+            parser.setContentHandler(this);
+            XSSFReader.SheetIterator sheets = (XSSFReader.SheetIterator) r.getSheetsData();
+            while (sheets.hasNext()) { //遍历sheet
+                curColumn = 0; //标记初始行为第一行
+                sheetIndex++;
+                InputStream sheet = sheets.next(); //sheets.next()和sheets.getSheetName()不能换位置，否则sheetName报错
+                sheetName = sheets.getSheetName();
+                sheetName+="--"+fileName;
+                InputSource sheetSource = new InputSource(sheet);
+                parser.parse(sheetSource); //解析excel的每条记录，在这个过程中startElement()、characters()、endElement()这三个函数会依次执行
+                sheet.close();
+                total=0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
     /***
      * 执行顺序 - 第一
      * frist
@@ -138,35 +177,19 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
         if(qName.equals("c")){
             if(preRef==null){
                 preRef=attributes.getValue("r");
-                if(!getStr(preRef).equals("A")){
-                    firstFag=true;
-                    String tempRef="A"+getInt(preRef);
-                    int len = countNullCell(preRef , tempRef);
-                    for (int i = 0; i < len+1; i++) {
-                        String value=rowBefore.get(rowTitle.get(curColumn+""));
-                        rowContents.put(rowTitle.get(curColumn+""),value);
-                        curColumn++;
-                    }
-                }
+                isStartFlag=true;
             }else{
                 //拿取上次的值
                 if(isPreFlag){
                     preRef=ref;
+                    isEndFlag=true;
                 }
             }
             ref = attributes.getValue("r");//得到单元格编号 如 AF12
             this.setNextDataType(attributes);//设置读取方式
             //String cellType = attributes.getValue("t");//是否存在值(s,null 为返回值)
-            //判断值是否存在
-            if("t".equals(qName)){
-                isValueCell = true;
-            } else {
-                isValueCell = false;
-            }
          }
-        //把上次缓存清空
         isPreFlag=false;
-        isEndFlag=false;
         lastContents="";
     }
     /***
@@ -181,7 +204,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         lastContents+=new String(ch,start,length);
-        isEndFlag=true;
     }
     /***
      * 执行顺序 - 第三
@@ -193,125 +215,54 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
      */
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-
-        if(isValueCell){
-            //获取缓存大小
-            int idx = Integer.parseInt(lastContents);
-            //给缓存赋value 值
-            String value = new XSSFRichTextString(sst.getEntryAt(idx)).toString();
-            if(total>titleNum){
-                rowContents.put(rowTitle.get(curColumn+""),value);
-            }else{
-                if(rowTitle.get(curColumn+"")!=null){
-                    rowTitle.put(curColumn+"",value+"--"+rowTitle.get(curColumn+""));
+        if(qName.equals("v")){
+            if(ref.contains("A")){
+               isStartFlag=false;
+            }
+            //补全中间值
+            if(preRef!=ref){
+                int len=0;
+                if(isStartFlag){
+                    len = countNullCell(ref, "A")+1;
+                    isStartFlag=false;
                 }else {
-                    rowTitle.put(curColumn+"",value);
+                    len = countNullCell(ref, preRef);
                 }
-            }
-            //关闭isValueCell
-            isValueCell=false;
-            isPreFlag=true;
-            //更新列
-            curColumn++;
-            //如果里面某个单元格含有值，则标识该行不为空行
-            if (value != null && !"".equals(value)) {
-                flag = true;
-            }
-        }
-        else if (qName.equals("v")){
-            String value = this.getDataValue(lastContents.trim(), "");
-            if(value.contains("\"")){
-                value=value.substring(1,value.length()-1);
-            }
-            //补全中间
-            if(!ref.equals(preRef)){
-                int len = countNullCell(ref , preRef);
-                for (int i = 0; i < (firstFag?(len+1):len); i++) {
-                    rowContents.put(rowTitle.get(curColumn+""),"");
+                //是否是标题
+                for (int i=0;i<len;i++){
+                    rowResource.add(curRow==0?dataValue:"");
                     curColumn++;
                 }
-                firstFag=false;
             }
-            if(total>titleNum){
-                rowContents.put(rowTitle.get(curColumn+""),value);
-            }else{
-                if(rowTitle.get(curColumn+"")!=null){
-                    rowTitle.put(curColumn+"",value+"--"+rowTitle.get(curColumn+""));
-                }else {
-                    rowTitle.put(curColumn+"",value);
-                }
-            }
-            isPreFlag=true;
+            //得到值
+            dataValue= getDataValue(lastContents.trim(), "");
+            rowResource.add(dataValue);
             curColumn++;
-            if (value != null && !"".equals(value)) {
-                flag = true;
-            }
+            isPreFlag=true;
+            isEndFlag=false;
         }
-        else if (qName.equals("row")){//换行
-            if (total==0) {
-                 maxRef= ref;
-            }
-            if(total>titleNum+1){
-                if (titlFlag){//返回数据
-                    ExceclResouce.getTitle(rowTitle,sheetName);
-                    titlFlag=false;
-                }
-                String beValue = rowBefore.get(primaryKey)+"xx";
-                String conValue = rowContents.get(primaryKey);
-                if(StringUtils.isNotBlank(beValue) &&beValue.equals(conValue)){
-                    //叠加，拼接，覆盖
-                    for (Map.Entry<String,String> entry:rowContents.entrySet()){
-                        getOverlay(entry);
-                        getJoint(entry);
-                        //如果是空
-                        if(StringUtils.isBlank(entry.getValue())){
-                            rowContents.put(entry.getKey(),rowBefore.get(entry.getKey()));
-                        }
-                    }
-                }else {
-                    if(flag){
-                        ExceclResouce.getResource(rowBefore,sheetName);//每条数据，则用getShow方法返回
-                    }
-                }
-            }
-
-            //补全一行尾部可能缺失的单元格
-            if (maxRef != null) {
-                int len = -1;
-                //前一单元格，true则不是文本空字符串，false则是文本空字符串
+        else if(qName.equals("row")){
+            //补全尾翼
+            if(curRow==0){
+                maxRef=getStr(ref);
+            }else{
                 if(isEndFlag){
-                    len =countNullCell(maxRef,ref);
-                }else{
-                    len = countNullCell(maxRef, preRef);
-                }
-                for (int i = 0; i <= len; i++) {
-                    rowContents.put(rowTitle.get(curColumn+""),"");
-                    curColumn++;
+                    int len = countNullCell(maxRef, preRef)+1;
+                    for (int i=0;i<len;i++){
+                        rowResource.add("");
+                        curColumn++;
+                    }
                 }
             }
-            rowBefore=rowContents;
-            rowContents= new LinkedHashMap<String, String>();
-            preRef = null;
-            ref = null;
-            flag=false;
-            total++;
+            TableDealWith.getResource(rowResource,sheetName);
+            rowResource.clear();
             curColumn=0;
+            preRef=null;
+            ref=null;
+            dataValue="";
+            curRow++;
+            total++;
         }
-    }
-
-    //特殊读取解析
-    public void  getRuleRead(String[] read){
-        List<String> overlay = new ArrayList<String>();
-        List<String> joint = new ArrayList<String>();
-        for (int i=0;i<read.length-1;i+=2){
-            if(read[i+1].trim().equals("叠加")){
-                overlay.add(read[i]);
-            }else if(read[i+1].trim().equals("拼接")){
-                joint.add(read[i]);
-            }
-        }
-        ruleOverLay = overlay.toArray(new String[overlay.size()]);
-        ruleJoint  = joint.toArray(new String[joint.size()]);
     }
     //得到非数字部分
     public String getStr(String ref){
@@ -322,32 +273,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
         int i = Integer.parseInt(ref.replaceAll("[^0-9]", ""));
         return i;
     }
-    //叠加
-    public void getOverlay(Map.Entry<String,String> entry){
-        for (String strTitle:ruleOverLay){
-            if(entry.getKey().equals(strTitle)){
-                double beforeValue = Double.parseDouble(rowBefore.get(strTitle));
-                double contenValue = Double.parseDouble(entry.getValue());
-                rowContents.put(strTitle,String.format("%.2f",(contenValue+beforeValue)));
-            };
-        }
-    };
-    //拼接
-    public void getJoint(Map.Entry<String,String> entry){
-        for (String strTitle:ruleJoint){
-            if(entry.getKey().equals(strTitle)){
-                String beforeValue = rowBefore.get(strTitle);
-                String contenValue = entry.getValue();
-                rowContents.put(strTitle,(contenValue+","+beforeValue));
-            };
-        }
-    }
-
-    /**
-     * 处理数据类型
-     *
-     * @param attributes
-     */
+    // 处理数据类型
     public void setNextDataType(Attributes attributes) {
         nextDataType = CellDataType.NUMBER; //cellType为空，则表示该单元格类型为数字
         formatIndex = -1;
@@ -442,6 +368,10 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 thisStr = " ";
                 break;
         }
+        //出去引号""
+//        if(thisStr.contains("\"")){
+//            value=value.substring(1,value.length()-1);
+//        }
         return thisStr;
     }
 

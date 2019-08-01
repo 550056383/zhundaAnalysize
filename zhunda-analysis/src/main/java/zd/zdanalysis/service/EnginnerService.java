@@ -62,9 +62,9 @@ public class EnginnerService {
                         System.out.println(s1);
                     }
                    String uuid = StringFormat.uuid(s.getSheetName());
-
                         // 创建临时表
                    System.out.println("开始创建临时表:" + uuid);
+                   System.out.println(s.getSheetName());
                         dataService.createTables(uuid, str);
                         //存入数据到临时表
                     List<List<String>> resource = s.getResource();
@@ -85,7 +85,7 @@ public class EnginnerService {
     public String getSetup(Map<String, Object> map) {
 
         //关联设置项表查询
-        // List<Map<String, Object>> mapList = dataService.selectTables(map);
+         //List<Map<String, Object>> mapList = dataService.selectTables(map);
 
         //输出表字段
         // List<String> arrr = dataService.selectTableCell(map);

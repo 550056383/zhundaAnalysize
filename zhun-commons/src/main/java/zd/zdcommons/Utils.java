@@ -1,7 +1,6 @@
 package zd.zdcommons;
 
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -10,9 +9,17 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
-import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
+import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
+import zd.zdcommons.analysis.ClockAnalysis;
+import zd.zdcommons.analysis.Complete;
+import zd.zdcommons.analysis.Logic;
+import zd.zdcommons.excel.ExcelEventParser;
+import zd.zdcommons.pojo.*;
+import zd.zdcommons.resouce.ExceclResouce;
+import zd.zdcommons.serviceImp.AnalysisImp;
+import zd.zdcommons.serviceImp.ExcelDrivenImp;
+import zd.zdcommons.serviceImp.ReadExcelImp;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -20,19 +27,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import sun.awt.SunHints;
-import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
-import zd.zdcommons.analysis.ClockAnalysis;
-import zd.zdcommons.analysis.Complete;
-import zd.zdcommons.analysis.Logic;
-import zd.zdcommons.excel.ExcelEventParser;
-import zd.zdcommons.pojo.*;
-
-import zd.zdcommons.resouce.ExceclResouce;
-import zd.zdcommons.serviceImp.AnalysisImp;
-import zd.zdcommons.serviceImp.ExcelDrivenImp;
-import zd.zdcommons.serviceImp.ReadExcelImp;
 
 public class Utils {
     //对应数组
@@ -154,6 +148,18 @@ public class Utils {
     }
     public static Date getFormate_B(String value){
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        Date date =null;
+        try {
+            date=f.parse(value);
+        } catch (ParseException e) {
+            //System.out.println("yyyy-MM-dd，报错:"+value);
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    public static Date getFormate_C(String value){
+        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yy");
         Date date =null;
         try {
             date=f.parse(value);

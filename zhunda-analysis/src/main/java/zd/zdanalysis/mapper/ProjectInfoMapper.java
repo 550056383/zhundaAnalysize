@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 import zd.zdanalysis.pojo.ProjectInfo;
+import zd.zdcommons.pojo.Majors;
+import zd.zdcommons.pojo.Vice;
 
 import java.util.List;
 import java.util.Map;
@@ -38,5 +40,6 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     List<String> selectTableCell(String s0, String s1);
 
     //条件设置
-    List<Map<String, Object>> selectByWriteRules(String s0, String s1, String s2, String s3, String s4, String s5);
+/*    List<Map<String, Object>> selectByWriteRules( Map<String,Object> map);*/
+    List<Map<String, Object>> selectByWriteRules(@Param("majorsList") List<Majors> mapList,@Param("viceList") List<Vice> viceList,@Param("num") int num);
 }

@@ -1,15 +1,14 @@
 package zd.zdcommons.analysis;
 
-import zd.zdcommons.pojo.ErrorCount;
 import zd.zdcommons.pojo.Message;
-import zd.zdcommons.pojo.ReverseMes;
-import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.pojo.ResultMessage;
+import zd.zdcommons.serviceImp.AnalysisImp;
 
-import javax.swing.plaf.basic.BasicScrollPaneUI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static zd.zdcommons.Utils.getFormate_A;
 import static zd.zdcommons.Utils.getInteger;
 
 public class Complete implements AnalysisImp {
@@ -113,12 +112,14 @@ public class Complete implements AnalysisImp {
                 listAnchor = (ArrayList<String>) map1.get("error");
             }
         }
+
         //添加F1800
         if(listAnchor.size()>0){
             count1800fdd=listAnchor.size();
             message = get1800Anchor(message, listAnchor);
             meslist.add(message);
         }
+        //3DMIMO测试
         long count3d=0;
         //生成listMimo
         ArrayList<String> listMimo = new ArrayList<String>();

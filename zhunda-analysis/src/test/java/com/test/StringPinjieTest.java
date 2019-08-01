@@ -18,7 +18,7 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AnalysisApplication.class)
-public class StringPinjieTest {
+public class StringPinJieTest {
     /*    tableAssocia---------[{table1=1.xlsx--Test, title1=PO号, table2=1.xlsx--Sheet1, title2=PO号}]
         tableCell---------{tableTitle=[[1.xlsx--Sheet1, 总金额]], custTitle=[回款金额有多少]}
         writeRules---------
@@ -28,21 +28,24 @@ public class StringPinjieTest {
         String s = "[{major=[[1.xlsx--Test, 总金额, 大于, 1.xlsx--Sheet1, 回款金额, 500]," +
                 " [1.xlsx--Test, 是否及时验收, 等于, 1.xlsx--Sheet1, 是否及时验收, 是]], " +
 
-                "vice=[[1.xlsx--Sheet1, PO号, 等于, 1.xlsx--Sheet2, PO号]," +
-                " [1.xlsx--Sheet1, 回款金额, 大于, 1.xlsx--Sheet2, 回款金额, 500]], " +
+                "vice=[[]], " +
 
                 "title=多少, xshow=true}]";
         List<String[]> list = new ArrayList<String[]>();
-        List<List<String[]>> listList = new ArrayList<List<String[]>>();
         String[] split = s.split("]],");
         for (String s1 : split) {
-            String[] arr = s1.replace("[", "").replace("]", "").replace("{", "").replace("}", "").split(",");
-            for (int i = 0; i < arr.length; i++) {
-                String substring1 = arr[i].substring(arr[i].indexOf("=") + 1);
-                arr[i] = substring1;
+            String[] split1 = s1.split("],");
+            for (int i = 0; i < split1.length; i++){
+                String replace = split1[i].replace("[", "").replace("]", "").replace("{", "").replace("}", "");
+                String substring1 = replace.substring(replace.indexOf("=") + 1);
+                split1[i] = substring1.trim();
             }
-            list.add(arr);
+            System.out.println(split1.length);
+            System.out.println(split1[0]);
+            System.out.println(split1[0].isEmpty());
+            list.add(split1);
         }
+        System.out.println(list.size());
         for (String[] strings : list) {
             for (String s1 : strings) {
                 System.out.println(s1);

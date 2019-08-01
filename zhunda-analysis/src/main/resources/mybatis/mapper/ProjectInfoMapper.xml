@@ -9,7 +9,7 @@
     </select>
     <!--临时表存在则删除-->
     <delete id="deleteTableByName" parameterType="string">
-       drop temporary table #{deletename}
+      drop temporary table #{deletename}
     </delete>
     <update id="createTables" parameterType="string">
         create TEMPORARY table  ${param1} (
@@ -36,7 +36,7 @@
 
     <!--关联设置项表查询-->
     <select id="selectTables" resultType="java.util.LinkedHashMap">
-        select * from ${param1},${param3} where ${param1}.${param2}=${param3}.${param4}
+        select * from ${param1} inner join ${param3} on  ${param1}.${param2}=${param3}.${param4}
     </select>
 
     <!--输出表字段-->
@@ -44,25 +44,73 @@
         select ${param2} from ${param1}
     </select>
 
-    <!--条件设置"a", "zje", ">", "b", "hk", "10")-->
-    <select id="selectByWriteRules" resultType="java.util.LinkedHashMap">
-        select * from
-        <if test="param1!=null  and param4!=null ">
-            ${param1},${param4}
-        </if>
-        <if test="param4=null">
-            ${param1}
-        </if>
-        <where>
-            <if test="param1!=null  and param4!=null ">
-                and ${param1}.${param2}>${param4}.${param5}
-                and (${param1}.${param2}-${param4}.${param5})>${param6}
-                and ${param1}.aid=${param4}.bid
-            </if>
-            <if test="param4=null ">
-                and ${param1}.${param2}>${param6}
-            </if>
-        </where>
+<!--    <select id="selectByWriteRules" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
 
+        &lt;!&ndash;<foreach collection="map" item="table" separator="union">&ndash;&gt;
+            select * from ${param0},${param3}
+            where ${param0}.${param1}>${param3}.${param4}
+            and ${param0}.${param1}-${param3}.${param4}>${param5}
+        &lt;!&ndash;</foreach>&ndash;&gt;
+    </select>-->
+   <!-- <select id="selectByWriteRules"  resultType="java.util.LinkedHashMap">
+        <foreach collection="majorsList"  item="m" separator="union" close="union">
+        select * from ${m.table1},${m.table2}
+        where ${m.table1}.${m.field1}>${m.table2}.${m.field2}
+        and ${m.table1}.${m.field1}-${m.table2}.${m.field2}>${m.value}
+        </foreach>
+
+        <foreach collection="viceList" item="m" separator="union">
+            select * from ${m.table1},${m.table2}
+            where ${m.table1}.${m.field1} &gt; ${m.table2}.${m.field2}
+            and ${m.table1}.${m.field1} - ${m.table2}.${m.field2}>${m.value}
+        </foreach>
+    </select>-->
+
+    <select id="selectByWriteRules"  resultType="java.util.LinkedHashMap">
+        <foreach collection="majorsList"  item="m" separator="union"  >
+            select * from
+            <if test="num==1">
+                ${m.table1}
+            </if>
+            <if test="num==2">
+                ${m.table1},${m.table2}
+            </if>
+            <if test="num==3">
+                <if test="num=2">
+                    where ${m.table1}.${m.field1} &gt;  ${m.table2}.${m.field2}
+                    and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }  &gt;  ${m.value}
+                </if>
+                <if test="num=1">
+                    where ${m.table1}.${m.field1} &gt; ${m.value}
+                </if>
+            </if>
+            <if test="num==4">
+                where ${m.table1}.${m.field1} =  ${m.table2}.${m.field2}
+                and ${m.table1}.${m.field1}=  ${m.value}
+            </if>
+            <if test="num==5">
+                where ${m.table1}.${m.field1} &lt;  ${m.table2}.${m.field2}
+                and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 }  &lt;  ${m.value}
+            </if>
+            <if test="num==6">
+                where ${m.table1}.${m.field1} &gt;=  ${m.table2}.${m.field2}
+                and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }  &gt;=  ${m.value}
+            </if>
+            <if test="num==7">
+                where ${m.table1}.${m.field1} &lt;=  ${m.table2}.${m.field2}
+                and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 }  &lt;=  ${m.value}
+            </if>
+           <!-- <if test="num==8">
+                where ${m.table1}.${m.field1} ${m.conditions}  ${m.table2}.${m.field2}
+                and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }  ${m.conditions}  ${m.value}
+            </if>-->
+
+        </foreach>
+
+    <!--    <foreach collection="viceList" item="m" separator="union">
+            select * from ${m.table1},${m.table2}
+            where ${m.table1}.${m.field1} &gt; ${m.table2}.${m.field2}
+            and ${m.table1}.${m.field1} - ${m.table2}.${m.field2}>${m.value}
+        </foreach>-->
     </select>
 </mapper>

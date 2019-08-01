@@ -68,42 +68,66 @@
 
     <select id="selectByWriteRules"  resultType="java.util.LinkedHashMap">
         <foreach collection="majorsList"  item="m" separator="union"  >
-            select * from
+            <if test="tag==1">
+                select * from ${m.table1}
+            </if>
+            <if test="tag==2">
+                select ${m.table1}.*,${m.table2}.* from ${m.table1} inner join ${m.table2}
+            </if>
             <if test="num==1">
-                ${m.table1}
-            </if>
-            <if test="num==2">
-                ${m.table1},${m.table2}
-            </if>
-            <if test="num==3">
-                <if test="num=2">
-                    where ${m.table1}.${m.field1} &gt;  ${m.table2}.${m.field2}
+                <if test="tag==2">
+                    on ${m.table1}.${m.field1} &gt; ${m.table2}.${m.field2}
                     and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }  &gt;  ${m.value}
                 </if>
-                <if test="num=1">
+                <if test="tag==1">
                     where ${m.table1}.${m.field1} &gt; ${m.value}
                 </if>
             </if>
+            <if test="num==2">
+                <if test="tag==2">
+                    on ${m.table1}.${m.field1} = ${m.value}
+                    and ${m.table2}.${m.field2} = ${m.value}
+                </if>
+                <if test="tag==1">
+                    where ${m.table1}.${m.field1} = ${m.value}
+                </if>
+            </if>
+            <if test="num==3">
+                <if test="tag==2">
+                    on ${m.table1}.${m.field1} &lt; ${m.table2}.${m.field2}
+                    and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 } > ${m.value}
+                </if>
+                <if test="tag==1">
+                    where ${m.table1}.${m.field1} &lt; ${m.value}
+                </if>
+            </if>
             <if test="num==4">
-                where ${m.table1}.${m.field1} =  ${m.table2}.${m.field2}
-                and ${m.table1}.${m.field1}=  ${m.value}
+                <if test="tag==2">
+                    on ${m.table1}.${m.field1} &gt;= ${m.table2}.${m.field2}
+                    and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 } &gt;= ${m.value}
+                </if>
+                <if test="tag==1">
+                    where ${m.table1}.${m.field1} &gt;= ${m.value}
+                </if>
             </if>
             <if test="num==5">
-                where ${m.table1}.${m.field1} &lt;  ${m.table2}.${m.field2}
-                and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 }  &lt;  ${m.value}
+                <if test="tag==2">
+                    on ${m.table1}.${m.field1} &lt;= ${m.table2}.${m.field2}
+                    and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 } >= ${m.value}
+                </if>
+                <if test="tag==1">
+                    where ${m.table1}.${m.field1} &lt;= ${m.value}
+                </if>
             </if>
             <if test="num==6">
-                where ${m.table1}.${m.field1} &gt;=  ${m.table2}.${m.field2}
-                and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }  &gt;=  ${m.value}
+                <if test="tag==2">
+                    on ${m.table1}.${m.field1} != ${m.value}
+                    and ${m.table2}.${m.field2} != ${m.value}
+                </if>
+                <if test="tag==1">
+                    where ${m.table1}.${m.field1} != ${m.value}
+                </if>
             </if>
-            <if test="num==7">
-                where ${m.table1}.${m.field1} &lt;=  ${m.table2}.${m.field2}
-                and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 }  &lt;=  ${m.value}
-            </if>
-           <!-- <if test="num==8">
-                where ${m.table1}.${m.field1} ${m.conditions}  ${m.table2}.${m.field2}
-                and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }  ${m.conditions}  ${m.value}
-            </if>-->
 
         </foreach>
 

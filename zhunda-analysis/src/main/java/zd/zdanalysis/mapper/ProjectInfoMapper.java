@@ -41,5 +41,5 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
 
     //条件设置
 /*    List<Map<String, Object>> selectByWriteRules( Map<String,Object> map);*/
-    List<Map<String, Object>> selectByWriteRules(@Param("majorsList") List<Majors> mapList,@Param("viceList") List<Vice> viceList,@Param("num") int num);
+    List<Map<String, Object>> selectByWriteRules(@Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList, @Param("num") int num, @Param("tag") int tag);
 }

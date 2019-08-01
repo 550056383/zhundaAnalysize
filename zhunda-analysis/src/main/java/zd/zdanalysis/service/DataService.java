@@ -102,9 +102,9 @@ public class DataService {
     List<String>    selectByWriteRules(Map<String, Object> maps) {
         String writeRules = maps.get("writeRules").toString();
          int num =0;
+        int tag = 0;
         //字符串转数组
         List<String[]> list= StringFormat.getString4(writeRules);
-        System.out.println(list.size()+"===================");
         List<String[]> newlist=new ArrayList<>();
         List<String[]> newlist2=new ArrayList<>();
 
@@ -112,7 +112,6 @@ public class DataService {
         List<Vice> viceList=new ArrayList<>();
 
          String[] arr1 = list.get(0);
-        System.out.println("arr1.length"+arr1.length);
          if (!arr1[0].isEmpty()){
              for (String s : arr1) {
                  List<String[]> list1 = StringFormat.stringToArr(s);
@@ -126,35 +125,34 @@ public class DataService {
                  majors.setConditions(arr[2]);
                  majors.setTable2(arr[3]);
                  majors.setField2(arr[4]);
-                 System.out.println(arr.length);
                  majors.setValue(arr[5]);
                  System.out.println(majors);
                  //标记便于拼接SQL使用
-                 switch (majors.getConditions()){
+                 switch (majors.getConditions().trim()) {
                      case "大于":
-                         num=3;
+                         num = 1;
                          break;
                      case "等于":
-                         num =4;
+                         num = 2;
                          break;
                      case "小于":
-                         num =5;
+                         num = 3;
                          break;
                      case "大于等于":
-                         num =6;
+                         num = 4;
                          break;
                      case "小于等于":
-                         num =7;
+                         num = 5;
                          break;
                      case "不等于":
-                         num =7;
+                         num = 6;
                          break;
                  }
-                 //标记一组规则中表名是否相同
-                 if (majors.getTable1().equals(majors.getTable2())){
-                      num =1;
+                 //标记一组规则中表名是否相同 ,相同标记为1,判断一组规则中只有一个表时,标记为1
+                 if (majors.getTable1().equals(majors.getTable2()) || majors.getTable2() == null) {
+                     tag = 1;
                  }else {
-                     num=2;
+                     tag = 2;
                  }
 
                  majorsList.add(majors);
@@ -188,8 +186,9 @@ public class DataService {
                 viceList.add(vice);
             }
         }
-
-        List<Map<String, Object>> resultlist = projectInfoMapper.selectByWriteRules(majorsList,viceList,num);
+        System.out.println(num + "===========" + tag);
+        List<Map<String, Object>> resultlist = projectInfoMapper.selectByWriteRules(majorsList, viceList, num, tag);
+        System.out.println("结果有:" + resultlist.size());
         for (Map<String, Object> map1 :resultlist ) {
             System.out.println(map1);
         }

@@ -22,20 +22,20 @@ public class TableDealWith {
     private static String sheetx="";
     private static String[] preStrs=null;
     private static String[] titleStr=null;
-    private static LinkedHashMap<String, String> resource=new LinkedHashMap<String, String>();
-    private static List<Map<String,String>> listRsourcecs=new CopyOnWriteArrayList<Map<String,String>>();
+    private static LinkedHashMap<String, Object> resource=new LinkedHashMap<String, Object>();
+    private static List<Map<String,Object>> listRsourcecs=new CopyOnWriteArrayList<Map<String,Object>>();
 
     //外部设置
-    private static int titleNum=2;
+    private static int titleNum=1;
     private static String[] realRules=null;
-    private static int interva=1;
-    private static String[] sheetNames={"Site Rollout Plan"};
+    private static int interva=0;
+    private static String[] sheetNames=null;
     @Test
     public void  Test(){
         String filePath="E:\\Zhunda\\测试\\工程所有信息表2019-01-02.xls";
         File file = new File(filePath);
         getRead(file);
-        for (Map<String,String> map:listRsourcecs){
+        for (Map<String,Object> map:listRsourcecs){
             for (Map.Entry entry:map.entrySet()){
                 System.out.println("键："+entry.getKey()+"-=-值："+entry.getValue());
             }
@@ -81,7 +81,7 @@ public class TableDealWith {
                 resource.put(titleStr[i],strs[i]);
             }
             listRsourcecs.add(resource);
-            resource= new LinkedHashMap<String, String>();
+            resource= new LinkedHashMap<String, Object>();
         }
         //赋值
         if (sheetName!=sheetx){
@@ -89,5 +89,23 @@ public class TableDealWith {
             count=0;
         }
         count++;
+    }
+
+    private static class LayHolder{
+        private static final TableDealWith INSTANCE= new TableDealWith();
+    }
+
+    private TableDealWith(){}
+
+    public static final TableDealWith getInstance(int titleNumx, String[] realRulesx,int intervax,String[] sheetNamesx) {
+        titleNum=titleNumx;
+        realRules=realRulesx;
+        interva=intervax;
+        sheetNames=sheetNamesx;
+        return LayHolder.INSTANCE;
+    }
+
+    public  List<Map<String, Object>> getListRsourcecs() {
+        return listRsourcecs;
     }
 }

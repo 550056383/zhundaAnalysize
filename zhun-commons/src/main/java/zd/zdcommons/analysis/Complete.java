@@ -30,7 +30,6 @@ public class Complete implements AnalysisImp {
         long count=0;
         long count5g=0;
         //获取数据
-        if(resource.get("YD5-dUID").toString().contains("5"))
         //第一个规则
         if(!resource.get("YD5-dUID").toString().isEmpty()) {
             HashMap<String,Object> map = getCO(duidstr,resource,list5g, count,titleMap,false,"YD5-dUID",false);//返回的是为空的字段的集合

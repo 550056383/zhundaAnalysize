@@ -164,6 +164,18 @@ public class Utils {
         return date;
     }
 
+    public static Date getFormate_C(String value){
+        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yy");
+        Date date =null;
+        try {
+            date=f.parse(value);
+        } catch (ParseException e) {
+            //System.out.println("yyyy-MM-dd，报错:"+value);
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     //写文档
     public static  void writeExcel(List<ResultMessage> rem,String name) {
         System.out.println("write Excel is comming");

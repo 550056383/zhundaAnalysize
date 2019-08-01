@@ -20,7 +20,8 @@ public class ReadIntegrityExcel implements ReadExcelImp {
             "YD5-scenario","YD5-auuArrivalQuantity","YD5-problemClassification","YD5-RFI-baselineEndDate","YD5-RFI-planEndDate","YD5-RFI-actualEndDate","YD5-RFI-owner","YD5-RFI-approveState","YD5-RFI-deliveryAttachmentRequired","YD5-RFI-deliveryAttachmentUploaded","YD5-RFI-accumulation","YD5-RFI-remarks","YD5-RFI-delayReason","YD5-MOS-baselineEndDate","YD5-MOS-planEndDate","YD5-MOS-actualEndDate","YD5-MOS-owner","YD5-MOS-approveState","YD5-MOS-deliveryAttachmentRequired","YD5-MOS-deliveryAttachmentUploaded",
             "YD5-MOS-accumulation","YD5-MOS-remarks","YD5-MOS-delayReason","YD5-completionDate","YD5-receptionDate","YD5-IC-baselineEndDate","YD5-IC-planEndDate","YD5-IC-actualEndDate","YD5-IC-owner","YD5-IC-approveState","YD5-IC-deliveryAttachmentRequired","YD5-IC-deliveryAttachmentUploaded","YD5-IC-accumulation","YD5-IC-remarks","YD5-IC-delayReason","YD5-engineeringServiceMode","YD5-planningNumber","YD5-tianmianTransformation","YD5-dcFuse","YD5-acInduction","YD5-design","YD5-bbuToneNumber",
             "YD5-bbuESN","YD5-bbuSiteID","YD5-bbuSiteName","YD5-bbuScenario","YD5-bbuHardwareNumber","YD5-deliveryRegion","YD5-nmNEName","YD5-rruSiteID","YD5-rruSiteName","YD5-rruScenario","YD5-rruBoxNo","YD5-standingType","YD5-productModel","YD5-contractConnection","YD5-remoteStationType","YD5-standard","YD5-transmissionBandwidth","YD5-nroSubcontractor","YD5-standingType2","MIMO-miMO3DDate","MIMO-miMO3DID","MIMO-miMO3DGoodsQuantity","MIMO-deliveryDate","MIMO-questionClassification",
-            "MIMO-planningNumber","MIMO-installationDate","MIMO-completionDate","MIMO-nmNEID","MIMO-openTypeStand","MIMO-openTypeStandTarget","MIMO-baseStationName","MIMO-transmissionBandwidthe4G","MIMO-transmissionAvailable4G","M1800-deliveryDateFDD","M1800-programNumberFDD","M1800-constructionPlanFDD","M1800-questionClassificationFDD","M1800-whetherPlanningFDD","M1800-arrivalDateFDD","M1800-deliveryCompletionDateFFD","M1800-installationFDD","M1800-openedFDD","M1800-nmNEIDFDD","M1800-baseStationNameFDD"};
+            "MIMO-planningNumber","MIMO-installationDate","MIMO-completionDate","MIMO-nmNEID","MIMO-openTypeStand","MIMO-openTypeStandTarget","MIMO-baseStationName","MIMO-transmissionBandwidthe4G","MIMO-transmissionAvailable4G","M1800-deliveryDateFDD","M1800-programNumberFDD","M1800-constructionPlanFDD","M1800-questionClassificationFDD","M1800-whetherPlanningFDD","M1800-arrivalDateFDD","M1800-deliveryCompletionDateFFD","M1800-installationFDD","M1800-openedFDD","M1800-nmNEIDFDD","M1800-baseStationNameFDD",
+            "activityFlowName","PRRUQuantity","RHUBPlansNumber","ProductModel","rHUBType","RHUBIntegrityPlansNumber","RRU/PRRUIntegrityPlansNumber","PorducteType","PlansRHUBNumber","PlansRRU/PRRUNumber"};
 
 
     private final static String xls = "xls";
@@ -62,7 +63,7 @@ public class ReadIntegrityExcel implements ReadExcelImp {
                 int firstCellNum = row.getFirstCellNum();
                 //获得当前行的列数
                 //int lastCellNum = row.getLastCellNum();
-                int lastCellNum =128;
+                int lastCellNum =138;
 //                System.out.println("开始列：："+firstCellNum);
 //                System.out.println("结束列：："+lastCellNum);
                 String[] cells = new String[row.getPhysicalNumberOfCells()];

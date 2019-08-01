@@ -30,6 +30,7 @@ public class Complete implements AnalysisImp {
         long count=0;
         long count5g=0;
         //获取数据
+        if(resource.get("YD5-dUID").toString().contains("5"))
         //第一个规则
         if(!resource.get("YD5-dUID").toString().isEmpty()) {
             HashMap<String,Object> map = getCO(duidstr,resource,list5g, count,titleMap,false,"YD5-dUID",false);//返回的是为空的字段的集合
@@ -113,12 +114,14 @@ public class Complete implements AnalysisImp {
                 listAnchor = (ArrayList<String>) map1.get("error");
             }
         }
+
         //添加F1800
         if(listAnchor.size()>0){
             count1800fdd=listAnchor.size();
             message = get1800Anchor(message, listAnchor);
             meslist.add(message);
         }
+        //3DMIMO测试
         long count3d=0;
         //生成listMimo
         ArrayList<String> listMimo = new ArrayList<String>();

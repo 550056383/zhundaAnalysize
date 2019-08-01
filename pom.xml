@@ -17,7 +17,8 @@
     <modules>
         <module>zhunda-analysis</module>
         <module>zhun-commons</module>
-
+        <module>zhun-item</module>
+        <module>zhun-poiexcecl</module>
     </modules>
     <dependencyManagement>
         <dependencies>

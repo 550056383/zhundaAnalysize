@@ -8,6 +8,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="zhun-commons" />
+        <module name="zhun-item-interface" />
+        <module name="zhun-item-service" />
+        <module name="zhun-poiexcecl" />
         <module name="zhunda-analysis" />
         <module name="zhunda-interface" />
       </profile>

@@ -1,0 +1,42 @@
+
+?squid:S1643_"Use a StringBuilder instead.(Ü “òûÿÿÿÿ8´İÙÄ-
+?squid:S1643}"Use a StringBuilder instead.(Ü “òûÿÿÿÿ8´İÙÄ-
+@squid:S1643š"Use a StringBuilder instead.(Ü “òûÿÿÿÿ8´İÙÄ-
+;squid:S1643"Use a StringBuilder instead.(ö§¡8´İÙÄ-
+@squid:S1643‘"Use a StringBuilder instead.(ÕÑ‘äüÿÿÿÿ8´İÙÄ-
+Gsquid:S1659+"$Declare "preRef" on a separate line.(®ö‡íúÿÿÿÿ8´İÙÄ-
+˜squid:S1192V"uDefine a constant instead of duplicating this literal "com.sun.org.apache.xerces.internal.parsers.SAXParser" 3 times.(¦‚Êàûÿÿÿÿ8´İÙÄ-
+Msquid:S1068%"/Remove this unused "isValueCell" private field.(„™Á®8´İÙÄ-
+Ssquid:S10688"0Remove this unused "cellDataType" private field.(Úªšëüÿÿÿÿ8´İÙÄ-
+isquid:CommentedOutCodeLineô"<This block of commented-out lines of code should be removed.(òª–28´İÙÄ-
+hsquid:S2583´"DChange this condition so that it does not always evaluate to "false"(¡«Àÿûÿÿÿÿ8´İÙÄ-
+}squid:S1488"YImmediately return this expression instead of assigning it to the temporary variable "s".(·¡ÿÏûÿÿÿÿ8´İÙÄ-
+}squid:S1488‘"YImmediately return this expression instead of assigning it to the temporary variable "i".(ÓÂ–Šüÿÿÿÿ8´İÙÄ-
+csquid:S1226È"DIntroduce a new variable instead of reusing the parameter "thisStr".(»Â¡‘8´İÙÄ-
+hsquid:S1226Ë"DIntroduce a new variable instead of reusing the parameter "thisStr".(›–øÿÿÿÿ8´İÙÄ-
+hsquid:S1226Î"DIntroduce a new variable instead of reusing the parameter "thisStr".(æÃ÷Ïùÿÿÿÿ8´İÙÄ-
+csquid:S1226Ò"DIntroduce a new variable instead of reusing the parameter "thisStr".(µÿê—8´İÙÄ-
+hsquid:S1226Ú"DIntroduce a new variable instead of reusing the parameter "thisStr".(˜Ğ¿¤ıÿÿÿÿ8´İÙÄ-
+csquid:S1226ß"DIntroduce a new variable instead of reusing the parameter "thisStr".(¯åá²8´İÙÄ-
+hsquid:S1226ä"DIntroduce a new variable instead of reusing the parameter "thisStr".(ê ÇŸùÿÿÿÿ8´İÙÄ-
+hsquid:S1226æ"DIntroduce a new variable instead of reusing the parameter "thisStr".(÷£¶éøÿÿÿÿ8´İÙÄ-
+hsquid:S1226è"DIntroduce a new variable instead of reusing the parameter "thisStr".(–«¦ÿÿÿÿÿ8´İÙÄ-
+hsquid:S1226ë"DIntroduce a new variable instead of reusing the parameter "thisStr".(Åœ‹òùÿÿÿÿ8´İÙÄ-
+csquid:S1226í"DIntroduce a new variable instead of reusing the parameter "thisStr".(’ùŸı8´İÙÄ-
+hsquid:S1226ğ"DIntroduce a new variable instead of reusing the parameter "thisStr".(ßåŠôıÿÿÿÿ8´İÙÄ-
+Nsquid:S1481›"/Remove this unused "columnData" local variable.(©»ºÓ8´İÙÄ-
+qsquid:S3776Ù"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(Ìå‡š8´İÙÄ-
+]squid:S1854›">Remove this useless assignment to local variable "columnData".(©»ºÓ8´İÙÄ-
+\squid:S1854Ó"8Remove this useless assignment to local variable "rtsi".(Ìò—®ıÿÿÿÿ8´İÙÄ-
+\squid:S1854İ"8Remove this useless assignment to local variable "rtss".(ùÅüöúÿÿÿÿ8´İÙÄ-
+vsquid:S00117ı"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÿÊ÷úÿÿÿÿ8´İÙÄ-
+vsquid:S00117ƒ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(´öÒïıÿÿÿÿ8´İÙÄ-
+qsquid:S00117‰"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ş˜¶å8´İÙÄ-
+lsquid:S1858Ë"H"value" is already a string, there's no need to call "toString()" on it.(›–øÿÿÿÿ8´İÙÄ-
+lsquid:S1858Î"H"value" is already a string, there's no need to call "toString()" on it.(æÃ÷Ïùÿÿÿÿ8´İÙÄ-
+gsquid:S1858Ñ"H"value" is already a string, there's no need to call "toString()" on it.(¸¹Œæ8´İÙÄ-
+gsquid:S1858Ö"H"value" is already a string, there's no need to call "toString()" on it.(Ÿ·œ8´İÙÄ-
+gsquid:S1858ß"H"value" is already a string, there's no need to call "toString()" on it.(¯åá²8´İÙÄ-
+Fsquid:S1148g"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8´İÙÄ-
+Gsquid:S1148†"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8´İÙÄ-
+Gsquid:S1148¡"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8´İÙÄ-

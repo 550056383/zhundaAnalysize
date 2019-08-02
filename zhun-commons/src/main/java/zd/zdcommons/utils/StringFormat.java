@@ -123,13 +123,15 @@ public class StringFormat {
         List<String[]> newlist=new ArrayList<String[]>();
         String[] split = s.split(",");
             split[0] = StringFormat.uuid(split[0].trim());
-        if (split[3].trim().equals("null") || split[3].trim().equals("")) {
-            split[3] = null;
-        } else {
-            split[3] = StringFormat.uuid(split[3].trim());
-        }
-            split[1] = PinYinUtils.hanziToPinyin(split[1], "");
+        split[1] = PinYinUtils.hanziToPinyin(split[1], "");
+        if (split.length != 3) {
+            if (split[3].trim().equals("null") || split[3].trim().equals("")) {
+                split[3] = null;
+            } else {
+                split[3] = StringFormat.uuid(split[3].trim());
+            }
             split[4] = PinYinUtils.hanziToPinyin(split[4], "");
+        }
             newlist.add(split);
 
         return newlist;

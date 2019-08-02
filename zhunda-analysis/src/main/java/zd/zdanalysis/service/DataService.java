@@ -1,10 +1,12 @@
 package zd.zdanalysis.service;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zd.zdanalysis.mapper.ProjectInfoMapper;
 import zd.zdcommons.pojo.Majors;
 import zd.zdcommons.pojo.Vice;
+import zd.zdcommons.pojo.Write;
 import zd.zdcommons.utils.PinYinUtils;
 import zd.zdcommons.utils.StringFormat;
 
@@ -21,6 +23,8 @@ import java.util.Map;
 public class DataService {
     @Autowired
     ProjectInfoMapper projectInfoMapper;
+    @Autowired
+    private SqlSessionTemplate sqlSessionTemplate;
     //动态创建临时表
    public  void createTables(String table,String[] strTitle){
            //projectInfoMapper.deleteTableByName(table);
@@ -32,12 +36,12 @@ public class DataService {
     //查询临时表中的数据
     public  List<Map<String,Object>>  selectResult(String table){
         List<Map<String,Object>> list = projectInfoMapper.selectResult(table);
-        for (Map<String,Object> map:list){
+      /*  for (Map<String,Object> map:list){
             for (Map.Entry<String, Object> map1 : map.entrySet()) {
                 System.out.println("-------" + map1.getValue());
             }
             System.out.println("=========================");
-        }
+        }*/
 
         return list;
     }
@@ -50,10 +54,12 @@ public class DataService {
     }
 
     //插入数据到临时表
-    public  void insetData(String table,List<List<String>> lists) {
+    public void insetData(String table, List<List<String>> lists) {
       for (List<String> list:lists){
             projectInfoMapper.insetData(table, list);
         }
+
+        //projectInfoMapper
 
         }
 
@@ -80,29 +86,47 @@ public class DataService {
     }
 
     //输出表字段
-    public List<String> selectTableCell(Map<String, Object> maps) {
+    public List<Write> selectTableCell(Map<String, Object> maps) {
+        List<Write> writeList = new ArrayList<>();
         String tableCell = (String) maps.get("tableCell").toString();
         //字符串转数组
         List<String[]> list = StringFormat.getString2(tableCell);
 
         for (String[] arr : list) {
-            String str0 = StringFormat.uuid(arr[0]);
-            System.out.println(str0);
-            String s1 = PinYinUtils.hanziToPinyin(arr[1], "");
-            List<String> list1 = projectInfoMapper.selectTableCell(str0, s1);
-            for (String s : list1) {
-                System.out.println(s);
-            }
+            String s1 = StringFormat.uuid(arr[0]);
+            String s2 = PinYinUtils.hanziToPinyin(arr[1], "");
+            // List<String> list1 = projectInfoMapper.selectTableCell(str0, s1);
+            Write write = new Write();
+            write.setTable(s1);
+            write.setField(s2);
+            writeList.add(write);
         }
-
-        return null;
+        return writeList;
     }
 
     //条件设置
     List<String>    selectByWriteRules(Map<String, Object> maps) {
+        //关联设置的条件
+        String tableAssocia = (String) maps.get("tableAssocia").toString();
+        List<String[]> lists = StringFormat.getString1(tableAssocia);
+        //目前只进行两张表的关联
+        String[] arrs = lists.get(0);
+        String str0 = StringFormat.uuid(arrs[0].trim());
+        String str2 = StringFormat.uuid(arrs[2]).trim();
+        String s1 = PinYinUtils.hanziToPinyin(arrs[1], "");
+        String s3 = PinYinUtils.hanziToPinyin(arrs[3], "");
+
+        List<Write> writeList = selectTableCell(maps);
+
+
+        //条件设置的条件
         String writeRules = maps.get("writeRules").toString();
+        //num:1代表> 2代表= .........
          int num =0;
+        //1.表名相同或table2表为null默认进行表1查询 ,2:查询两表
         int tag = 0;
+        //追加条件有无标记,1:有,2:无
+        int tags = 0;
         //字符串转数组
         List<String[]> list= StringFormat.getString4(writeRules);
         List<String[]> newlist=new ArrayList<>();
@@ -123,9 +147,17 @@ public class DataService {
                  majors.setTable1(arr[0]);
                  majors.setField1(arr[1]);
                  majors.setConditions(arr[2]);
-                 majors.setTable2(arr[3]);
-                 majors.setField2(arr[4]);
-                 majors.setValue(arr[5]);
+                 if (arr.length != 3) {
+                     majors.setTable2(arr[3]);
+                     majors.setField2(arr[4]);
+                 }
+                 //若arr追加条件没有,arr实际只有5个值
+                 if (arr.length == 6) {
+                     majors.setValue(arr[5]);
+                     tags = 1;
+                 } else {
+                     tags = 2;
+                 }
                  System.out.println(majors);
                  //标记便于拼接SQL使用
                  switch (majors.getConditions().trim()) {
@@ -154,17 +186,13 @@ public class DataService {
                  }else {
                      tag = 2;
                  }
-
                  majorsList.add(majors);
 
              }
          }
 
-
-
-        System.out.println("-----------------------------");
-
-        String[] arr2 = list.get(1);
+        //以下为附件条件处理,不完善,待用
+       /* String[] arr2 = list.get(1);
         System.out.println("arr2.length"+arr2.length);
         if (!arr2[0].isEmpty()){
             for (String s : arr2) {
@@ -185,9 +213,9 @@ public class DataService {
                 //标记一组规则中表名是否相同
                 viceList.add(vice);
             }
-        }
-        System.out.println(num + "===========" + tag);
-        List<Map<String, Object>> resultlist = projectInfoMapper.selectByWriteRules(majorsList, viceList, num, tag);
+        }*/
+
+        List<Map<String, Object>> resultlist = projectInfoMapper.selectByWriteRules(str0, s1, str2, s3, writeList, tags, majorsList, viceList, num, tag);
         System.out.println("结果有:" + resultlist.size());
         for (Map<String, Object> map1 :resultlist ) {
             System.out.println(map1);

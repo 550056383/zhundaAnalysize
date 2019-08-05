@@ -13,12 +13,17 @@ public class ExistAnalysis implements AnalysisImp {
     }
 
     @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, String> resource) {
+        return null;
+    }
+
+    @Override
     public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis, String strTitle) {
         return null;
     }
 
     @Override
-    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis) {
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, String>> lis) {
         return null;
     }
 }

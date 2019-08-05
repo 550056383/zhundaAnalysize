@@ -26,7 +26,7 @@ public class AnalysisService {
         }
         String[] split = strName.split(",");
         //读取数据
-        Map<String, List<Map<String, Object>>> excelResource = utils.getExcelResource(split, mapfile);
+        Map<String, List<Map<String, String>>> excelResource = utils.getExcelResource(split, mapfile);
         //输出数据
         Pageto pageto = utils.getPageto(excelResource);
         return pageto;

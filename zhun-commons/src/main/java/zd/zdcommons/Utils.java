@@ -8,6 +8,9 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
@@ -174,13 +177,13 @@ public class Utils {
     public static  void writeExcel(List<ResultMessage> rem,String name) {
         System.out.println("write Excel is comming");
         //第一步，创建一个workbook对应一个excel文件
-        HSSFWorkbook workbook = new HSSFWorkbook();
+        XSSFWorkbook workbook = new XSSFWorkbook();
         //第二部，在workbook中创建一个sheet对应excel中的sheet
-        HSSFSheet sheet = workbook.createSheet("分析列表");
+        XSSFSheet sheet = workbook.createSheet("分析列表");
         //第三部，在sheet表中添加表头第0行，老版本的poi对sheet的行列有限制
-        HSSFRow row = sheet.createRow(0);
+        XSSFRow row = sheet.createRow(0);
         //第四步，创建单元格，设置表头
-        HSSFCell cell = row.createCell(0);
+        XSSFCell cell = row.createCell(0);
         cell.setCellValue("duId");
         cell = row.createCell(1);
         cell.setCellValue("duName");
@@ -192,7 +195,6 @@ public class Utils {
         cell.setCellValue("所属类型");
         cell = row.createCell(5);
         cell.setCellValue("错误信息");
-
         int cellsum=0;
         //第五步，写入数据
         for(int i=0;i<rem.size();i++) {
@@ -203,19 +205,20 @@ public class Utils {
                 for (int j=0;j<messages.size();j++){
                     List<String> oneData=new ArrayList<String>();
                     //封装每一个属性
-                    oneData.add(rem.get(i).getDUID().toString());
-                    oneData.add(rem.get(i).getDUName().toString());
-                    oneData.add(rem.get(i).getDarea().toString());
-                    oneData.add(rem.get(i).getTError().toString());
-                    oneData.add(mes.get(z).getTitle().toString());
+                    oneData.add(rem.get(i).getDUID());
+                    oneData.add(rem.get(i).getDUName());
+                    oneData.add(rem.get(i).getDarea());
+                    oneData.add(rem.get(i).getTError());
+                    oneData.add(mes.get(z).getTitle());
                     oneData.add(messages.get(j));
                     //添加一行
-                    HSSFRow row1 = sheet.createRow(cellsum + 1);
+                    XSSFRow row1 = sheet.createRow(cellsum + 1);
                     cellsum++;
                     for(int x=0;x<oneData.size();x++) {
                         //创建单元格设值
                         row1.createCell(x).setCellValue(oneData.get(x));
                     }
+
                 }
             }
         }
@@ -287,18 +290,18 @@ public class Utils {
 
 
     //得到读取数据
-    public Map<String,List<Map<String, Object>>> getExcelResource(String[] strName,Map<String,MultipartFile> mapFile){
+    public Map<String,List<Map<String, String>>> getExcelResource(String[] strName,Map<String,MultipartFile> mapFile){
         //判断是否传值
         if(strName.length<1 || mapFile.isEmpty()){
             return null;
         }
-        HashMap<String, List<Map<String, Object>>> resourcemap = new HashMap<String, List<Map<String, Object>>>();
+        HashMap<String, List<Map<String, String>>> resourcemap = new HashMap<String, List<Map<String, String>>>();
         //创建读取抽象工厂
         AnalysisAbstractFactory analysisAbstractFactory = FactoryProducer.getFactory("Read");
         //动态读取
         for (String name:strName){
             ReadExcelImp readexcel = analysisAbstractFactory.getExcel(name);
-            List<Map<String, Object>> excel = readexcel.getExcel(mapFile.get(name));
+            List<Map<String, String>> excel = readexcel.getExcel(mapFile.get(name));
             resourcemap.put(name,excel);
         }
         return resourcemap;
@@ -322,7 +325,7 @@ public class Utils {
     }
 
     //进行分析
-    public Pageto getPageto(Map<String,List<Map<String, Object>>> reeouce){
+    public Pageto getPageto(Map<String,List<Map<String, String>>> reeouce){
         //创建页面返回结果
         Pageto pt = new Pageto();
         //完整性计数
@@ -348,13 +351,13 @@ public class Utils {
             }
             HashMap<String, TempCount> xun = new HashMap<String, TempCount>();//临时数据属性存放
             for (Map map:reeouce.get("SHISHI")){
-                ResultMessage resultC = complete.getIntegrityAnalysis(map, getTitle());
+                ResultMessage resultC = complete.getIntegrityAnalysis(map);
                 if (resultC != null) {
                     iCCount++;
                     reslist.add(resultC);
                     getTempCount(xun,resultC,"--c");
                 }
-                ResultMessage resultL = logic.getIntegrityAnalysis(map,getTitle());
+                ResultMessage resultL = logic.getIntegrityAnalysis(map);
                 if (resultL != null) {
                     iLCont++;
                     reslist.add(resultL);
@@ -507,7 +510,7 @@ public class Utils {
 
     //区域错误计数方法
     public HashMap<String, HashMap<String, Object>> getAreacount(List < Map < String, Object >> shishilis, List
-        < Map < String, Object >> dakalis, Map < String, Object > title){
+        < Map < String, String >> dakalis, Map < String, Object > title){
         HashMap<String, HashMap<String, Object>> zuizhong = new HashMap<String, HashMap<String, Object>>();//最终得到的数据
         for (Map<String, Object> shishi : shishilis) {
             long wcount = 0;

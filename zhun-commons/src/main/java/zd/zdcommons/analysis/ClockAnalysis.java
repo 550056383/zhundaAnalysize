@@ -18,12 +18,17 @@ public class ClockAnalysis implements AnalysisImp {
     }
 
     @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, String> resource) {
+        return null;
+    }
+
+    @Override
     public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis, String strTitle) {
         return null;
     }
 
     @Override
-    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis) {
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, String>> lis) {
         ResultMessage resultm = null;
         Message message = null;
         List<Message> meslist=new ArrayList<Message>();
@@ -42,7 +47,7 @@ public class ClockAnalysis implements AnalysisImp {
             return r;
         }
         String duid = (String) map.get("YD5-dUID");
-        for (Map<String, Object> li : lis) {
+        for (Map<String, String> li : lis) {
             if((duid.equals(li.get("DUID").toString()))){ //表示打卡
                 return null;
             }
@@ -83,4 +88,5 @@ public class ClockAnalysis implements AnalysisImp {
         mes.setMessages(list);
         return mes;
     }
+
 }

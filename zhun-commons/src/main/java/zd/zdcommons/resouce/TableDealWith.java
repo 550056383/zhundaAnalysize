@@ -23,8 +23,8 @@ public class TableDealWith {
     private static String sheetx="";
     private static String[] preStrs=null;
     private static String[] titleStr=null;
-    private static LinkedHashMap<String, Object> resource=new LinkedHashMap<String, Object>();
-    private static List<Map<String,Object>> listRsourcecs=new CopyOnWriteArrayList<Map<String,Object>>();
+    private static LinkedHashMap<String, String> resource=new LinkedHashMap<String, String>();
+    private static List<Map<String,String>> listRsourcecs=new CopyOnWriteArrayList<Map<String,String>>();
 
     //外部设置
     private static int titleNum=1;
@@ -32,20 +32,10 @@ public class TableDealWith {
     private static int interva=0;
     private static String[] sheetNames=null;
 
-    public void getRead(File file){
-        InputStream inputStream = getInputStream(file);
-        String fileName = file.getName();
-        if(fileName.endsWith("xlsx")){
-            new ExcelXlsxAndDefaultHandlerV2().process(inputStream,sheetNames,file.getName());
-        }else if (fileName.endsWith("xls")){
-            //new ExcelXlsWithHSSFListener().process();
-        };
-
-    }
 
     public void getRead(MultipartFile file){
         InputStream inputStream = getInputStream(file);
-        String fileName = file.getName();
+        String fileName = file.getOriginalFilename();
         if(fileName.endsWith("xlsx")){
             new ExcelXlsxAndDefaultHandlerV2().process(inputStream,sheetNames,file.getName());
         }else if (fileName.endsWith("xls")){
@@ -91,7 +81,7 @@ public class TableDealWith {
                 resource.put(titleStr[i],strs[i]);
             }
             listRsourcecs.add(resource);
-            resource= new LinkedHashMap<String, Object>();
+            resource= new LinkedHashMap<String, String>();
         }
         //赋值
         if (sheetName!=sheetx){
@@ -115,7 +105,7 @@ public class TableDealWith {
         return LayHolder.INSTANCE;
     }
 
-    public  List<Map<String, Object>> getListRsourcecs() {
+    public  List<Map<String, String>> getListRsourcecs() {
         return listRsourcecs;
     }
 }

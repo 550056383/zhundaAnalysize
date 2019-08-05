@@ -108,4 +108,8 @@ public class TableDealWith {
     public  List<Map<String, Object>> getListRsourcecs() {
         return listRsourcecs;
     }
+
+    public  String getSheetx() {
+        return sheetx;
+    }
 }

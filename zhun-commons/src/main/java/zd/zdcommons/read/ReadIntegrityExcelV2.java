@@ -16,9 +16,10 @@ import java.util.Map;
 
 public class ReadIntegrityExcelV2 implements ReadExcelImp {
     @Override
-    public List<Map<String, Object>> getExcel(MultipartFile shishi) {
+    public List<Map<String, String>> getExcel(MultipartFile shishi) {
         TableDealWith dealWith = TableDealWith.getInstance(2, null, 1, new String[]{"Site Rollout Plan"});
         dealWith.getRead(shishi);
+        System.out.println("ok");
         return dealWith.getListRsourcecs();
     }
 }

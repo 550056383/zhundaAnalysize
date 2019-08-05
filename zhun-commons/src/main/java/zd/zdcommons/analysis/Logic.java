@@ -13,8 +13,9 @@ import java.util.Map;
 import static zd.zdcommons.Utils.*;
 
 public class Logic implements AnalysisImp {
+
     @Override
-    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis) {
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, String>> lis) {
         return null;
     }
 
@@ -48,6 +49,12 @@ public class Logic implements AnalysisImp {
         }
         return resultm;
     }
+
+    @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, String> resource) {
+        return null;
+    }
+
     /**
     * @Author:         chenkun
      *@param

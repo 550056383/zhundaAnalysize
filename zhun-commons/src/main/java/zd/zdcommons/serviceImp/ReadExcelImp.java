@@ -6,5 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface ReadExcelImp {
-    List<Map<String, Object>> getExcel(MultipartFile shishi);
+    List<Map<String, String>> getExcel(MultipartFile shishi);
+
 }

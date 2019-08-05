@@ -27,10 +27,10 @@ public class ReadIntegrityExcel implements ReadExcelImp {
     private final static String xls = "xls";
     private final static String xlsx = "xlsx";
     @Override
-    public List<Map<String, Object>> getExcel(MultipartFile file) {
+    public List<Map<String, String>> getExcel(MultipartFile file) {
         System.out.println("进入读取");
         //创建类型接受
-        ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
         //检查文件
 //        checkFile(file);
         //获得Workbook工作薄对象
@@ -55,7 +55,7 @@ public class ReadIntegrityExcel implements ReadExcelImp {
             for(int rowNum = firstRowNum;rowNum <= lastRowNum;rowNum++){
                 //获得当前行
                 Row row = sheet.getRow(rowNum);
-                Map<String, Object> map = new HashMap<String, Object>();
+                Map<String, String> map = new HashMap<String, String>();
                 if(row == null){
                     continue;
                 }

@@ -12,8 +12,15 @@ import java.util.Map;
 import static zd.zdcommons.Utils.getInteger;
 
 public class Complete implements AnalysisImp {
+
+
     @Override
-    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis) {
+    public ResultMessage getIntegrityAnalysis(Map<String, String> resource) {
+        return null;
+    }
+
+    @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, String>> lis) {
         return null;
     }
 

@@ -1,5 +1,6 @@
 package zd.zdcommons.analysis;
 
+import org.apache.commons.lang3.StringUtils;
 import zd.zdcommons.pojo.Message;
 import zd.zdcommons.pojo.ResultMessage;
 import zd.zdcommons.serviceImp.AnalysisImp;
@@ -13,167 +14,8 @@ import static zd.zdcommons.Utils.getInteger;
 
 public class CompleteV2 implements AnalysisImp {
     @Override
-    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, Object>> lis) {
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> map, List<Map<String, String>> lis) {
         return null;
-    }
-
-    @Override
-    public ResultMessage getIntegrityAnalysis(Map<String, Object> resource,Map<String,Object> titleMap) {
-        //结果信息的实体类
-        ResultMessage resultm = null;
-        Message message = null;
-        List<Message> meslist=new ArrayList<Message>();
-        ArrayList<String> list5g = new ArrayList<String>();
-
-        //记录count数即错误数
-        long count=0;
-        long count5g=0;
-        //获取数据
-        if (resource.get("Activities Flow Name").toString().contains(""))
-        //第一个规则
-        if(!resource.get("YD5-dUID").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(duidstr,resource,list5g, count,titleMap,false,"YD5-dUID",false);//返回的是为空的字段的集合
-            list5g = (ArrayList<String>) map.get("error");
-            count = Long.parseLong(map.get("count").toString());
-        }
-        //第二个规则
-        if(!resource.get("YD5-IC-actualEndDate").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(icad,resource,list5g, count,titleMap,false,"YD5-IC-actualEndDate",false);//返回的是为空的字段的集合
-            list5g = (ArrayList<String>) map.get("error");
-        }
-        //第三个规则
-        if(!resource.get("YD5-AAU-actualEndDate").toString().isEmpty()
-                &&!resource.get("YD5-AAU-actualEndDate").equals("N/A")
-                &&!resource.get("YD5-AAU-actualEndDate").equals("NA")) {
-            HashMap<String,Object> map = getCO(aau,resource,list5g, count,titleMap,false,"YD5-AAU-actualEndDate",false);//返回的是为空的字段的集合
-            list5g = (ArrayList<String>) map.get("error");
-        }
-        //第四个规则
-        if(!resource.get("YD5-receptionDate").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(fiveg,resource,list5g, count,titleMap,false,"YD5-receptionDate",false);//返回的是为空的字段的集合
-            list5g = (ArrayList<String>) map.get("error");
-        }
-        if(!resource.get("YD5-SC-actualEndDate").toString().isEmpty()) {
-            HashMap<String,Object> map = getCO(scStr,resource,list5g, count,titleMap,false,"YD5-SC-actualEndDate",false);//返回的是为空的字段的集合
-            list5g = (ArrayList<String>) map.get("error");
-            count = Long.parseLong(map.get("count").toString());
-        }
-        //第五个规则
-        if((!resource.get("YD5-AAU-actualEndDate").toString().isEmpty())) {
-            if(!resource.get("YD5-problemClassification").equals("已开通有告警")&&(!resource.get("YD5-problemClassification").toString().isEmpty())){
-                //System.out.println("开通AUU，问题分类的值="+resource.get("YD5-problemClassification").toString()+" ：：：");
-                list5g.add(titleMap.get("YD5-problemClassification").toString()+"  --的值不是 空 或 没有已开通有告警 ，AUU开通已有值");
-            }
-
-        }
-        if((resource.get("YD5-AAU-actualEndDate").toString().isEmpty())) {
-            if(resource.get("YD5-problemClassification").equals("已开通有告警")&&(resource.get("YD5-problemClassification").toString().isEmpty())){
-                //System.out.println(resource.get("YD5-problemClassification"));
-                list5g.add(titleMap.get("YD5-problemClassification").toString()+"  --的值是 空 或 已开通有告警 ，AUU开通也没有值");
-            }
-            //list5g.add(titleMap.get("YD5-problemClassification").toString());
-        }
-        //添加5g
-        if (list5g.size()>0){
-            count5g=list5g.size();//填入构造
-            message=get5G(message,list5g);
-            meslist.add(message);
-        }
-        long count1800fdd=0;
-        //生成listAnchor
-        ArrayList<String> listAnchor = new ArrayList<String>();
-        if (resource.get("M1800-whetherPlanningFDD").equals("是")){
-            //第六个规则
-            if(!resource.get("M1800-installationFDD").toString().isEmpty()) {
-                HashMap<String,Object> map = getCO(fddanzhang,resource,listAnchor, count,titleMap,false,"M1800-installationFDD",false);//返回的是为空的字段的集合
-                listAnchor = (ArrayList<String>) map.get("error");
-            }
-            //第七个规则（后面更新）
-//            if(!resource.get("M1800-openedFDD").toString().isEmpty()) {
-//                HashMap<String,Object> map = getCO(fddkt,resource,listAnchor, count,titleMap,false,"M1800-openedFDD",false);//返回的是为空的字段的集合
-//                listAnchor = (ArrayList<String>) map.get("error");
-//            }
-
-            //第八个规则
-            if(!resource.get("M1800-deliveryDateFDD").toString().isEmpty()) {
-                HashMap<String,Object> map = getCO(fddjy,resource,listAnchor, count,titleMap,false,"M1800-deliveryDateFDD",false);//返回的是为空的字段的集合
-                listAnchor = (ArrayList<String>) map.get("error");
-                //count = (long) map.get("count");
-            }
-            //第九个规则
-            if((!resource.get("M1800-openedFDD").toString().isEmpty())) {
-                //isEmpty true 判断非空，false判断空
-                HashMap<String,Object> map = getCO(anchorType,resource,listAnchor, count,titleMap,false,"M1800-openedFDD",false);//返回的是为空的字段的集合
-                listAnchor = (ArrayList<String>) map.get("error");
-                HashMap<String,Object> map1 = getCO(anchorRevceType,resource,listAnchor, count,titleMap,true,"M1800-openedFDD",false);//返回的是为空的字段的集合
-                listAnchor = (ArrayList<String>) map1.get("error");
-            }
-            if((resource.get("M1800-openedFDD").toString().isEmpty())) {
-                HashMap<String,Object> map1 = getCO(anchorRevceType,resource,listAnchor, count,titleMap,false,"M1800-openedFDD",true);//返回的是为空的字段的集合
-                listAnchor = (ArrayList<String>) map1.get("error");
-            }
-        }
-
-        //添加F1800
-        if(listAnchor.size()>0){
-            count1800fdd=listAnchor.size();
-            message = get1800Anchor(message, listAnchor);
-            meslist.add(message);
-        }
-        //3DMIMO测试
-        long count3d=0;
-        //生成listMimo
-        ArrayList<String> listMimo = new ArrayList<String>();
-        if (getInteger(resource.get("MIMO-planningNumber").toString())>0){//有规划量才校验
-            //第十个规则
-            if(!resource.get("MIMO-installationDate").toString().isEmpty()) {
-                HashMap<String,Object> map = getCO(mimoaz,resource,listMimo, count,titleMap,false,"MIMO-installationDate",false);//返回的是为空的字段的集合
-                listMimo = (ArrayList<String>) map.get("error");
-            }
-            //第十一个规则->(跟双向重复)
-//            if(!resource.get("MIMO-completionDate").toString().isEmpty()) {
-//                HashMap<String,Object> map = getCO(mimoawc,resource,listMimo, count,titleMap,false,"MIMO-completionDate",false);//返回的是为空的字段的集合
-//                listMimo = (ArrayList<String>) map.get("error");
-//            }
-            //第十二个规则
-            if(!resource.get("MIMO-deliveryDate").toString().isEmpty()) {
-                HashMap<String,Object> map = getCO(mimojy,resource,listMimo, count,titleMap,false,"MIMO-deliveryDate",false);//返回的是为空的字段的集合
-                listMimo = (ArrayList<String>) map.get("error");
-            }
-            //第十三个规则
-            if((!resource.get("MIMO-completionDate").toString().isEmpty())) {
-                //isEmpty true判断非空 ，false判断空
-                HashMap<String,Object> map = getCO(mimoType,resource,listMimo, count,titleMap,false,"MIMO-completionDate",false);//返回的是为空的字段的集合
-                listMimo = (ArrayList<String>) map.get("error");
-                HashMap<String,Object> map1 = getCO(mimoRevceType,resource,listMimo, count,titleMap,true,"MIMO-completionDate",false);//返回的是为空的字段的集合
-                listMimo = (ArrayList<String>) map1.get("error");
-            }
-            if((resource.get("MIMO-completionDate").toString().isEmpty())) {
-                HashMap<String,Object> map1 = getCO(mimoRevceType,resource,listMimo, count,titleMap,false,"MIMO-completionDate",true);//返回的是为空的字段的集合
-                listMimo = (ArrayList<String>) map1.get("error");
-            }
-        }
-
-        //添加3D-MIMO
-        if (listMimo.size()>0){
-            count3d=listMimo.size();
-            message=get3DMIMO(message,listMimo);
-            meslist.add(message);
-        }
-        //添加最终数据
-        if(meslist.size()>0){
-            resultm=new ResultMessage();
-            resultm.setTError("完整性错误");
-            resultm.setDarea(resource.get("YD5-area").toString());
-            resultm.setDUID(resource.get("YD5-dUID").toString());
-            resultm.setDUName(resource.get("YD5-dUName").toString());
-            resultm.setMessge(meslist);
-            resultm.setXcount(count5g+count3d+count1800fdd);
-            resultm.setCount3d(count3d);
-            resultm.setCount5g(count5g);
-            resultm.setCount1800fdd(count1800fdd);
-        }
-        return resultm;
     }
 
     @Override
@@ -181,89 +23,253 @@ public class CompleteV2 implements AnalysisImp {
         return null;
     }
 
-    //第一个规则所需要判断的字段
-    private static final String[] duidstr = {"YD5-dUID","YD5-customerSiteID","YD5-customerSiteName",
-            "YD5-dUName","YD5-area","YD5-Subcontractor","YD5-spectrum",
-            "YD5-scenario","YD5-standingType","YD5-engineeringServiceMode",
-            //2019/6/10检查之后对这个字段添加了一个YD5-deliveryRegion和其他几个字段
-            "YD5-contractConnection","YD5-standingType2","YD5-standard","YD5-deliveryRegion"};
-    //第二个规则所需的字段
-    private static final String[] icad = {"YD5-RFI-actualEndDate","YD5-MOS-actualEndDate","YD5-productModel",
-            "YD5-remoteStationType","YD5-planningNumber","YD5-tianmianTransformation","YD5-dcFuse",
-            "YD5-acInduction","YD5-design","YD5-rruHardwareNumber","YD5-IC-actualEndDate"};
-    //第三个规则所需字段
-    private static final String[] aau = {"YD5-IC-actualEndDate","YD5-deliveryType","YD5-rruToneNumber",
-            "YD5-residentialBroadband","YD5-transmissionEquipped",
-            "YD5-bbuESN","YD5-bbuSiteID","YD5-bbuSiteName","YD5-rruScenario","YD5-nmNEName","YD5-rruSiteID",
-            "YD5-rruSiteName","YD5-rruScenario","YD5-transmissionBandwidth",
-            "YD5-nroSubcontractor","YD5-AAU-actualEndDate"};//2019/6/10检查之后对这个字段添加了D5-AAU-actualEndDate
-    //第四个规则所需字段
-    private static final String[] fiveg = {"YD5-completionDate","YD5-AAU-actualEndDate","YD5-receptionDate"};
-    //5G新增
-    private static final String[] scStr={"YD5-nROPO","YD5-nroServiceContract"};
-    //第六个规则所需字段
-    private static final String[] fddanzhang = {"M1800-programNumberFDD",
-            "M1800-constructionPlanFDD","M1800-whetherPlanningFDD","M1800-arrivalDateFDD"};
-    //第七个规则所需字段
-    private static final String[] fddkt = {"M1800-installationFDD","M1800-baseStationNameFDD",
-            "MIMO-transmissionBandwidthe4G","M1800-openedFDD"};
-    //第八个规则所需字段
-    private static final String[] fddjy = {"M1800-openedFDD","M1800-deliveryCompletionDateFFD","M1800-deliveryDateFDD"};
-    //第十个规则所需字段
-    private static final String[] mimoaz = {"MIMO-miMO3DID","MIMO-planningNumber",
-            "MIMO-miMO3DGoodsQuantity"};
-    //第十一个规则
-//    private static final String[] mimoawc = {"MIMO-installationDate",
-//            "MIMO-transmissionBandwidthe4G","MIMO-baseStationName","MIMO-completionDate","MIMO-openTypeStandTarget","MIMO-openTypeStand"};
-    //第十二个规则
-    private static final String[] mimojy = {"MIMO-completionDate","MIMO-deliveryDate","MIMO-miMO3DDate"};
+    @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, Object> resource, Map<String, Object> titleMap) {
+        return null;
+    }
+
+    //结果信息的实体类
+    private ResultMessage resultm = null;
+    private Message message = null;
+    private List<Message> meslist=new ArrayList<Message>();
+    private ArrayList<String> listM5g = new ArrayList<String>();
+    private ArrayList<String> listR5g = new ArrayList<String>();
+    private ArrayList<String> listAnchor = new ArrayList<String>();
+    private ArrayList<String> listMimo = new ArrayList<String>();
+    @Override
+    public ResultMessage getIntegrityAnalysis(Map<String, String> resource) {
+        resultm=null;
+        meslist.clear();
+        message=null;
+        listMimo = new ArrayList<String>();
+        listAnchor = new ArrayList<String>();
+        listR5g = new ArrayList<String>();
+        listM5g = new ArrayList<String>();
+        //获取数据
+        String activities = resource.get("Activities Flow Name");
+        if (activities.contains("5G MBB")){
+            //判断宏站
+            getM5g(resource);
+            //判断瞄点
+            getAnchor(resource);
+        }
+        else if (activities.contains("5G ICS")){
+            //判断宏站
+            getR5g(resource);
+            //判断瞄点
+            getAnchor(resource);
+        }
+        else if(activities.contains("3D-MIMO")){
+            getMiMo(resource);
+        }
+        long r5g=0;
+        long m5g=0;
+        if(listR5g.size()>0){
+            r5g=listR5g.size();
+            message = get5GR(message, listR5g);
+            meslist.add(message);
+        }
+        if(listM5g.size()>0){
+            m5g=listM5g.size();
+            message = get5GR(message,listM5g);
+            meslist.add(message);
+        }
+        long count5g=r5g+m5g;
+        long count1800fdd=0;
+        long count3d=0;
+        if(listAnchor.size()>0){
+            count1800fdd=listAnchor.size();
+            message = get1800Anchor(message, listAnchor);
+            meslist.add(message);
+        }
+        if(listMimo.size()>0){
+            count1800fdd=listMimo.size();
+            message = get1800Anchor(message, listMimo);
+            meslist.add(message);
+        }
+
+        //添加3D-MIMO
+        //添加最终数据
+        if(meslist.size()>0){
+            resultm=new ResultMessage();
+            resultm.setTError("完整性错误");
+            resultm.setDarea(resource.get("行政区域"));
+            resultm.setDUID(resource.get("DU ID"));
+            resultm.setDUName(resource.get("DU Name"));
+            resultm.setMessge(meslist);
+            resultm.setXcount(count5g+count3d+count1800fdd);
+            resultm.setCount3d(count3d);
+            resultm.setCount5g(count5g);
+            resultm.setCount1800fdd(count1800fdd);
+        }
+
+        return resultm;
+    }
+    public void getM5g(Map<String,String> resource){
+        //DU开通
+        if(StringUtils.isNotBlank(resource.get("DU ID"))){
+            getError("DU ID",false,stationM_DU,resource,true,"宏站");
+        }
+        //宏站安装
+        if(StringUtils.isNotBlank(resource.get("Installation-Completed--Actual End Date"))){
+            getError("Installation-Completed--Actual End Date",false,stationM_Install,resource,true,"宏站");
+        }
+        //AAU开通
+        if(StringUtils.isNotBlank(resource.get("AAU开通--Actual End Date"))){
+            getError("AAU开通--Actual End Date",false,stationM_Open,resource,true,"宏站");
+        }
+        if(StringUtils.isNotBlank(resource.get("5G 交优接收日期"))){
+            getError("5G 交优接收日期",false,stationM_PayDate,resource,true,"宏站");
+        }
+        if(StringUtils.isNotBlank(resource.get("5G问题分类"))){
+            getError("5G问题分类",false,stationM_Problem,resource,false,"宏站");
+        }
+        if(StringUtils.isBlank(resource.get("5G问题分类"))){
+            getError("5G问题分类",true,stationM_Problem,resource,true,"宏站");
+        }
+    }
+    public void getR5g(Map<String,String> resource){
+        //DU开通
+        if(StringUtils.isNotBlank(resource.get("DU ID"))){
+            getError("DU ID",false,stationR_DU,resource,true,"室分");
+        }
+        //安装
+        if(StringUtils.isNotBlank(resource.get("Installation-Completed--Actual End Date"))){
+            getError("Installation-Completed--Actual End Date",false,stationR_Install,resource,true,"室分");
+        }
+        //室分开通
+        if(StringUtils.isNotBlank(resource.get("Software Commissioning--Actual End Date"))){
+            getError("Software Commissioning--Actual End Date",false,stationR_Open,resource,true,"室分");
+        }
+        if(StringUtils.isNotBlank(resource.get("5G 交优接收日期"))){
+            getError("5G 交优接收日期",false,stationR_PayDate,resource,true,"室分");
+        }
+        if(StringUtils.isNotBlank(resource.get("5G问题分类"))){
+            getError("5G问题分类",false,stationR_Problem,resource,false,"室分");
+        }
+        if(StringUtils.isBlank(resource.get("5G问题分类"))){
+            getError("5G问题分类",true,stationR_Problem,resource,true,"室分");
+        }
+    }
+    public void getAnchor(Map<String,String> resource){
+        if(StringUtils.isNotBlank(resource.get("FDD1800安装"))){
+            getError("FDD1800安装",false,anchor_Install,resource,true,"瞄点");
+        }
+        if(StringUtils.isNotBlank(resource.get("FDD1800开通"))){
+            getError("FDD1800开通",false,anchor_Open,resource,true,"瞄点");
+        }
+        if(StringUtils.isNotBlank(resource.get("FDD1800 交优接收日期"))){
+            getError("FDD1800 交优接收日期",false,anchor_Receive,resource,true,"瞄点");
+        }
+        if(StringUtils.isNotBlank(resource.get("锚点FDD1800问题分类"))){
+            getError("锚点FDD1800问题分类",false,anchor_Problem,resource,false,"瞄点");
+        }
+        if(StringUtils.isBlank(resource.get("锚点FDD1800问题分类"))){
+            getError("锚点FDD1800问题分类",true,anchor_Problem,resource,true,"瞄点");
+        }
+
+    }
+    public void getMiMo(Map<String,String> resource){
+        //安装
+        if(!resource.get("3D-MIMO安装时间").isEmpty()){
+            getError("3D-MIMO安装时间",false,mimo_Install,resource,true,"3D");
+        }
+        //开通
+        if(!resource.get("Software Commissioning--Actual End Date").isEmpty()){
+            getError("Software Commissioning--Actual End Date",false,mimo_Open,resource,true,"3D");
+        }
+        //3D-MIMO交优完成日期
+        if(!resource.get("3D-MIMO 交优接收日期").isEmpty()){
+            getError("3D-MIMO 交优接收日期",false,mimo_Receive,resource,true,"3D");
+        }
+        //开通
+        if(!resource.get("3D-MIMO问题分类").isEmpty()){
+            getError("3D-MIMO问题分类",false,mimo_Problem,resource,false,"3D");
+        }
+        if(resource.get("3D-MIMO问题分类").isEmpty()){
+            getError("3D-MIMO问题分类",true,mimo_Problem,resource,true,"3D");
+        }
+    }
+
+    //第二次修改
+    //StationM
+    private static final String [] stationM_DU={"Customer Site ID","Customer Site Name","DU Name","行政区域","Subcontractor",
+    "频段","NRO服务合同号","场景","站 型","工程服务方式","合同挂接方式","站型","制式","Delivery Region"};
+    private static final String[] stationM_Install={"Ready For Installation--Actual End Date","Material On Site--Actual End Date",
+    "产品型号","拉远站类型","5G规划编号","天面改造进展","直流空开熔丝","交流引入","是否有设计图纸","RRU硬件数量"};
+    private static final String[] stationM_Open={"Installation-Completed--Actual End Date","Delivery Type","NRO PO","RRU软调数量",
+    "5G小区带宽","5G传输具备","BBU ESN","BBU Site ID","BBU Site Name","BBU交付场景","NM NE Name","RRU Site ID","RRU Site Name",
+    "RRU交付场景","5G传输带宽","NRO Subcontractor"};
+    private static final String[] stationM_PayDate={"AAU开通--Actual End Date","5G交优完成日期"};//注意
+    private static final String[] stationM_Problem={"AAU开通--Actual End Date"};//双向
+
+    //StationR
+    private static final String[] stationR_DU={"Customer Site ID","Customer Site Name","DU Name","行政区域","Subcontractor",
+    "NRO服务合同号","场景","站 型","工程服务方式","合同挂接方式","站型","制式","Delivery Region"};
+    private static final String[] stationR_Install={"Ready For Installation--Actual End Date","Material On Site--Actual End Date",
+    "5G规划编号","直流空开熔丝","交流引入","PRRU规划数量","RHUB规划数量","规划RRU/PRRU数","rHUB类型","RHUB实际安装数",
+    "RRU/PRRU实际安装数","规划RHUB数","产品类型","产品型号","是否有设计图纸"};
+    private static final String[] stationR_Open={"Installation-Completed--Actual End Date","Delivery Type","NRO PO","RRU软调数量",
+    "5G小区带宽","5G传输具备","NM NE Name","5G传输带宽","NRO Subcontractor"};
+    private static final String[] stationR_PayDate={"Software Commissioning--Actual End Date","5G交优完成日期"};
+    private static final String[] stationR_Problem={"Software Commissioning--Actual End Date"};
+
+    //3D-MIMO
+    private static final String[] mimo_Install={"3D-MIMO规划编号","3D-MIMO规划数量","3D-MIMO NM NE ID","3D-MIMO目标站型（设计图纸）",
+    "3D-MIMO开通站型","3D-MIMO到货数量"};
+    private static final String[] mimo_Open={"3D-MIMO安装时间","4G传输带宽","3D-MIMO网管基站名称","Software Commissioning--Actual End Date"};
+    private static final String[] mimo_Receive={"Software Commissioning--Actual End Date","3D-MIMO单验完成日期","3D-MIMO交优完成日期"};
+    private static final String[] mimo_Problem={"Software Commissioning--Actual End Date"};
+
+    //锚点FDD1800
+    private static final String[] anchor_Install={"4G传输具备","FDD1800规划编号","FDD1800施工计划","FDD1800是否规划","FDD1800 NM NE ID",
+    "FDD1800到货日期"};
+    private static final String[] anchor_Open={"FDD1800安装","FDD1800网管基站名称","4G传输具备"};
+    private static final String[] anchor_Receive={"FDD1800开通","FDD1800交优完成日期"};
+    private static final String[] anchor_Problem={"FDD1800开通"};
+
 
     //双转规则
 
-    private static final String[] anchorType={"M1800-nmNEIDFDD","M1800-installationFDD","M1800-baseStationNameFDD",
-            "MIMO-transmissionBandwidthe4G","M1800-openedFDD"};
-    private static final String[] anchorRevceType={"M1800-questionClassificationFDD"};
-    private static final String[] mimoType={"MIMO-nmNEID","MIMO-baseStationName","MIMO-openTypeStandTarget","MIMO-openTypeStand","MIMO-transmissionBandwidthe4G","MIMO-installationDate"};
-    private static final String[] mimoRevceType={"MIMO-questionClassification"};
-    /**
-     * 得到错误信息和出错次数的方法
-     *
-     * @param s 包含判断的字段的数组
-     * @param map 读取的表格数据
-     * @param befolist 错误信息的集合
-     * @param count 出错的次数
-     * @return 返回一个map集合包含错误信息和出错次数
-     */
+
     /***
      *
-     * @param s 包含判断的字段的数组
-     * @param map 读取的表格数据
-     * @param befolist 错误信息的集合
-     * @param count 记录错误数
-     * @param titleMap 中文标题
-     * @param isEmpty 判断所需要字段(正确情况是否为空)
-     * @param judge 主条件所关联字段
-     * @param isnull 主条件是否为空
-     * @return
+     * @param conditions 当前条件字段
+     * @param isState 当前字段状态（true：空,false:非空）
+     * @param rules 规则数组
+     * @param map 当前信息
+     * @param type 当前类型（3D,室分,宏站,瞄点）
+     * @param isNull 被判断的状态(true:空,false:非空)
      */
-    public static HashMap<String,Object> getCO(String [] s, Map<String, Object> map, List<String> befolist, long count,Map<String,Object> titleMap,boolean isEmpty,String judge,boolean isnull) {
-        List<String> list = befolist;
-        for(int i = 0;i<s.length;i++) {
-            if(isEmpty?(!map.get(s[i]).toString().isEmpty()):(map.get(s[i]).toString().isEmpty())) {
-                list.add(titleMap.get(judge)+" -"+(isnull?"未录入":"已录入")+"，---"+titleMap.get(s[i]).toString()+(isEmpty?"不为空":"为空"));
-                count++;
+    public void getError(String conditions,Boolean isState,String[] rules,Map<String,String> map,Boolean isNull,String type){
+        List<String> list = new ArrayList<String>();
+        for(int i = 0;i<rules.length;i++) {
+            if(isNull?StringUtils.isBlank(map.get(rules[i])):StringUtils.isNotBlank(map.get(rules[i]))){
+                String str="当"+conditions+(isState?"未录入":"已录入")+"时，--"+rules[i]+(isNull?"为空":"不为空");
+                list.add(str);
             }
         }
-        HashMap<String,Object> hashMap = new HashMap<String ,Object>();
-        hashMap.put("error", list);
-        hashMap.put("count", count);
-        return hashMap;
-    }
-
-    private final static Message get5G(Message mes, List<String> list){
+        if (type.equals("宏站")){
+            listM5g.addAll(list);
+        }else if(type.equals("瞄点")){
+            listAnchor.addAll(list);
+        }else if (type.equals("3D")){
+            listMimo.addAll(list);
+        }else if (type.equals("室分")){
+            listR5g.addAll(list);
+        }
+    };
+    private final static Message get5GM(Message mes, List<String> list){
         mes = new Message();
-        mes.setAction("G");
-        mes.setTitle("5G");
+        mes.setAction("MBB");
+        mes.setTitle("5G宏站");
+        mes.setMessages(list);
+        return mes;
+    }
+    private final static Message get5GR(Message mes, List<String> list){
+        mes = new Message();
+        mes.setAction("ICS");
+        mes.setTitle("5G室分");
         mes.setMessages(list);
         return mes;
     }

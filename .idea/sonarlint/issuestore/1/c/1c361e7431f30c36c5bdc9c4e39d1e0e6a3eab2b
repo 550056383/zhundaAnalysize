@@ -1,0 +1,7 @@
+
+Lsquid:S1172&"0Remove this unused method parameter "SheetName".(½Ö‘™ùÿÿÿÿ
+nsquid:S00117&"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(½Ö‘™ùÿÿÿÿ
+nsquid:CommentedOutCodeLine("<This block of commented-out lines of code should be removed.(¢êœ¡øÿÿÿÿ8¥µøØÄ-
+Xsquid:S1118":Add a private constructor to hide the implicit public one.(¢‚Éê8Ð¥üãÃ-
+nsquid:CommentedOutCodeLine-"<This block of commented-out lines of code should be removed.(ÒÈ§–ýÿÿÿÿ8¥µøØÄ-
+isquid:CommentedOutCodeLine*"<This block of commented-out lines of code should be removed.(”ÂØÑ8¥µøØÄ-

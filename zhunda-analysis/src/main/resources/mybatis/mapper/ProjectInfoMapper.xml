@@ -27,6 +27,15 @@
         </foreach>
         )
     </insert >
+    <!--批量插入数据-->
+    <insert id="insertForeach">
+        insert ${param1}()
+        values
+        <foreach collection="#{lists}" item="map" separator=",">
+            (${map})
+        </foreach>
+
+    </insert>
     <select id="selectResult"  resultType="java.util.LinkedHashMap" parameterType="string">
         select * from ${tables}
     </select>
@@ -35,6 +44,12 @@
     </select>
 
     <!--关联设置项表查询-->
+    <!--
+        <select id="selectTables" resultType="java.util.LinkedHashMap">
+            select * from ${param1} inner join ${param3} on  ${param1}.${param2}=${param3}.${param4}
+        </select>
+    -->
+
     <select id="selectTables" resultType="java.util.LinkedHashMap">
         select * from ${param1} inner join ${param3} on  ${param1}.${param2}=${param3}.${param4}
     </select>
@@ -68,49 +83,145 @@
 
     <select id="selectByWriteRules"  resultType="java.util.LinkedHashMap">
         <foreach collection="majorsList"  item="m" separator="union"  >
-            select * from
+            <if test="tag==1">
+                select
+                <foreach collection="writeList" item="write" separator=",">
+                    ${write.table}.${write.field}
+                </foreach>
+                from ${param1} inner join ${param3} on ${param1}.${param2}=${param3}.${param4}
+            </if>
+            <if test="tag==2">
+                select
+                <foreach collection="writeList" item="write" separator=",">
+                    ${write.table}.${write.field}
+                </foreach>
+                from ${param1} inner join ${param3} on ${param1}.${param2}=${param3}.${param4}
+            </if>
             <if test="num==1">
-                ${m.table1}
+                <if test="tag==2">
+                    and ${m.table1}.${m.field1} &gt; ${m.table2}.${m.field2}
+                    and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }
+                    <if test="tags==1">
+                        &gt; ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        >0
+                    </if>
+                </if>
+                <if test="tag==1">
+                    and ${m.table1}.${m.field1}
+                    <if test="tags==1">
+                        &gt; ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        > 0
+                    </if>
+                </if>
             </if>
             <if test="num==2">
-                ${m.table1},${m.table2}
+                <if test="tag==2">
+                    and ${m.table1}.${m.field1}=${m.table2}.${m.field2}
+                    <if test="tags==1">
+                        = ${m.value}
+                    </if>
+                    <if test="tags==2">
+
+                    </if>
+                </if>
+                <if test="tag==1">
+                    and ${m.table1}.${m.field1}
+                    <if test="tags==1">
+                        = ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        = 0
+                    </if>
+                </if>
             </if>
             <if test="num==3">
-                <if test="num=2">
-                    where ${m.table1}.${m.field1} &gt;  ${m.table2}.${m.field2}
-                    and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }  &gt;  ${m.value}
+                <if test="tag==2">
+                    and ${m.table1}.${m.field1} &lt; ${m.table2}.${m.field2}
+                    and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 }
+                    <if test="tags==1">
+                        &lt; ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        &lt; 0
+                    </if>
                 </if>
-                <if test="num=1">
-                    where ${m.table1}.${m.field1} &gt; ${m.value}
+                <if test="tag==1">
+                    and ${m.table1}.${m.field1}
+                    <if test="tags==1">
+                        &lt; ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        &lt; 0
+                    </if>
                 </if>
             </if>
             <if test="num==4">
-                where ${m.table1}.${m.field1} =  ${m.table2}.${m.field2}
-                and ${m.table1}.${m.field1}=  ${m.value}
+                <if test="tag==2">
+                    and ${m.table1}.${m.field1} &gt;= ${m.table2}.${m.field2}
+                    and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }
+                    <if test="tags==1">
+                        &gt;= ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        &gt;=0
+                    </if>
+                </if>
+                <if test="tag==1">
+                    and ${m.table1}.${m.field1}
+                    <if test="tags==1">
+                        &gt;= ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        &gt;= 0
+                    </if>
+                </if>
             </if>
             <if test="num==5">
-                where ${m.table1}.${m.field1} &lt;  ${m.table2}.${m.field2}
-                and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 }  &lt;  ${m.value}
+                <if test="tag==2">
+                    and ${m.table1}.${m.field1} &lt;= ${m.table2}.${m.field2}
+                    and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 }
+                    <if test="tags==1">
+                        &lt;= ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        &lt;= 0
+                    </if>
+                </if>
+                <if test="tag==1">
+                    and ${m.table1}.${m.field1}
+                    <if test="tags==1">
+                        &lt;= ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        &lt;= 0
+                    </if>
+                </if>
             </if>
             <if test="num==6">
-                where ${m.table1}.${m.field1} &gt;=  ${m.table2}.${m.field2}
-                and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }  &gt;=  ${m.value}
+                <if test="tag==2">
+                    and ${m.table1}.${m.field1} != ${m.table2}.${m.field2}
+                    <if test="tags==1">
+                        != ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        !=0
+                    </if>
+                </if>
+                <if test="tag==1">
+                    and ${m.table1}.${m.field1}
+                    <if test="tags==1">
+                        != ${m.value}
+                    </if>
+                    <if test="tags==2">
+                        != 0
+                    </if>
+                </if>
             </if>
-            <if test="num==7">
-                where ${m.table1}.${m.field1} &lt;=  ${m.table2}.${m.field2}
-                and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 }  &lt;=  ${m.value}
-            </if>
-           <!-- <if test="num==8">
-                where ${m.table1}.${m.field1} ${m.conditions}  ${m.table2}.${m.field2}
-                and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }  ${m.conditions}  ${m.value}
-            </if>-->
 
         </foreach>
-
-    <!--    <foreach collection="viceList" item="m" separator="union">
-            select * from ${m.table1},${m.table2}
-            where ${m.table1}.${m.field1} &gt; ${m.table2}.${m.field2}
-            and ${m.table1}.${m.field1} - ${m.table2}.${m.field2}>${m.value}
-        </foreach>-->
     </select>
 </mapper>

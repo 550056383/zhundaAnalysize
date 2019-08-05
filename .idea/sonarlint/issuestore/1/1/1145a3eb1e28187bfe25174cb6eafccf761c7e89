@@ -1,0 +1,20 @@
+
+Qsquid:S1481$".Remove this unused "listTitle" local variable.(şÏë…şÿÿÿÿ8ôßÑìÂ-
+nsquid:CommentedOutCodeLineX"<This block of commented-out lines of code should be removed.(İáçıÿÿÿÿ8î÷ƒäÃ-
+isquid:CommentedOutCodeLine["<This block of commented-out lines of code should be removed.(é”ÈŞ8Œ¸ÁäÃ-
+nsquid:CommentedOutCodeLineI"<This block of commented-out lines of code should be removed.(üßÔäùÿÿÿÿ8ïÁåØÄ-
+V
+squid:S106B"9Replace this use of System.out or System.err by a logger.(Ç”Ø‘8÷ÆøØÄ-
+Gsquid:S1481^")Remove this unused "list" local variable.(È²ÒÆ8—äÃ-
+Vsquid:S1854^"8Remove this useless assignment to local variable "list".(È²ÒÆ8—äÃ-
+€squid:S1488"]Immediately return this expression instead of assigning it to the temporary variable "title".(Ãúéáùÿÿÿÿ8ôßÑìÂ-
+`squid:S1854$"=Remove this useless assignment to local variable "listTitle".(şÏë…şÿÿÿÿ8ôßÑìÂ-
+[squid:S1854O"8Remove this useless assignment to local variable "list".(Œìíòùÿÿÿÿ8ïÁåØÄ-
+Lsquid:S1481#")Remove this unused "name" local variable.(Ÿ•ï‘ıÿÿÿÿ8ôßÑìÂ-
+Vsquid:S18542"8Remove this useless assignment to local variable "name".(éñŒ¨8ôßÑìÂ-
+|squid:S2293&"YReplace the type specification in this constructor call with the diamond operator ("<>").(¸µøÆüÿÿÿÿ8ôßÑìÂ-
+|squid:S2293$"YReplace the type specification in this constructor call with the diamond operator ("<>").(şÏë…şÿÿÿÿ8ôßÑìÂ-
+V
+squid:S106>"9Replace this use of System.out or System.err by a logger.(Î’ÛÚ8ôßÑìÂ-
+[
+squid:S106C"9Replace this use of System.out or System.err by a logger.(®ùàüøÿÿÿÿ8ïÁåØÄ-

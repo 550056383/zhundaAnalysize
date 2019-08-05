@@ -6,11 +6,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import zd.zdcommons.Utils;
 import zd.zdcommons.pojo.ExcelTable;
+import zd.zdcommons.pojo.Majors;
+import zd.zdcommons.pojo.Write;
 import zd.zdcommons.resouce.ExceclResouce;
 import zd.zdcommons.utils.PinYinUtils;
 import zd.zdcommons.utils.StringFormat;
+import zd.zdcommons.wirte.WriteNewExcel;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -63,16 +69,15 @@ public class EnginnerService {
                     }
                    String uuid = StringFormat.uuid(s.getSheetName());
                         // 创建临时表
-                   System.out.println("开始创建临时表:" + uuid);
-                   System.out.println(s.getSheetName());
                         dataService.createTables(uuid, str);
                         //存入数据到临时表
-                    List<List<String>> resource = s.getResource();
-                        dataService.insetData(uuid,resource);
+                   //List<List<String>> resource = s.getResource();
+                   List<List<String>> resource = s.getResource();
+                   dataService.insetData(uuid, resource);
 
-/*                        List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
+                   List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
                         //写入Excel
-                        WriteNewExcel writeNewExcel = new WriteNewExcel();
+                       /* WriteNewExcel writeNewExcel = new WriteNewExcel();
                         WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");*/
                    s.setResource(null);
                     }
@@ -82,16 +87,61 @@ public class EnginnerService {
             return listEx;
         }
 
-    public String getSetup(Map<String, Object> map) {
-
+    public List<Map<String, Object>> getSetup(Map<String, Object> map, HttpServletResponse response, HttpServletRequest request) {
+        Object o = null;
         //关联设置项表查询
          //List<Map<String, Object>> mapList = dataService.selectTables(map);
 
-        //输出表字段
-        // List<String> arrr = dataService.selectTableCell(map);
-
         //条件设置
-        List<String> list = dataService.selectByWriteRules(map);
+        List<Map<String, Object>> mapList = dataService.selectByWriteRules(map);
+
+        //得到想要的自定义字段
+        String writeRules = map.get("writeRules").toString();
+        //字符串转数组
+        List<String[]> list = StringFormat.getString4(writeRules);
+        String[] arrs = list.get(0);
+        String[] split = list.get(2)[0].split(",");
+        String zidingyi = split[0];
+        List<Majors> writeRules1 = dataService.getWriteRules(arrs);
+        System.out.println("writeRules1.size()" + writeRules1.size());
+        for (Majors majors : writeRules1) {
+            String s = majors.getTable1();
+            String s1 = majors.getField1();
+            String s2 = majors.getConditions();
+            String s3 = majors.getTable2();
+            String s4 = majors.getField2();
+            String s5 = majors.getValue();
+            if (s3.equals("null") && s4.equals("null")) {
+                String string = s + "表的" + s1 + s2 + s5;
+                o = (Object) string;
+            } else {
+                String string = s + "表的" + s1 + s2 + s3 + "表的" + s4 + "并且" + s2 + s5;
+                o = (Object) string;
+            }
+        }
+        Map<String, Object> objectMap = new HashMap<>();
+        for (Map<String, Object> map1 : mapList) {
+            map1.put(zidingyi, o);
+            System.out.println(map1);
+        }
+
+
+        //得到想要的表头
+        List<Write> writeList = dataService.selectTableCells(map);
+        String[] arr = new String[writeList.size() + 1];
+        for (int i = 0; i < writeList.size(); i++) {
+            Write write = writeList.get(i);
+            String s1 = write.getField().toString();
+            String s2 = write.getTable().toString();
+            String str = s2 + " ：" + s1;
+            arr[i] = str;
+        }
+        arr[writeList.size()] = zidingyi;
+
+        //写入Excel
+        WriteNewExcel writeNewExcel = new WriteNewExcel();
+        WriteNewExcel.writeExcecl(arr, mapList, "分析结果表", "");
+        // getDownload( response);
         return null;
     }
     }

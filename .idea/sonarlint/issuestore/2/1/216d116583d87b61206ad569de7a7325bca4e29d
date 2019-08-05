@@ -1,0 +1,6 @@
+
+ssquid:S3008"WRename this field "charset_utf8" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©¢¹îþÿÿÿÿ
+msquid:S3008"VRename this field "charset_gbk" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®½ÍÞ
+Fsquid:S1068"/Remove this unused "charset_gbk" private field.(®½ÍÞ
+Vsquid:S1118":Add a private constructor to hide the implicit public one.(†èº¹þÿÿÿÿ
+?squid:S1148"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ

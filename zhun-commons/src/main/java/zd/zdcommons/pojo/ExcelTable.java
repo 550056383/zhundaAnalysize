@@ -14,6 +14,7 @@ import java.util.List;
 public class ExcelTable {
     private String sheetName;
     private String[] title;
+    //private List<List<String>> resource;
     private List<List<String>> resource;
 
     @Override

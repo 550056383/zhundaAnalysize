@@ -7,11 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="zhun-commons" />
-        <module name="zhun-item-interface" />
-        <module name="zhun-item-service" />
         <module name="zhun-poiexcecl" />
+        <module name="zhun-commons" />
+        <module name="zhun-item-service" />
         <module name="zhunda-analysis" />
+        <module name="zhun-item-interface" />
         <module name="zhunda-interface" />
       </profile>
     </annotationProcessing>

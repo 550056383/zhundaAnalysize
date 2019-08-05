@@ -1,0 +1,39 @@
+
+Usquid:S1854"8Remove this useless assignment to local variable "rtsi".(Ìò—®ıÿÿÿÿ
+}squid:S1488Ã"YImmediately return this expression instead of assigning it to the temporary variable "i".(ÓÂ–Šüÿÿÿÿ8§ë‘ãÃ-
+Lsquid:S1068@"0Remove this unused "cellDataType" private field.(Úªšëüÿÿÿÿ
+asquid:S1226±"DIntroduce a new variable instead of reusing the parameter "thisStr".(÷£¶éøÿÿÿÿ
+9squid:S1643Ø"Use a StringBuilder instead.(ÕÑ‘äüÿÿÿÿ
+?squid:S1148z"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+jsquid:S00117Ğ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ş˜¶å
+Lsquid:EmptyStatementUsageCheckÍ"Remove this empty statement.(ôŸìúÿÿÿÿ
+Lsquid:EmptyStatementUsageCheckÏ"Remove this empty statement.(ôŸìúÿÿÿÿ
+\squid:S1226ª"DIntroduce a new variable instead of reusing the parameter "thisStr".(¯åá²
+jsquid:S3776Ä"RRefactor this method to reduce its Cognitive Complexity from 68 to the 15 allowed.(Ìå‡š
+4squid:S1643Ô"Use a StringBuilder instead.(ö§¡
+asquid:S1226³"DIntroduce a new variable instead of reusing the parameter "thisStr".(–«¦ÿÿÿÿÿ
+Usquid:S1854¨"8Remove this useless assignment to local variable "rtss".(ùÅüöúÿÿÿÿ
+Gsquid:S1481æ"/Remove this unused "columnData" local variable.(©»ºÓ
+esquid:S1858–"H"value" is already a string, there's no need to call "toString()" on it.(›–øÿÿÿÿ
+\squid:S1226“"DIntroduce a new variable instead of reusing the parameter "thisStr".(»Â¡‘
+:squid:S1643p"Use a StringBuilder instead.(ÓØªÁ8‡øØÄ-
+asquid:S1226¶"DIntroduce a new variable instead of reusing the parameter "thisStr".(Åœ‹òùÿÿÿÿ
+asquid:S1226¯"DIntroduce a new variable instead of reusing the parameter "thisStr".(ê ÇŸùÿÿÿÿ
+Lsquid:EmptyStatementUsageCheck×"Remove this empty statement.(ôŸìúÿÿÿÿ
+@squid:S1659-"$Declare "preRef" on a separate line.(®ö‡íúÿÿÿÿ
+asquid:S1226™"DIntroduce a new variable instead of reusing the parameter "thisStr".(æÃ÷Ïùÿÿÿÿ
+asquid:S2583ÿ"DChange this condition so that it does not always evaluate to "false"(¡«Àÿûÿÿÿÿ
+vsquid:S1488¿"YImmediately return this expression instead of assigning it to the temporary variable "s".(·¡ÿÏûÿÿÿÿ
+qsquid:S3776Š"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ûÀØ¯8§ë‘ãÃ-
+`squid:S1858¡"H"value" is already a string, there's no need to call "toString()" on it.(Ÿ·œ
+\squid:S1226¸"DIntroduce a new variable instead of reusing the parameter "thisStr".(’ùŸı
+Vsquid:S1854æ">Remove this useless assignment to local variable "columnData".(©»ºÓ
+`squid:S1858œ"H"value" is already a string, there's no need to call "toString()" on it.(¸¹Œæ
+asquid:S1226¥"DIntroduce a new variable instead of reusing the parameter "thisStr".(˜Ğ¿¤ıÿÿÿÿ
+\squid:S1226"DIntroduce a new variable instead of reusing the parameter "thisStr".(µÿê—
+osquid:S00117Ê"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(´öÒïıÿÿÿÿ
+asquid:S1226–"DIntroduce a new variable instead of reusing the parameter "thisStr".(›–øÿÿÿÿ
+asquid:S1226»"DIntroduce a new variable instead of reusing the parameter "thisStr".(ßåŠôıÿÿÿÿ
+osquid:S00117Ä"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÿÊ÷úÿÿÿÿ
+esquid:S1858™"H"value" is already a string, there's no need to call "toString()" on it.(æÃ÷Ïùÿÿÿÿ
+`squid:S1858ª"H"value" is already a string, there's no need to call "toString()" on it.(¯åá²

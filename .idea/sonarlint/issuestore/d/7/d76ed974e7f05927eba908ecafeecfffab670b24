@@ -1,0 +1,23 @@
+
+jsquid:ModifiersOrderCheck"EReorder the modifiers to comply with the Java Language Specification.(éóöê
+jsquid:ModifiersOrderCheck"EReorder the modifiers to comply with the Java Language Specification.(õÅÆ¨
+Tsquid:S1197"8Move the array designator from the variable to the type.(Ø„¤–ýÿÿÿÿ
+gsquid:CommentedOutCodeLine#"<This block of commented-out lines of code should be removed.(šæÎçûÿÿÿÿ
+gsquid:CommentedOutCodeLineA"<This block of commented-out lines of code should be removed.(çèù·úÿÿÿÿ
+gsquid:CommentedOutCodeLineC"<This block of commented-out lines of code should be removed.(¼«‹¨þÿÿÿÿ
+O
+squid:S106"9Replace this use of System.out or System.err by a logger.(ÜÝÒ½
+T
+squid:S1060"9Replace this use of System.out or System.err by a logger.(ÜÕû¡ýÿÿÿÿ
+T
+squid:S1065"9Replace this use of System.out or System.err by a logger.(ý²µíøÿÿÿÿ
+T
+squid:S106S"9Replace this use of System.out or System.err by a logger.(”ºÚÀøÿÿÿÿ
+T
+squid:S106n"9Replace this use of System.out or System.err by a logger.(©þêÜúÿÿÿÿ
+Asquid:S1481E"*Remove this unused "cells" local variable.(ý¨„‚
+isquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(¸þÑô
+Psquid:S1854E"9Remove this useless assignment to local variable "cells".(ý¨„‚
+rsquid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(éóöê
+rsquid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(õÅÆ¨
+?squid:S1148W"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ

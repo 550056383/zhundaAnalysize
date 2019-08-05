@@ -1,6 +1,7 @@
 server:
   port: 8089
 
+
 spring:
   application:
     name: zhunda-Analysis
@@ -11,7 +12,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://47.101.215.117:3306/demo
+    url: jdbc:mysql://47.101.215.117:3306/demo?useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
 
 savefile:
@@ -23,4 +24,3 @@ savefile:
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   config-location: classpath:mybatis/mybatis-config.xml
-debug: true

@@ -6,6 +6,7 @@ import tk.mybatis.mapper.common.Mapper;
 import zd.zdanalysis.pojo.ProjectInfo;
 import zd.zdcommons.pojo.Majors;
 import zd.zdcommons.pojo.Vice;
+import zd.zdcommons.pojo.Write;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,9 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     //插入数据到临时表
     void insetData(String table, List<String> list);
 
+    //批量插入数据
+    void insertForeach(String table, @Param("lists") List<List<String>> lists);
+
       int selectResults(@Param("tables") String table);
 
     //关联设置项表查询
@@ -41,5 +45,5 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
 
     //条件设置
 /*    List<Map<String, Object>> selectByWriteRules( Map<String,Object> map);*/
-    List<Map<String, Object>> selectByWriteRules(@Param("majorsList") List<Majors> mapList,@Param("viceList") List<Vice> viceList,@Param("num") int num);
+    List<Map<String, Object>> selectByWriteRules(String s0, String s1, String s2, String s3, @Param("writeList") List<Write> writeList, @Param("tags") int tags, @Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList, @Param("num") int num, @Param("tag") int tag);
 }

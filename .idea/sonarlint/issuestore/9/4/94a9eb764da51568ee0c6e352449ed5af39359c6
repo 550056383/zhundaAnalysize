@@ -1,0 +1,89 @@
+
+Ksquid:EmptyStatementUsageCheck["Remove this empty statement.(ôŸìúÿÿÿÿ
+Lsquid:EmptyStatementUsageCheckˆ"Remove this empty statement.(ôŸìúÿÿÿÿ
+Lsquid:EmptyStatementUsageCheck›"Remove this empty statement.(ôŸìúÿÿÿÿ
+Lsquid:EmptyStatementUsageCheckæ"Remove this empty statement.(ôŸìúÿÿÿÿ
+Lsquid:EmptyStatementUsageCheckï"Remove this empty statement.(ôŸìúÿÿÿÿ
+jsquid:ModifiersOrderCheckR"EReorder the modifiers to comply with the Java Language Specification.(éóöê
+jsquid:ModifiersOrderCheckS"EReorder the modifiers to comply with the Java Language Specification.(õÅÆ¨
+Tsquid:S1197J"8Move the array designator from the variable to the type.(Ø„¤–ıÿÿÿÿ
+Psquid:S1197Ô"8Move the array designator from the variable to the type.(ñê¥Û
+`squid:S1192÷"HDefine a constant instead of duplicating this literal "3D-MIMO" 7 times.(ıŸ€©
+gsquid:S1192y"KDefine a constant instead of duplicating this literal "yyyy/MM/dd" 3 times.(¦–ùÿÿÿÿ
+Gsquid:S1066‹"/Merge this if statement with the enclosing one.(¦®÷³
+Gsquid:S1066 "/Merge this if statement with the enclosing one.(¦®÷³
+Lsquid:S1066Ÿ"/Merge this if statement with the enclosing one.(ôÊ¨šúÿÿÿÿ
+Lsquid:S1066º"/Merge this if statement with the enclosing one.(ôÊ¨šúÿÿÿÿ
+Asquid:S1068È")Remove this unused "field" private field.(Æöô
+lsquid:S1450È"TRemove the "field" field and declare it as a local variable in the relevant methods.(Æöô
+3squid:S3626É"Remove this redundant jump.(ÉŠ©ƒ
+gsquid:S2095±"JUse try-with-resources or close this "HSSFWorkbook" in a "finally" clause.(ĞÅ±Ìøÿÿÿÿ
+p
+squid:S135€"YReduce the total number of break and continue statements in this loop to use at most one.(ó™Ù®
+bsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(şœÚS
+hsquid:CommentedOutCodeLine›"<This block of commented-out lines of code should be removed.(›İ“Íÿÿÿÿÿ
+hsquid:CommentedOutCodeLine§"<This block of commented-out lines of code should be removed.(›İ“Íÿÿÿÿÿ
+bsquid:CommentedOutCodeLine˜"<This block of commented-out lines of code should be removed.(®¹ís
+hsquid:CommentedOutCodeLine "<This block of commented-out lines of code should be removed.(‡ùçöûÿÿÿÿ
+csquid:CommentedOutCodeLineØ"<This block of commented-out lines of code should be removed.(ë¸œŞ
+csquid:CommentedOutCodeLineí"<This block of commented-out lines of code should be removed.(äÀË
+hsquid:CommentedOutCodeLineÑ"<This block of commented-out lines of code should be removed.(îÉºÜûÿÿÿÿ
+…squid:S1319ı"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(ø±·Í
+T
+squid:S106n"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ
+P
+squid:S106¯"9Replace this use of System.out or System.err by a logger.(¼ôèÄ
+P
+squid:S106â"9Replace this use of System.out or System.err by a logger.(…Ñ¥¯
+P
+squid:S106ã"9Replace this use of System.out or System.err by a logger.(²ÚâÈ
+P
+squid:S106æ"9Replace this use of System.out or System.err by a logger.(À‘òÖ
+U
+squid:S106ø"9Replace this use of System.out or System.err by a logger.(€õµüÿÿÿÿ
+U
+squid:S106€"9Replace this use of System.out or System.err by a logger.(ªÓ¼áşÿÿÿÿ
+P
+squid:S106‚"9Replace this use of System.out or System.err by a logger.(Ğîô©
+U
+squid:S106"9Replace this use of System.out or System.err by a logger.(é®üôşÿÿÿÿ
+P
+squid:S106œ"9Replace this use of System.out or System.err by a logger.(Ë¹€İ
+U
+squid:S106"9Replace this use of System.out or System.err by a logger.(ì¡£ÿÿÿÿÿ
+P
+squid:S106İ"9Replace this use of System.out or System.err by a logger.(‰¨Òğ
+U
+squid:S106Ö"9Replace this use of System.out or System.err by a logger.(á€ôøûÿÿÿÿ
+P
+squid:S106×"9Replace this use of System.out or System.err by a logger.(…µÖÍ
+Jsquid:S2110v"3"-1" is not a valid value for setting "dayOfMonth".(¢Ç‘Ì
+Bsquid:S1481"&Remove this unused "f" local variable.(íš™·ùÿÿÿÿ
+Gsquid:S1481µ"*Remove this unused "total" local variable.(óË üÿÿÿÿ
+Dsquid:S1481á"'Remove this unused "ne" local variable.(µÅ“Àşÿÿÿÿ
+osquid:S3776Å"RRefactor this method to reduce its Cognitive Complexity from 53 to the 15 allowed.(óà›şÿÿÿÿ
+jsquid:S3776ı"RRefactor this method to reduce its Cognitive Complexity from 43 to the 15 allowed.(ø±·Í
+osquid:S3776Ñ"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.( ÌÜíûÿÿÿÿ
+lsquid:S00100Š"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(™«’ıüÿÿÿÿ
+gsquid:S00100•"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Áµ‹›
+lsquid:S00100¡"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(”¨ÏŞıÿÿÿÿ
+_squid:S2259†"BA "NullPointerException" could be thrown; "date" is nullable here.(ÃïÅüÿÿÿÿ
+^squid:S2259•"AA "NullPointerException" could be thrown; "bis" is nullable here.(ö˜Øüÿÿÿÿ
+Qsquid:S1854"5Remove this useless assignment to local variable "f".(íš™·ùÿÿÿÿ
+Vsquid:S1854»"9Remove this useless assignment to local variable "total".(ÕúİÈúÿÿÿÿ
+Qsquid:S1854¾"9Remove this useless assignment to local variable "total".(œ²·
+[squid:S1854‡">Remove this useless assignment to local variable "errorCount".(ˆÂĞÿÿÿÿÿ
+[squid:S1854‰">Remove this useless assignment to local variable "errorCount".(Ä ôûúÿÿÿÿ
+Vsquid:S1854‹">Remove this useless assignment to local variable "errorCount".(ŠÅ¥¿
+rsquid:S00115R"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(éóöê
+rsquid:S00115S"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(õÅÆ¨
+jsquid:S00117û"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì«Òã
+osquid:S00117è"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ôÛ°äøÿÿÿÿ
+@squid:S1148œ"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148¨"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148é"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148’"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148˜"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148ã"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148ì"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Msquid:S1143û"5Remove this return statement from this finally block.(”íÅÍ

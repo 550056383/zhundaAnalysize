@@ -119,10 +119,11 @@ public class StringFormat {
         return list;
     }
 
+    //对表名和字段进行处理
     public  static List<String[]> stringToArr(String s){
         List<String[]> newlist=new ArrayList<String[]>();
         String[] split = s.split(",");
-            split[0] = StringFormat.uuid(split[0].trim());
+        split[0] = StringFormat.uuid(split[0].trim());
         split[1] = PinYinUtils.hanziToPinyin(split[1], "");
         if (split.length != 3) {
             if (split[3].trim().equals("null") || split[3].trim().equals("")) {
@@ -132,7 +133,26 @@ public class StringFormat {
             }
             split[4] = PinYinUtils.hanziToPinyin(split[4], "");
         }
-            newlist.add(split);
+        newlist.add(split);
+
+        return newlist;
+    }
+
+    //对表名和字段不进行处理
+    public static List<String[]> stringToArrs(String s) {
+        List<String[]> newlist = new ArrayList<String[]>();
+        String[] split = s.split(",");
+        split[0] = split[0].trim();
+        split[1] = split[1];
+        if (split.length != 3) {
+            if (split[3].trim().equals("null") || split[3].trim().equals("")) {
+                split[3] = null;
+            } else {
+                split[3] = split[3].trim();
+            }
+            split[4] = split[4];
+        }
+        newlist.add(split);
 
         return newlist;
     }

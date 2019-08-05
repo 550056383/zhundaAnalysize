@@ -241,7 +241,8 @@ public class Utils {
     }
     //判断系统返回存储
     public static String getOS(){
-        String save="F:\\test\\";
+        String save = "C:\\Users\\本非凡\\Desktop\\";
+        System.out.println(save);
         String os = System.getProperty("os.name");
         if(!os.toLowerCase().startsWith("win")){
             save="/opt/zhundaSave/";

@@ -8,6 +8,8 @@ import zd.zdanalysis.service.DataService;
 import zd.zdanalysis.service.EnginnerService;
 import zd.zdcommons.pojo.ExcelTable;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -32,12 +34,13 @@ public   ResponseEntity<List<ExcelTable>> getTest(@RequestParam("files") Multipa
     return ResponseEntity.ok(enginnerService.getMove(files, reads));
 }
     @PostMapping("/cond")
-    public ResponseEntity<String> getSetup(@RequestBody Map<String,Object> map){
+    public ResponseEntity<List<Map<String, Object>>> getSetup(@RequestBody Map<String, Object> map, HttpServletResponse response, HttpServletRequest request) {
         System.out.println(map.size());
         for (Map.Entry<String,Object> entry:map.entrySet()){
             System.out.println(entry.getKey()+"---------"+entry.getValue());
         }
-        enginnerService.getSetup(map);
-        return null;
+        List<Map<String, Object>> mapList = enginnerService.getSetup(map, response, request);
+
+        return ResponseEntity.ok(mapList);
     }
 }

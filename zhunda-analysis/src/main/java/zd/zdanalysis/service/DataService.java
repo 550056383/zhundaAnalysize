@@ -85,27 +85,10 @@ public class DataService {
         return null;
     }
 
-    //输出表字段
-    public List<Write> selectTableCell(Map<String, Object> maps) {
-        List<Write> writeList = new ArrayList<>();
-        String tableCell = (String) maps.get("tableCell").toString();
-        //字符串转数组
-        List<String[]> list = StringFormat.getString2(tableCell);
 
-        for (String[] arr : list) {
-            String s1 = StringFormat.uuid(arr[0]);
-            String s2 = PinYinUtils.hanziToPinyin(arr[1], "");
-            // List<String> list1 = projectInfoMapper.selectTableCell(str0, s1);
-            Write write = new Write();
-            write.setTable(s1);
-            write.setField(s2);
-            writeList.add(write);
-        }
-        return writeList;
-    }
 
     //条件设置
-    List<String>    selectByWriteRules(Map<String, Object> maps) {
+    List<Map<String, Object>> selectByWriteRules(Map<String, Object> maps) {
         //关联设置的条件
         String tableAssocia = (String) maps.get("tableAssocia").toString();
         List<String[]> lists = StringFormat.getString1(tableAssocia);
@@ -116,6 +99,7 @@ public class DataService {
         String s1 = PinYinUtils.hanziToPinyin(arrs[1], "");
         String s3 = PinYinUtils.hanziToPinyin(arrs[3], "");
 
+        //获取输出表字段
         List<Write> writeList = selectTableCell(maps);
 
 
@@ -217,10 +201,78 @@ public class DataService {
 
         List<Map<String, Object>> resultlist = projectInfoMapper.selectByWriteRules(str0, s1, str2, s3, writeList, tags, majorsList, viceList, num, tag);
         System.out.println("结果有:" + resultlist.size());
-        for (Map<String, Object> map1 :resultlist ) {
+      /*  for (Map<String, Object> map1 :resultlist ) {
             System.out.println(map1);
+        }*/
+
+        return resultlist;
+    }
+
+    //输出表字段,表名,字段经过处理
+    public List<Write> selectTableCell(Map<String, Object> maps) {
+        List<Write> writeList = new ArrayList<>();
+        String tableCell = (String) maps.get("tableCell").toString();
+        //字符串转数组
+        List<String[]> list = StringFormat.getString2(tableCell);
+
+        for (String[] arr : list) {
+            String s1 = StringFormat.uuid(arr[0]);
+            String s2 = PinYinUtils.hanziToPinyin(arr[1], "");
+            // List<String> list1 = projectInfoMapper.selectTableCell(str0, s1);
+            Write write = new Write();
+            write.setTable(s1);
+            write.setField(s2);
+            writeList.add(write);
+        }
+        return writeList;
+    }
+
+    //输出表字段,表名,字段不经过处理
+    public List<Write> selectTableCells(Map<String, Object> maps) {
+        List<Write> writeList = new ArrayList<>();
+        String tableCell = (String) maps.get("tableCell").toString();
+        //字符串转数组
+        List<String[]> list = StringFormat.getString2(tableCell);
+
+        for (String[] arr : list) {
+            String s1 = arr[0];
+            String s2 = arr[1];
+            Write write = new Write();
+            write.setTable(s1);
+            write.setField(s2);
+            writeList.add(write);
+        }
+        return writeList;
+    }
+
+    //条件设置对表名和字段不进行处理
+    public List<Majors> getWriteRules(String[] arr1) {
+        List<String[]> newlist = new ArrayList<>();
+        List<Majors> majorsList = new ArrayList<>();
+        if (!arr1[0].isEmpty()) {
+            for (String s : arr1) {
+                List<String[]> list1 = StringFormat.stringToArrs(s);
+                newlist = list1;
+            }
+
+            for (String[] arr : newlist) {
+                Majors majors = new Majors();
+                majors.setTable1(arr[0]);
+                majors.setField1(arr[1]);
+                majors.setConditions(arr[2]);
+                if (arr.length != 3) {
+                    majors.setTable2(arr[3]);
+                    majors.setField2(arr[4]);
+                }
+                if (arr.length == 6) {
+                    majors.setValue(arr[5]);
+                }
+                System.out.println(majors);
+                majorsList.add(majors);
+
+            }
         }
 
-        return null;
+        return majorsList;
     }
 }

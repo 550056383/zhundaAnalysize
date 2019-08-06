@@ -7,12 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import zd.zdanalysis.service.AnalysisService;
 import zd.zdcommons.pojo.Pageto;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +35,7 @@ public class AnalysisController {
         return ResponseEntity.ok(analysisService.getTitle(file,sheetName,index));
     };
     @GetMapping("/download")
-    public ResponseEntity<String> downloadFile( HttpServletResponse response,@RequestParam("uid") String uid) {
+    public ResponseEntity<String> downloadFile(HttpServletResponse response, @RequestParam("uid") String uid) {
         return ResponseEntity.ok(analysisService.getDownload(response,uid));
     }
 }

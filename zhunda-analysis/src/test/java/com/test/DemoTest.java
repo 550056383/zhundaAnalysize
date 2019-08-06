@@ -1,8 +1,9 @@
 package com.test;
 
 import org.junit.Test;
+import org.springframework.util.ResourceUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 
 /**
  * 类描述 :
@@ -14,9 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 public class DemoTest {
 
     @Test
-    public void test(HttpServletRequest request) {
-        String contextPath = request.getContextPath();
-        System.out.println(contextPath);
+    public void test() throws Exception {
+        File file = ResourceUtils.getFile("classpath:static");
+        System.out.println(file);
+
     }
+
 
 }

@@ -35,13 +35,15 @@ public class AnalysisService {
 
     public String getDownload(HttpServletResponse response, String uid) {
         Utils utils = new Utils();
-        String fileName = uid + ".xls";
+        // String fileName = uid + ".xls";
+        String fileName = "分析结果表" + ".xlsx";
         try {
             OutputStream outputStream = response.getOutputStream();
-            Boolean down = utils.getDownload(outputStream, fileName);
+            Boolean down = utils.getDownload(outputStream, fileName, response);
             if (down) {
                 response.setContentType("application/force-download");// 设置强制下载不打开
                 response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);// 设置文件名
+                response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 return "文件下载完成";
             }
         } catch (IOException e) {

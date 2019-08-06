@@ -75,7 +75,7 @@ public class EnginnerService {
                    List<List<String>> resource = s.getResource();
                    dataService.insetData(uuid, resource);
 
-                   List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
+                   // List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
                         //写入Excel
                        /* WriteNewExcel writeNewExcel = new WriteNewExcel();
                         WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");*/
@@ -89,8 +89,6 @@ public class EnginnerService {
 
     public List<Map<String, Object>> getSetup(Map<String, Object> map, HttpServletResponse response, HttpServletRequest request) {
         Object o = null;
-        //关联设置项表查询
-         //List<Map<String, Object>> mapList = dataService.selectTables(map);
 
         //条件设置
         List<Map<String, Object>> mapList = dataService.selectByWriteRules(map);

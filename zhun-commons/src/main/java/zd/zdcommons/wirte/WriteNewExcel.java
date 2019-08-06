@@ -8,7 +8,10 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +69,7 @@ public class WriteNewExcel {
             //创建存储位置
             String save = getOS();
             //创建输出流
-            FileOutputStream outputStream= new FileOutputStream(save+fileName+".xlsx");
+            FileOutputStream outputStream = new FileOutputStream(save + "\\" + fileName + ".xlsx");
             //工作簿写入
             workbook.write(outputStream);
             //关闭流
@@ -76,11 +79,17 @@ public class WriteNewExcel {
         }
     }
     public static String getOS(){
-        String save="C:\\Users\\本非凡\\Desktop\\";
-        String os = System.getProperty("os.name");
-        if(!os.toLowerCase().startsWith("win")){
-            save="/opt/zhundaSave/";
-            System.out.println("There is Linux");
+        String save = "";
+        try {
+            File files = ResourceUtils.getFile("classpath:static");
+            save = files.toString();
+            String os = System.getProperty("os.name");
+            if (!os.toLowerCase().startsWith("win")) {
+                save = "/opt/zhundaSave/";
+                System.out.println("There is Linux");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         return save;
     }

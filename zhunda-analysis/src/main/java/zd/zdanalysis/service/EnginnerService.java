@@ -15,6 +15,8 @@ import zd.zdcommons.wirte.WriteNewExcel;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,7 +103,6 @@ public class EnginnerService {
         String[] split = list.get(2)[0].split(",");
         String zidingyi = split[0];
         List<Majors> writeRules1 = dataService.getWriteRules(arrs);
-        System.out.println("writeRules1.size()" + writeRules1.size());
         for (Majors majors : writeRules1) {
             String s = majors.getTable1();
             String s1 = majors.getField1();
@@ -109,7 +110,7 @@ public class EnginnerService {
             String s3 = majors.getTable2();
             String s4 = majors.getField2();
             String s5 = majors.getValue();
-            if (s3.equals("null") && s4.equals("null")) {
+            if (s3 == null) {
                 String string = s + "表的" + s1 + s2 + s5;
                 o = (Object) string;
             } else {
@@ -120,7 +121,6 @@ public class EnginnerService {
         Map<String, Object> objectMap = new HashMap<>();
         for (Map<String, Object> map1 : mapList) {
             map1.put(zidingyi, o);
-            System.out.println(map1);
         }
 
 
@@ -141,5 +141,27 @@ public class EnginnerService {
         WriteNewExcel.writeExcecl(arr, mapList, "分析结果表", "");
         // getDownload( response);
         return null;
+    }
+
+    //条件分析得到数据提供下载
+    public String getDownloads(HttpServletResponse response, String uid) {
+        Utils utils = new Utils();
+        // String fileName = uid + ".xls";
+        //暂时将表名固定,条件分析得到的数据生成表的表名
+        String fileName = "分析结果表" + ".xlsx";
+        try {
+            OutputStream outputStream = response.getOutputStream();
+            Boolean down = utils.getDownload(outputStream, fileName, response);
+            if (down) {
+                response.setContentType("application/force-download");// 设置强制下载不打开
+                response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);// 设置文件名
+                response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                return "文件下载完成";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "文件下载失败";
     }
     }

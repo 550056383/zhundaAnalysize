@@ -9,7 +9,7 @@
     </select>
     <!--临时表存在则删除-->
     <delete id="deleteTableByName" parameterType="string">
-      drop temporary table #{deletename}
+      DROP TEMPORARY TABLE IF EXISTS ${name}
     </delete>
     <update id="createTables" parameterType="string">
         create TEMPORARY table  ${param1} (

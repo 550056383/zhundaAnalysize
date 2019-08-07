@@ -27,7 +27,7 @@ public class DataService {
     private SqlSessionTemplate sqlSessionTemplate;
     //动态创建临时表
    public  void createTables(String table,String[] strTitle){
-           //projectInfoMapper.deleteTableByName(table);
+       projectInfoMapper.deleteTableByName(table);
            projectInfoMapper.createTables(table, strTitle);
 
 

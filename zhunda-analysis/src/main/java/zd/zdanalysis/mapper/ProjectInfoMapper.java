@@ -23,7 +23,7 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     String selectTableByName(@Param("tablename") String name);
 
     //删除临时表
-    String deleteTableByName(@Param("deletename") String name);
+    void deleteTableByName(@Param("name") String name);
     //动态创建临时表
     void createTables(String table, String[] cloums);
 

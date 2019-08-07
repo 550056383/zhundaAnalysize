@@ -35,15 +35,13 @@ public class AnalysisService {
 
     public String getDownload(HttpServletResponse response, String uid) {
         Utils utils = new Utils();
-        // String fileName = uid + ".xls";
-        String fileName = "分析结果表" + ".xlsx";
+        String fileName = uid + ".xls";
         try {
             OutputStream outputStream = response.getOutputStream();
-            Boolean down = utils.getDownload(outputStream, fileName, response);
+            Boolean down = utils.getDownload(outputStream, fileName);
             if (down) {
                 response.setContentType("application/force-download");// 设置强制下载不打开
                 response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);// 设置文件名
-                response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 return "文件下载完成";
             }
         } catch (IOException e) {
@@ -52,6 +50,7 @@ public class AnalysisService {
 
         return "文件下载失败";
     }
+
 
     public String[] getTitle(MultipartFile file,String sheetName,int cout){
         Utils utils = new Utils();

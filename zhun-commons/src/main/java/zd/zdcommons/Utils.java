@@ -2,9 +2,6 @@ package zd.zdcommons;
 
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -12,6 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 import zd.zdcommons.abstractFactory.AnalysisAbstractFactory;
 import zd.zdcommons.analysis.ClockAnalysis;
@@ -24,6 +22,7 @@ import zd.zdcommons.serviceImp.AnalysisImp;
 import zd.zdcommons.serviceImp.ExcelDrivenImp;
 import zd.zdcommons.serviceImp.ReadExcelImp;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -244,8 +243,7 @@ public class Utils {
     }
     //判断系统返回存储
     public static String getOS(){
-        String save = "C:\\Users\\本非凡\\Desktop\\";
-        System.out.println(save);
+        String save = "F:\\test\\";
         String os = System.getProperty("os.name");
         if(!os.toLowerCase().startsWith("win")){
             save="/opt/zhundaSave/";
@@ -253,6 +251,7 @@ public class Utils {
         }
         return save;
     }
+
     //下载文件
     public static Boolean getDownload(OutputStream os,String fileName){
         String save = getOS();
@@ -285,6 +284,62 @@ public class Utils {
                 }
             }
         };
+        System.out.println("导出文档不存在");
+        return false;
+    }
+
+    //判断系统返回存储,针对依据条件分析的到的数据生成Excel表的位置
+    public static String getOS2() {
+        String save = "";
+        try {
+            File files = ResourceUtils.getFile("classpath:static");
+            save = files.toString();
+            String os = System.getProperty("os.name");
+            if (!os.toLowerCase().startsWith("win")) {
+                save = "/opt/zhundaSave/";
+                System.out.println("There is Linux");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return save;
+    }
+
+    //下载文件,条件分析得到数据提供下载
+    public static Boolean getDownload(OutputStream os, String fileName, HttpServletResponse response) {
+        String save = getOS2();
+        File file = new File(save + "\\" + fileName);
+        System.out.println(file);
+
+        if (file.exists()) {
+            System.out.println("文件存在");
+            //方大缓存读取
+            byte[] buffer = new byte[1000000];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                response.setHeader("Content-Length", String.valueOf(bis.available()));
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    os.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+                System.out.println("导出读取完成");
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    bis.close();
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        ;
         System.out.println("导出文档不存在");
         return false;
     }

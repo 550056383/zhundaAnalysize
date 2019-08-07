@@ -43,4 +43,9 @@ public   ResponseEntity<List<ExcelTable>> getTest(@RequestParam("files") Multipa
 
         return ResponseEntity.ok(mapList);
     }
+
+    @GetMapping("/download")
+    public ResponseEntity<String> downloadFile(HttpServletResponse response, @RequestParam("uid") String uid) {
+        return ResponseEntity.ok(enginnerService.getDownloads(response, uid));
+    }
 }

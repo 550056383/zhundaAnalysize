@@ -86,6 +86,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     private Boolean isEndFlag=false;
     private Boolean flag=true;
     private Boolean firstFag=false;
+    private Boolean isStartFlag = false;
 
     private int sheetIndex=0;
     private String sheetName="";
@@ -139,16 +140,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
         if(qName.equals("c")){
             if(preRef==null){
                 preRef=attributes.getValue("r");
-                if(!getStr(preRef).equals("A")){
-                    firstFag=true;
-                    String tempRef="A"+getInt(preRef);
-                    int len = countNullCell(preRef , tempRef);
-                    for (int i = 0; i < len+1; i++) {
-                        String value=rowBefore.get(rowTitle.get(curColumn+""));
-                        rowContents.put(rowTitle.get(curColumn+""),value);
-                        curColumn++;
-                    }
-                }
+                isStartFlag = true;
             }else{
                 //拿取上次的值
                 if(isPreFlag){
@@ -214,15 +206,24 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             isPreFlag=true;
             //更新列
             curColumn++;
-        }
-        else if (qName.equals("v")){
+        } else if (qName.equals("v")) {
+            if (ref.contains("A")) {
+                isStartFlag = false;
+            }
             String value = this.getDataValue(lastContents.trim(), "");
             if(value.contains("\"")){
                 value=value.substring(1,value.length()-1);
             }
             //补全中间
             if(!ref.equals(preRef)){
-                int len = countNullCell(ref , preRef);
+                int len = 0;
+                if (isStartFlag) {
+                    len = countNullCell(ref, "A") + 1;
+                    isStartFlag = false;
+                } else {
+                    len = countNullCell(ref, preRef);
+                }
+                //是否是标题
                 for (int i = 0; i < (firstFag?(len+1):len); i++) {
                     rowContents.put(rowTitle.get(curColumn+""),"");
                     curColumn++;

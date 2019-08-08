@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dc7db842-9672-4200-8422-375f0dd39a50" name="Default Changelist" comment="Default Changelist">
-      <change afterPath="$PROJECT_DIR$/zhunda-analysis/src/test/java/com/test/JavaCodeGen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="dc7db842-9672-4200-8422-375f0dd39a50" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/analysis/CompleteV2.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/analysis/CompleteV2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/analysis/LogicV2.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/analysis/LogicV2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/read/ReadIntegrityExcelV2.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/read/ReadIntegrityExcelV2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/ExceclResouce.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/ExceclResouce.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/TableDealWith.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/TableDealWith.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/web/AnalysisController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/web/AnalysisController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/excel/ExcelXlsxAndDefaultHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/excel/ExcelXlsxAndDefaultHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/DataService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/DataService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mybatis-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mybatis-config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhunda-analysis/src/test/java/com/test/DynamicBean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/zhunda-analysis/src/test/java/com/test/DynamicPOJO.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/zhun-item/zhun-item-service/target/" />
     <ignored path="$PROJECT_DIR$/zhun-item/target/" />
@@ -50,10 +41,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/read/ReadIntegrityExcelV2.java">
+        <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/mapper/ProjectInfoMapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
+            <state relative-caret-position="108">
+              <caret line="35" column="9" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -62,45 +53,96 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/analysis/CompleteV2.java">
+        <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mybatis-config.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1182">
-              <caret line="97" column="55" selection-start-line="97" selection-start-column="55" selection-end-line="97" selection-end-column="55" />
+            <state relative-caret-position="264">
+              <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/Utils.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mapper/ProjectInfoMapper.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="159" column="14" selection-start-line="159" selection-start-column="14" selection-end-line="159" selection-end-column="14" />
+            <state relative-caret-position="220">
+              <caret line="16" column="25" lean-forward="true" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
               <folding>
-                <element signature="e#7864#7880#0" expanded="true" />
-                <element signature="e#11974#11982#0" expanded="true" />
-                <element signature="e#17019#17054#0" expanded="true" />
-                <element signature="e#18661#18676#0" expanded="true" />
-                <element signature="e#19294#19313#0" expanded="true" />
+                <element signature="e#3942#3946#0" expanded="true" />
+                <element signature="e#4110#4114#0" expanded="true" />
+                <element signature="e#4416#4420#0" expanded="true" />
+                <element signature="e#5362#5366#0" expanded="true" />
+                <element signature="e#5530#5534#0" expanded="true" />
+                <element signature="e#5636#5640#0" expanded="true" />
+                <element signature="e#5840#5844#0" expanded="true" />
+                <element signature="e#5946#5950#0" expanded="true" />
+                <element signature="e#6135#6139#0" expanded="true" />
+                <element signature="e#6304#6308#0" expanded="true" />
+                <element signature="e#6411#6415#0" expanded="true" />
+                <element signature="e#6615#6619#0" expanded="true" />
+                <element signature="e#6722#6726#0" expanded="true" />
+                <element signature="e#6912#6916#0" expanded="true" />
+                <element signature="e#7081#7085#0" expanded="true" />
+                <element signature="e#7188#7192#0" expanded="true" />
+                <element signature="e#7393#7397#0" expanded="true" />
+                <element signature="e#7500#7504#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/analysis/LogicV2.java">
+        <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/DataService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="127">
-              <caret line="214" selection-start-line="214" selection-end-line="214" />
+            <state relative-caret-position="109">
+              <caret line="100" selection-start-line="100" selection-end-line="100" />
               <folding>
-                <element signature="e#5693#5784#1" />
-                <element signature="e#5934#6025#1" />
-                <element signature="e#6177#6268#1" />
-                <element signature="e#6416#6507#1" />
-                <element signature="method#addMeslist#0;class#LogicV2#0" />
-                <element signature="method#get5GM#0;class#LogicV2#0" />
-                <element signature="method#get5GR#0;class#LogicV2#0" />
-                <element signature="method#get3DMIMO#0;class#LogicV2#0" />
-                <element signature="method#get1800Anchor#0;class#LogicV2#0" />
+                <element signature="method#selectTables#0;class#DataService#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/excel/ExcelXlsxAndDefaultHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2856">
+              <caret line="227" column="23" selection-start-line="227" selection-start-column="23" selection-end-line="227" selection-end-column="23" />
+              <folding>
+                <element signature="e#6501#7194#1" />
+                <element signature="e#8225#10067#1" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/excel/ExcelXlsxAndDefaultHandlerV2.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="269">
+              <caret line="234" column="17" lean-forward="true" selection-start-line="223" selection-start-column="16" selection-end-line="234" selection-end-column="17" />
+              <folding>
+                <element signature="method#process#1;class#ExcelXlsxAndDefaultHandlerV2#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/TableDealWith.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="220">
+              <caret line="23" column="27" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/ExceclResouce.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="154">
+              <caret line="17" column="52" selection-start-line="17" selection-start-column="48" selection-end-line="17" selection-end-column="52" />
+              <folding>
+                <element signature="e#389#401#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -109,8 +151,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/EnginnerService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="78" selection-start-line="78" selection-end-line="78" />
+            <state relative-caret-position="134">
+              <caret line="89" column="31" selection-start-line="89" selection-start-column="31" selection-end-line="89" selection-end-column="31" />
               <folding>
                 <element signature="e#1362#1372#0" expanded="true" />
                 <element signature="e#1469#1481#0" expanded="true" />
@@ -120,19 +162,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/text/DateFormat.java">
+        <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/resources/application.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="365" selection-start-line="365" selection-end-line="365" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/pojo/ResultMessage.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="12" column="19" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
+            <state relative-caret-position="164">
+              <caret line="25" column="17" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -154,6 +187,8 @@
       <find>68</find>
       <find>listRsourcecs</find>
       <find>complete</find>
+      <find>System.out.println</find>
+      <find>isStartFlag</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -168,11 +203,7 @@
         <option value="$PROJECT_DIR$/zhunda-analysis/src/main/resources/application.yml" />
         <option value="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/pojo/Write.java" />
         <option value="$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/mapper/ProjectInfoMapper.java" />
-        <option value="$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mapper/ProjectInfoMapper.xml" />
-        <option value="$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/DataService.java" />
         <option value="$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/EnginnerService.java" />
-        <option value="$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mybatis-config.xml" />
-        <option value="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/ExceclResouce.java" />
         <option value="$PROJECT_DIR$/zhunda-analysis/src/test/java/com/test/DynamicBean.java" />
         <option value="$PROJECT_DIR$/zhunda-analysis/src/test/java/com/test/DynamicPOJO.java" />
         <option value="$PROJECT_DIR$/zhunda-analysis/src/test/java/com/test/IJavaGen.java" />
@@ -184,6 +215,11 @@
         <option value="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/analysis/CompleteV2.java" />
         <option value="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/analysis/LogicV2.java" />
         <option value="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/Utils.java" />
+        <option value="$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mybatis-config.xml" />
+        <option value="$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mapper/ProjectInfoMapper.xml" />
+        <option value="$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/DataService.java" />
+        <option value="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/ExceclResouce.java" />
+        <option value="$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/excel/ExcelXlsxAndDefaultHandler.java" />
       </list>
     </option>
   </component>
@@ -506,13 +542,119 @@
               <item name="zhunda" type="462c0819:PsiDirectoryNode" />
               <item name="zhun-commons" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="zdcommons" type="462c0819:PsiDirectoryNode" />
+              <item name="excel" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
               <item name="zhunda" type="462c0819:PsiDirectoryNode" />
               <item name="zhun-commons" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="zdcommons" type="462c0819:PsiDirectoryNode" />
+              <item name="resouce" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhun-commons" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="zdanalysis" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="zdanalysis" type="462c0819:PsiDirectoryNode" />
+              <item name="mapper" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="zdanalysis" type="462c0819:PsiDirectoryNode" />
+              <item name="pojo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="zdanalysis" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="mybatis" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zhunda" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zhunda" type="462c0819:PsiDirectoryNode" />
+              <item name="zhunda-analysis" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="mybatis" type="462c0819:PsiDirectoryNode" />
+              <item name="mapper" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -530,7 +672,7 @@
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1565232170330" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1565254713272" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../zhunda-vue" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
@@ -607,7 +749,7 @@
       <workItem from="1565106084515" duration="81000" />
       <workItem from="1565147383079" duration="1893000" />
       <workItem from="1565156340987" duration="14340000" />
-      <workItem from="1565224397102" duration="7321000" />
+      <workItem from="1565224397102" duration="19484000" />
     </task>
     <task id="LOCAL-00001" summary="针对单个条件设置,对必填项与选填项以及不同条件进行相应处理,各个条件测试均可进行查询(查询有待进一步处理).">
       <created>1564647844385</created>
@@ -616,11 +758,25 @@
       <option name="project" value="LOCAL" />
       <updated>1564647844385</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="V2调整">
+      <created>1565232212605</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1565232212605</updated>
+    </task>
+    <task id="LOCAL-00003" summary="驱动调整">
+      <created>1565252045755</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1565252045755</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="78280000" />
+    <option name="totallyTimeSpent" value="90443000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -641,21 +797,21 @@
       <window_info id="UI Designer" order="3" />
       <window_info id="Capture Tool" order="4" />
       <window_info id="Favorites" order="5" sideWeight="0.5057143" side_tool="true" weight="0.3158694" />
-      <window_info content_ui="combo" id="Project" order="6" sideWeight="0.4942857" visible="true" weight="0.2677761" />
+      <window_info active="true" content_ui="combo" id="Project" order="6" sideWeight="0.4942857" visible="true" weight="0.26928896" />
       <window_info id="Structure" order="7" sideWeight="0.50233644" side_tool="true" weight="0.302202" />
       <window_info id="设计器" order="8" />
       <window_info anchor="bottom" id="Spring" order="0" weight="0.32786885" />
-      <window_info anchor="bottom" id="Java Enterprise" order="1" weight="0.32786885" />
-      <window_info anchor="bottom" id="Docker" order="2" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.4977307" weight="0.29950082" />
-      <window_info anchor="bottom" id="Terminal" order="4" sideWeight="0.49924356" weight="0.327787" />
+      <window_info anchor="bottom" id="Docker" order="1" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Java Enterprise" order="2" weight="0.32786885" />
+      <window_info anchor="bottom" id="Version Control" order="3" sideWeight="0.4977307" visible="true" weight="0.29836065" />
+      <window_info anchor="bottom" id="Terminal" order="4" sideWeight="0.49924356" weight="0.3262295" />
       <window_info anchor="bottom" id="Database Changes" order="5" />
       <window_info anchor="bottom" id="Event Log" order="6" sideWeight="0.5015129" side_tool="true" weight="0.23278688" />
       <window_info anchor="bottom" id="Messages" order="7" weight="0.30948418" />
       <window_info anchor="bottom" id="Message" order="8" />
       <window_info anchor="bottom" id="Find" order="9" weight="0.3295082" />
-      <window_info active="true" anchor="bottom" id="Run" order="10" sideWeight="0.49848714" visible="true" weight="0.27704918" />
-      <window_info anchor="bottom" id="Debug" order="11" sideWeight="0.49886104" weight="0.39767054" />
+      <window_info anchor="bottom" id="Run" order="10" sideWeight="0.49848714" weight="0.050819673" />
+      <window_info anchor="bottom" id="Debug" order="11" sideWeight="0.49886104" weight="0.3967213" />
       <window_info anchor="bottom" id="Cvs" order="12" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="13" weight="0.4" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="14" sideWeight="0.49865046" weight="0.32805756" />
@@ -665,13 +821,13 @@
       <window_info anchor="bottom" id="MyBatis Log" order="18" weight="0.14244604" />
       <window_info anchor="bottom" id="Tail" order="19" />
       <window_info anchor="bottom" id="TODO" order="20" weight="0.32786885" />
-      <window_info anchor="right" id="Bean Validation" order="0" weight="0.32953683" />
+      <window_info anchor="right" id="Bean Validation" order="0" weight="0.3290469" />
       <window_info anchor="right" id="Palette" order="1" />
-      <window_info anchor="right" id="Database" order="2" weight="0.32953683" />
+      <window_info anchor="right" id="Database" order="2" weight="0.3290469" />
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Palette&#9;" order="5" />
-      <window_info anchor="right" id="Maven" order="6" weight="0.22323462" />
+      <window_info anchor="right" id="Maven" order="6" weight="0.22314675" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="7" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="8" weight="0.24966262" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="9" weight="0.25" />
@@ -766,31 +922,19 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="针对单个条件设置,对必填项与选填项以及不同条件进行相应处理,各个条件测试均可进行查询(查询有待进一步处理)." />
-    <option name="LAST_COMMIT_MESSAGE" value="针对单个条件设置,对必填项与选填项以及不同条件进行相应处理,各个条件测试均可进行查询(查询有待进一步处理)." />
+    <MESSAGE value="V2调整" />
+    <MESSAGE value="驱动调整" />
+    <option name="LAST_COMMIT_MESSAGE" value="驱动调整" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/test/java/com/test/StringPinjieTest.java" />
-    <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/excel/ExcelXlsxAndDefaultHandlerV2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="256" selection-start-line="256" selection-end-line="257" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/excel/ExcelXlsWithHSSFListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
           <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/excel/ExcelXlsxAndDefaultHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2464">
-          <caret line="110" column="41" selection-start-line="110" selection-start-column="41" selection-end-line="110" selection-end-column="41" />
         </state>
       </provider>
     </entry>
@@ -876,13 +1020,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/resources/application.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="13" column="86" selection-start-line="13" selection-start-column="86" selection-end-line="13" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/pojo/Vice.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="305">
@@ -897,51 +1034,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/mapper/ProjectInfoMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="46" column="118" lean-forward="true" selection-start-line="46" selection-start-column="118" selection-end-line="46" selection-end-column="118" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/pojo/Write.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
           <caret line="14" column="24" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mapper/ProjectInfoMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="16" column="25" lean-forward="true" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/DataService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="60" selection-start-line="60" selection-end-line="60" />
-          <folding>
-            <element signature="method#selectTables#0;class#DataService#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mybatis-config.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="9" column="57" lean-forward="true" selection-start-line="9" selection-start-column="57" selection-end-line="9" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/ExceclResouce.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="39" column="8" selection-start-line="39" selection-start-column="8" selection-end-line="39" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -1005,17 +1101,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/TableDealWith.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1298">
-          <caret line="96" column="16" selection-start-line="96" selection-start-column="16" selection-end-line="96" selection-end-column="16" />
-          <folding>
-            <element signature="e#3395#3396#0" expanded="true" />
-            <element signature="e#3431#3432#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/pojo/Message.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
@@ -1047,28 +1132,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/EnginnerService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="78" selection-start-line="78" selection-end-line="78" />
-          <folding>
-            <element signature="e#1362#1372#0" expanded="true" />
-            <element signature="e#1469#1481#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/analysis/CompleteV2.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1182">
-          <caret line="97" column="55" selection-start-line="97" selection-start-column="55" selection-end-line="97" selection-end-column="55" />
+          <caret line="94" column="55" selection-start-line="94" selection-start-column="55" selection-end-line="94" selection-end-column="55" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/analysis/LogicV2.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="127">
-          <caret line="214" selection-start-line="214" selection-end-line="214" />
+          <caret line="102" selection-start-line="102" selection-end-line="102" />
           <folding>
             <element signature="e#5693#5784#1" />
             <element signature="e#5934#6025#1" />
@@ -1085,14 +1159,127 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="159" column="14" selection-start-line="159" selection-start-column="14" selection-end-line="159" selection-end-column="14" />
+        <state relative-caret-position="-12368">
+          <caret line="247" column="30" selection-start-line="247" selection-start-column="26" selection-end-line="247" selection-end-column="30" />
           <folding>
             <element signature="e#7864#7880#0" expanded="true" />
             <element signature="e#11974#11982#0" expanded="true" />
             <element signature="e#17019#17054#0" expanded="true" />
             <element signature="e#18661#18676#0" expanded="true" />
             <element signature="e#19294#19313#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/resources/application.properties">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/resources/application.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="25" column="17" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mapper/ProjectInfoMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="16" column="25" lean-forward="true" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+          <folding>
+            <element signature="e#3942#3946#0" expanded="true" />
+            <element signature="e#4110#4114#0" expanded="true" />
+            <element signature="e#4416#4420#0" expanded="true" />
+            <element signature="e#5362#5366#0" expanded="true" />
+            <element signature="e#5530#5534#0" expanded="true" />
+            <element signature="e#5636#5640#0" expanded="true" />
+            <element signature="e#5840#5844#0" expanded="true" />
+            <element signature="e#5946#5950#0" expanded="true" />
+            <element signature="e#6135#6139#0" expanded="true" />
+            <element signature="e#6304#6308#0" expanded="true" />
+            <element signature="e#6411#6415#0" expanded="true" />
+            <element signature="e#6615#6619#0" expanded="true" />
+            <element signature="e#6722#6726#0" expanded="true" />
+            <element signature="e#6912#6916#0" expanded="true" />
+            <element signature="e#7081#7085#0" expanded="true" />
+            <element signature="e#7188#7192#0" expanded="true" />
+            <element signature="e#7393#7397#0" expanded="true" />
+            <element signature="e#7500#7504#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/mapper/ProjectInfoMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="35" column="9" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/resources/mybatis/mybatis-config.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/DataService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="100" selection-start-line="100" selection-end-line="100" />
+          <folding>
+            <element signature="method#selectTables#0;class#DataService#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhunda-analysis/src/main/java/zd/zdanalysis/service/EnginnerService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="89" column="31" selection-start-line="89" selection-start-column="31" selection-end-line="89" selection-end-column="31" />
+          <folding>
+            <element signature="e#1362#1372#0" expanded="true" />
+            <element signature="e#1469#1481#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/ExceclResouce.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="17" column="52" selection-start-line="17" selection-start-column="48" selection-end-line="17" selection-end-column="52" />
+          <folding>
+            <element signature="e#389#401#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/resouce/TableDealWith.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="23" column="27" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/excel/ExcelXlsxAndDefaultHandlerV2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="234" column="17" lean-forward="true" selection-start-line="223" selection-start-column="16" selection-end-line="234" selection-end-column="17" />
+          <folding>
+            <element signature="method#process#1;class#ExcelXlsxAndDefaultHandlerV2#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zhun-commons/src/main/java/zd/zdcommons/excel/ExcelXlsxAndDefaultHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2856">
+          <caret line="227" column="23" selection-start-line="227" selection-start-column="23" selection-end-line="227" selection-end-column="23" />
+          <folding>
+            <element signature="e#6501#7194#1" />
+            <element signature="e#8225#10067#1" />
           </folding>
         </state>
       </provider>

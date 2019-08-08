@@ -93,6 +93,7 @@ public class DataService {
                     initial.append('"' + list.get(j) + '"' + ",");
                 }
             }
+            System.out.println("当前数据size" + list.size());
             initial = initial.append("(");
         }
         String string = initial.toString();

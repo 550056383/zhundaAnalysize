@@ -37,9 +37,9 @@ public class ExceclResouce {
 
     public  static void  getResource(Map<String,String> map,String SheetName){
         List<String> recource = new CopyOnWriteArrayList<String>();
-        //System.out.println("size::"+map.size());
+        System.out.println("size::" + map.size());
         for (Map.Entry<String,String> entry:map.entrySet()){
-           // System.out.println("标题："+entry.getKey()+"-值：："+entry.getValue());
+            //  System.out.println("标题："+entry.getKey()+"-值：："+entry.getValue());
             recource.add(entry.getValue());
         }
         //System.out.println("-------------------------------------------------------");

@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import zd.zdanalysis.service.AnalysisService;
 import zd.zdcommons.pojo.Pageto;
 
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,8 @@ public class AnalysisController {
         return ResponseEntity.ok(analysisService.getAnalysis(map));
     };
     @PutMapping
-    public  ResponseEntity<Pageto> getAnalysis(@RequestParam("shishi") MultipartFile shishi) {
+    public ResponseEntity<Pageto> getAnalysis(@RequestParam("shishi") MultipartFile shishi, ServletResponse response) {
+
         Map<String, MultipartFile> map = new HashMap<String, MultipartFile>();
         map.put("SHISHI",shishi);
         return ResponseEntity.ok(analysisService.getAnalysis(map));

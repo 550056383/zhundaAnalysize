@@ -11,7 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static zd.zdcommons.Utils.*;
+import static zd.zdcommons.Utils.getInteger;
+import static zd.zdcommons.Utils.importByExcelForBack;
 
 public class LogicV2 implements AnalysisImp {
 
@@ -97,6 +98,15 @@ public class LogicV2 implements AnalysisImp {
         }
         return meslist;
     }
+
+    private static int getDateNum(Map<String, String> resource, String titleName, List list) {
+        int i = importByExcelForBack(resource.get(titleName));
+        if (i == 0) {
+            list.add(resource.get("DU ID") + " 的 " + titleName + "存在异常，内容：" + resource.get(titleName));
+        }
+        return i;
+    }
+
     //判断是否为空
     public Map<String,Object> getNull(String[] logic,Map<String, String> resource,ArrayList<String> list,
                                       boolean custom,String mesType,List<Message> meslist){
@@ -132,23 +142,25 @@ public class LogicV2 implements AnalysisImp {
                 }
             }
         }
-//        if(list.size()>0){
-//            if (mesType.equals("5gM")){
-//                message = get5GM(message, list);
-//            }else if(mesType.equals("5gR")){
-//                message = get5GR(message, list);
-//            }else if (mesType.equals("3d")){
-//                message = get3DMIMO(message, list);
-//            }else {
-//                message = get1800Anchor(message, list);
-//            }
-//            meslist.add(message);
-//        }
+
         addMeslist(list,mesType);
         map.put("index",index);
         map.put("meslist",meslist);
         return map;
     }
+
+    private final static String[] logicM5g = {"Ready For Installation--Actual End Date", "Material On Site--Actual End Date",
+            "Installation-Completed--Actual End Date", "AAU开通--Actual End Date",
+            "Software Commissioning--Actual End Date", "5G交优完成日期", "5G 交优接收日期"};
+    private final static String[] logicR5g = {"Ready For Installation--Actual End Date", "Material On Site--Actual End Date",
+            "Installation-Completed--Actual End Date", "Software Commissioning--Actual End Date", "5G交优完成日期", "5G 交优接收日期"};
+    private final static String[] logicAnchor = {"FDD1800到货日期", "FDD1800安装", "FDD1800开通", "FDD1800交优完成日期", "FDD1800 交优接收日期", "FDD1800单验完成"};
+    private final static String[] logicMimo = {"3D-MIMO安装时间", "Software Commissioning--Actual End Date", "3D-MIMO交优完成日期",
+            "3D-MIMO 交优接收日期", "3D-MIMO单验完成日期"};
+    private final static String[] logic5g = {"Ready For Installation--Actual End Date", "Material On Site--Actual End Date", "Installation-Completed--Actual End Date", "Software Commissioning--Actual End Date"};
+    private final static String[] Logic3d = {"MIMO-installationDate", "MIMO-completionDate", "MIMO-miMO3DDate", "MIMO-deliveryDate"};
+    private final static String[] logicFDD1800 = {"M1800-arrivalDateFDD", "M1800-installationFDD", "M1800-openedFDD", "M1800-deliveryCompletionDateFFD", "M1800-deliveryDateFDD"};
+
     //判断是否逻辑正常
     public List<Message> getDateLogic(String[]logicStr,Map<String, String> resource,ArrayList<String> list
             ,int index,boolean custom,String mesType,List<Message> meslist){
@@ -175,36 +187,23 @@ public class LogicV2 implements AnalysisImp {
                 first--;//向前推时间
                 if (first<0)return meslist;
             }
-            int qian = getInteger(resource.get(logicStr[first]));
-            String qianTime="";
 
+
+            int qian = getDateNum(resource, logicStr[first], list);
+            if (qian == 0) continue;
+            String qianTime = resource.get(logicStr[first]);
+            ;
             //如果是日期类型转换为天数
-            if(qian==0){
-                //System.out.println(logicStr[first]);
-                qian = importByExcelForBack(resource.get(logicStr[first]));
-                qianTime=resource.get(logicStr[first]);
-            }else{
-                qianTime = importByExcelForDate(resource.get(logicStr[first]));
-            }
 //            后面
-            int hou = getInteger(resource.get(logicStr[after]));
-            String houTime ="";
-            if(hou==0){
-                hou = importByExcelForBack(resource.get(logicStr[after]));
-                houTime=resource.get(logicStr[after]);
-            }else {
-                houTime=importByExcelForDate(resource.get(logicStr[after]));
-            }
+            int hou = getDateNum(resource, logicStr[after], list);
+            if (hou == 0) continue;
+            String houTime = resource.get(logicStr[after]);
             //开启自定义设置
             if(custom){
                 if (i < 2) {
-                     hou = getInteger(resource.get(logicStr[2]));
-                    if(hou==0){
-                        hou = importByExcelForBack(resource.get(logicStr[after]));
-                        houTime=resource.get(logicStr[after]);
-                    }else {
-                        houTime=importByExcelForDate(resource.get(logicStr[after]));
-                    }
+                    hou = getDateNum(resource, logicStr[2], list);
+                    if (hou == 0) continue;
+                    houTime = resource.get(logicStr[after]);
                     if(qian>hou){
                         list.add(logicStr[first]+": "+qianTime+"  | 大于 |"+logicStr[2]+"："+houTime);
                     }
@@ -223,18 +222,6 @@ public class LogicV2 implements AnalysisImp {
         addMeslist(list,mesType);
         return meslist;
     }
-    private final static String [] logicM5g={"Ready For Installation--Actual End Date","Material On Site--Actual End Date",
-            "Installation-Completed--Actual End Date","AAU开通--Actual End Date",
-            "Software Commissioning--Actual End Date","5G交优完成日期","5G 交优接收日期"};
-    private final static String [] logicR5g={"Ready For Installation--Actual End Date","Material On Site--Actual End Date",
-            "Installation-Completed--Actual End Date", "Software Commissioning--Actual End Date","5G交优完成日期","5G 交优接收日期"};
-    private final static String [] logicAnchor={"FDD1800到货日期","FDD1800安装","FDD1800开通","FDD1800交优完成日期","FDD1800 交优接收日期","FDD1800单验完成"};
-    private final static String [] logicMimo={"3D-MIMO安装时间","Software Commissioning--Actual End Date","3D-MIMO交优完成日期",
-            "3D-MIMO 交优接收日期","3D-MIMO单验完成日期"};
-    private final static String [] logic5g={"Ready For Installation--Actual End Date","Material On Site--Actual End Date","Installation-Completed--Actual End Date","Software Commissioning--Actual End Date"};
-    private final static String [] Logic3d={"MIMO-installationDate","MIMO-completionDate","MIMO-miMO3DDate","MIMO-deliveryDate"};
-    private final static String [] logicFDD1800={"M1800-arrivalDateFDD","M1800-installationFDD","M1800-openedFDD","M1800-deliveryCompletionDateFFD","M1800-deliveryDateFDD"};
-
     private final  void addMeslist(List list,String mesType){
         if(list.size()>0){
             if (mesType.equals("5gM")){

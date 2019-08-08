@@ -183,7 +183,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     public void characters(char[] ch, int start, int length) throws SAXException {
         lastContents+=new String(ch,start,length);
         isEndFlag=true;
-        flag = false;
     }
     /***
      * 执行顺序 - 第三
@@ -250,6 +249,9 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 if (titlFlag) {//返回数据
                     ExceclResouce.getTitle(rowTitle,sheetName);
                     titlFlag=false;
+                    flag = false;
+                } else {
+                    flag = true;
                 }
                 String beValue = rowBefore.get(primaryKey);
                 String conValue = rowContents.get(primaryKey);

@@ -183,6 +183,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     public void characters(char[] ch, int start, int length) throws SAXException {
         lastContents+=new String(ch,start,length);
         isEndFlag=true;
+        flag = false;
     }
     /***
      * 执行顺序 - 第三
@@ -214,10 +215,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             isPreFlag=true;
             //更新列
             curColumn++;
-            //如果里面某个单元格含有值，则标识该行不为空行
-            if (value != null && !"".equals(value)) {
-                flag = true;
-            }
         }
         else if (qName.equals("v")){
             String value = this.getDataValue(lastContents.trim(), "");
@@ -244,16 +241,13 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             }
             isPreFlag=true;
             curColumn++;
-            if (value != null && !"".equals(value)) {
-                flag = true;
-            }
         }
         else if (qName.equals("row")){//换行
             if (total==0) {
                  maxRef= ref;
             }
-            if(total>titleNum+1){
-                if (titlFlag){//返回数据
+            if (total > titleNum) {
+                if (titlFlag) {//返回数据
                     ExceclResouce.getTitle(rowTitle,sheetName);
                     titlFlag=false;
                 }

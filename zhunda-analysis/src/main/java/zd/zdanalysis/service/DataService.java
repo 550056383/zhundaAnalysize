@@ -54,14 +54,52 @@ public class DataService {
     }
 
     //插入数据到临时表
-    public void insetData(String table, List<List<String>> lists) {
+   /* public void insetData(String table, List<List<String>> lists) {
       for (List<String> list:lists){
             projectInfoMapper.insetData(table, list);
         }
-
-        //projectInfoMapper
-
+        }*/
+    public void insetData(String table, List<List<String>> lists, String[] titles) {
+        System.out.println("开始每一张表的数据插入..............");
+        long l = System.currentTimeMillis();
+        int size = lists.size();
+        int unitNum = 1000;
+        int startIndex = 0;
+        int endIndex = 0;
+        while (size > 0) {
+            if (size > unitNum) {
+                endIndex = startIndex + unitNum;
+            } else {
+                endIndex = startIndex + size;
+            }
+            List<List<String>> insertData = lists.subList(startIndex, endIndex);
+            insetDatas(table, lists, titles);
+            System.out.println("1000条数据插入完毕...........");
+            size = size - unitNum;
+            startIndex = endIndex;
         }
+        long l1 = System.currentTimeMillis();
+        System.out.println("一张表插入时间:" + (l1 - l));
+    }
+
+    public void insetDatas(String table, List<List<String>> lists, String[] titles) {
+        int length = titles.length;
+        StringBuffer initial = new StringBuffer("(");
+        for (List<String> list : lists) {
+            for (int j = 0; j < length; j++) {
+                if (j == (length - 1)) {
+                    initial.append('"' + list.get(j) + '"' + "),");
+                } else {
+                    initial.append('"' + list.get(j) + '"' + ",");
+                }
+            }
+            initial = initial.append("(");
+        }
+        String string = initial.toString();
+        string = string.substring(0, string.length() - 2);
+        projectInfoMapper.insetDatas(table, string);
+    }
+
 
     public void insetData(String uuid, String[] str, Map<Integer, List<String>> maps) {
     }

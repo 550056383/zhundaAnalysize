@@ -33,8 +33,7 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     //插入数据到临时表
     void insetData(String table, List<String> list);
 
-    //批量插入数据
-    void insertForeach(String table, @Param("lists") List<List<String>> lists);
+    void insetDatas(String table, String string);
 
       int selectResults(@Param("tables") String table);
 

@@ -14,7 +14,7 @@
     <update id="createTables" parameterType="string">
         create TEMPORARY table  ${param1} (
          <foreach collection="param2" item="Item" separator=",">
-             ${Item} varchar(500)
+             ${Item} text
         </foreach>
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     </update>
@@ -28,12 +28,10 @@
         )
     </insert >
     <!--批量插入数据-->
-    <insert id="insertForeach">
+    <insert id="insetDatas">
         insert ${param1}()
         values
-        <foreach collection="#{lists}" item="map" separator=",">
-            (${map})
-        </foreach>
+        ${param2}
 
     </insert>
     <select id="selectResult"  resultType="java.util.LinkedHashMap" parameterType="string">
@@ -88,18 +86,18 @@
                 <foreach collection="writeList" item="write" separator=",">
                     ${write.table}.${write.field}
                 </foreach>
-                from ${param1} inner join ${param3} on ${param1}.${param2}=${param3}.${param4}
+                from (${param1} inner join ${param3} on ${param1}.${param2}=${param3}.${param4})
             </if>
             <if test="tag==2">
                 select
                 <foreach collection="writeList" item="write" separator=",">
                     ${write.table}.${write.field}
                 </foreach>
-                from ${param1} inner join ${param3} on ${param1}.${param2}=${param3}.${param4}
+                from ( ${param1} inner join ${param3} on ${param1}.${param2}=${param3}.${param4})
             </if>
             <if test="num==1">
                 <if test="tag==2">
-                    and ${m.table1}.${m.field1} &gt; ${m.table2}.${m.field2}
+                    where ${m.table1}.${m.field1} &gt; ${m.table2}.${m.field2}
                     and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }
                     <if test="tags==1">
                         &gt; ${m.value}
@@ -109,7 +107,7 @@
                     </if>
                 </if>
                 <if test="tag==1">
-                    and ${m.table1}.${m.field1}
+                    where ${m.table1}.${m.field1}
                     <if test="tags==1">
                         &gt; ${m.value}
                     </if>
@@ -120,7 +118,7 @@
             </if>
             <if test="num==2">
                 <if test="tag==2">
-                    and ${m.table1}.${m.field1}=${m.table2}.${m.field2}
+                    where ${m.table1}.${m.field1}=${m.table2}.${m.field2}
                     <if test="tags==1">
                         = ${m.value}
                     </if>
@@ -129,7 +127,7 @@
                     </if>
                 </if>
                 <if test="tag==1">
-                    and ${m.table1}.${m.field1}
+                    where ${m.table1}.${m.field1}
                     <if test="tags==1">
                         = ${m.value}
                     </if>
@@ -140,8 +138,8 @@
             </if>
             <if test="num==3">
                 <if test="tag==2">
-                    and ${m.table1}.${m.field1} &lt; ${m.table2}.${m.field2}
-                    and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 }
+                    where ${m.table1}.${m.field1} &lt; ${m.table2}.${m.field2}
+                    and ${m.table2}.${m.field2} - ${m.table1}.${m.field1 }
                     <if test="tags==1">
                         &lt; ${m.value}
                     </if>
@@ -150,7 +148,7 @@
                     </if>
                 </if>
                 <if test="tag==1">
-                    and ${m.table1}.${m.field1}
+                    where ${m.table1}.${m.field1}
                     <if test="tags==1">
                         &lt; ${m.value}
                     </if>
@@ -161,7 +159,7 @@
             </if>
             <if test="num==4">
                 <if test="tag==2">
-                    and ${m.table1}.${m.field1} &gt;= ${m.table2}.${m.field2}
+                    where ${m.table1}.${m.field1} &gt;= ${m.table2}.${m.field2}
                     and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }
                     <if test="tags==1">
                         &gt;= ${m.value}
@@ -171,7 +169,7 @@
                     </if>
                 </if>
                 <if test="tag==1">
-                    and ${m.table1}.${m.field1}
+                    where ${m.table1}.${m.field1}
                     <if test="tags==1">
                         &gt;= ${m.value}
                     </if>
@@ -182,8 +180,8 @@
             </if>
             <if test="num==5">
                 <if test="tag==2">
-                    and ${m.table1}.${m.field1} &lt;= ${m.table2}.${m.field2}
-                    and ${m.table2}.${m.field1} - ${m.table1}.${m.field2 }
+                    where ${m.table1}.${m.field1} &lt;= ${m.table2}.${m.field2}
+                    and ${m.table2}.${m.field2} - ${m.table1}.${m.field1 }
                     <if test="tags==1">
                         &lt;= ${m.value}
                     </if>
@@ -192,7 +190,7 @@
                     </if>
                 </if>
                 <if test="tag==1">
-                    and ${m.table1}.${m.field1}
+                    where ${m.table1}.${m.field1}
                     <if test="tags==1">
                         &lt;= ${m.value}
                     </if>
@@ -203,7 +201,7 @@
             </if>
             <if test="num==6">
                 <if test="tag==2">
-                    and ${m.table1}.${m.field1} != ${m.table2}.${m.field2}
+                    where ${m.table1}.${m.field1} != ${m.table2}.${m.field2}
                     <if test="tags==1">
                         != ${m.value}
                     </if>
@@ -212,7 +210,7 @@
                     </if>
                 </if>
                 <if test="tag==1">
-                    and ${m.table1}.${m.field1}
+                    where ${m.table1}.${m.field1}
                     <if test="tags==1">
                         != ${m.value}
                     </if>

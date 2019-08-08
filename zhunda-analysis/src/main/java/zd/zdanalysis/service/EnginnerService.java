@@ -46,6 +46,7 @@ public class EnginnerService {
         List<ExcelTable> listEx = new CopyOnWriteArrayList<ExcelTable>();
 
         JSONArray jsonArray = JSONArray.fromObject(reads);
+
             //遍历每一个数组
             for (int i = 0; i < jsonArray.size(); i++) {
                 file = files[i];
@@ -58,8 +59,9 @@ public class EnginnerService {
                 name = (String) objects[3];
                 List<ExcelTable> list = utils.getExcelResource(file, num, rules, primarykey);
                 ((CopyOnWriteArrayList<ExcelTable>) listEx).addAllAbsent(list);
+                System.out.println("开始读取每个表数据进行存储..............");
+                long l = System.currentTimeMillis();
                for (ExcelTable s : list) {
-
                    //汉字转拼音字母
                     String[] sTitle = s.getTitle();
                     int length = sTitle.length;
@@ -75,7 +77,7 @@ public class EnginnerService {
                         //存入数据到临时表
                    //List<List<String>> resource = s.getResource();
                    List<List<String>> resource = s.getResource();
-                   dataService.insetData(uuid, resource);
+                   dataService.insetData(uuid, resource, str);
 
                    // List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
                         //写入Excel
@@ -83,9 +85,12 @@ public class EnginnerService {
                         WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");*/
                    s.setResource(null);
                     }
+
                 list=null;
                 ExceclResouce.clear();
-                }
+                long l2 = System.currentTimeMillis();
+                System.out.println("总共插入时间:" + (l2 - l));
+            }
             return listEx;
         }
 

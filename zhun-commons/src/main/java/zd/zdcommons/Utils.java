@@ -133,9 +133,11 @@ public class Utils {
         if (date==null){
            date = getFormate_B(value);
         }
-        valuedate = (int) ((date.getTime() / 1000 / 60 / 60 / 24)+25568);
+        if (date != null) {
+            valuedate = (int) ((date.getTime() / 1000 / 60 / 60 / 24) + 25568);
+        }
         return valuedate;
-    };
+    }
 
     public static Date getFormate_A(String value){
         SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd");
@@ -155,7 +157,7 @@ public class Utils {
             date=f.parse(value);
         } catch (ParseException e) {
             //System.out.println("yyyy-MM-dd，报错:"+value);
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return date;
     }
@@ -243,7 +245,7 @@ public class Utils {
     }
     //判断系统返回存储
     public static String getOS(){
-        String save = "F:\\test\\";
+        String save = "F:/test/";
         String os = System.getProperty("os.name");
         if(!os.toLowerCase().startsWith("win")){
             save="/opt/zhundaSave/";

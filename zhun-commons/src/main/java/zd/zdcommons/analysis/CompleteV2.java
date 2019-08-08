@@ -6,11 +6,8 @@ import zd.zdcommons.pojo.ResultMessage;
 import zd.zdcommons.serviceImp.AnalysisImp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static zd.zdcommons.Utils.getInteger;
 
 public class CompleteV2 implements AnalysisImp {
     @Override
@@ -171,22 +168,22 @@ public class CompleteV2 implements AnalysisImp {
     }
     public void getMiMo(Map<String,String> resource){
         //安装
-        if(!resource.get("3D-MIMO安装时间").isEmpty()){
+        if (StringUtils.isNotBlank("3D-MIMO安装时间")) {
             getError("3D-MIMO安装时间",false,mimo_Install,resource,true,"3D");
         }
         //开通
-        if(!resource.get("Software Commissioning--Actual End Date").isEmpty()){
+        if (StringUtils.isNotBlank("Software Commissioning--Actual End Date")) {
             getError("Software Commissioning--Actual End Date",false,mimo_Open,resource,true,"3D");
         }
         //3D-MIMO交优完成日期
-        if(!resource.get("3D-MIMO 交优接收日期").isEmpty()){
+        if (StringUtils.isNotBlank("3D-MIMO 交优接收日期")) {
             getError("3D-MIMO 交优接收日期",false,mimo_Receive,resource,true,"3D");
         }
         //开通
-        if(!resource.get("3D-MIMO问题分类").isEmpty()){
+        if (StringUtils.isNotBlank("3D-MIMO问题分类")) {
             getError("3D-MIMO问题分类",false,mimo_Problem,resource,false,"3D");
         }
-        if(resource.get("3D-MIMO问题分类").isEmpty()){
+        if (StringUtils.isBlank("3D-MIMO问题分类")) {
             getError("3D-MIMO问题分类",true,mimo_Problem,resource,true,"3D");
         }
     }

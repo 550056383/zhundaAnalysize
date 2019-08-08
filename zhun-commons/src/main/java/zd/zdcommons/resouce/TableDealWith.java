@@ -3,9 +3,6 @@ package zd.zdcommons.resouce;
 import org.springframework.web.multipart.MultipartFile;
 import zd.zdcommons.excel.ExcelXlsxAndDefaultHandlerV2;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,8 +20,8 @@ public class TableDealWith {
     private static String sheetx="";
     private static String[] preStrs=null;
     private static String[] titleStr=null;
-    private static LinkedHashMap<String, String> resource=new LinkedHashMap<String, String>();
-    private static List<Map<String,String>> listRsourcecs=new CopyOnWriteArrayList<Map<String,String>>();
+    private static LinkedHashMap<String, String> resource = null;
+    private static List<Map<String, String>> listRsourcecs = null;
 
     //外部设置
     private static int titleNum=1;
@@ -42,16 +39,6 @@ public class TableDealWith {
             //new ExcelXlsWithHSSFListener().process();
         };
 
-    }
-
-    private InputStream getInputStream(File file){
-        FileInputStream inputStream=null;
-        try {
-            inputStream= new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return inputStream;
     }
 
     private InputStream getInputStream(MultipartFile file){
@@ -102,6 +89,9 @@ public class TableDealWith {
         realRules=realRulesx;
         interva=intervax;
         sheetNames=sheetNamesx;
+        resource = new LinkedHashMap<String, String>();
+        listRsourcecs = new CopyOnWriteArrayList<Map<String, String>>();
+        count = 0;
         return LayHolder.INSTANCE;
     }
 

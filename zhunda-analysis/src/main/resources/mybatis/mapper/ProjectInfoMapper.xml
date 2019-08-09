@@ -100,7 +100,7 @@
                     where ${m.table1}.${m.field1} &gt; ${m.table2}.${m.field2}
                     and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }
                     <if test="tags==1">
-                        &gt; ${m.value}
+                        &gt; '${m.value}'
                     </if>
                     <if test="tags==2">
                         >0
@@ -109,7 +109,7 @@
                 <if test="tag==1">
                     where ${m.table1}.${m.field1}
                     <if test="tags==1">
-                        &gt; ${m.value}
+                        &gt; '${m.value}'
                     </if>
                     <if test="tags==2">
                         > 0
@@ -120,7 +120,7 @@
                 <if test="tag==2">
                     where ${m.table1}.${m.field1}=${m.table2}.${m.field2}
                     <if test="tags==1">
-                        = ${m.value}
+                        = '${m.value}'
                     </if>
                     <if test="tags==2">
 
@@ -129,7 +129,7 @@
                 <if test="tag==1">
                     where ${m.table1}.${m.field1}
                     <if test="tags==1">
-                        = ${m.value}
+                        = '${m.value}'
                     </if>
                     <if test="tags==2">
                         = 0
@@ -141,7 +141,7 @@
                     where ${m.table1}.${m.field1} &lt; ${m.table2}.${m.field2}
                     and ${m.table2}.${m.field2} - ${m.table1}.${m.field1 }
                     <if test="tags==1">
-                        &lt; ${m.value}
+                        &lt; '${m.value}'
                     </if>
                     <if test="tags==2">
                         &lt; 0
@@ -150,7 +150,7 @@
                 <if test="tag==1">
                     where ${m.table1}.${m.field1}
                     <if test="tags==1">
-                        &lt; ${m.value}
+                        &lt; '${m.value}'
                     </if>
                     <if test="tags==2">
                         &lt; 0
@@ -162,7 +162,7 @@
                     where ${m.table1}.${m.field1} &gt;= ${m.table2}.${m.field2}
                     and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }
                     <if test="tags==1">
-                        &gt;= ${m.value}
+                        &gt;= '${m.value}'
                     </if>
                     <if test="tags==2">
                         &gt;=0
@@ -171,7 +171,7 @@
                 <if test="tag==1">
                     where ${m.table1}.${m.field1}
                     <if test="tags==1">
-                        &gt;= ${m.value}
+                        &gt;='${m.value}'
                     </if>
                     <if test="tags==2">
                         &gt;= 0
@@ -183,7 +183,7 @@
                     where ${m.table1}.${m.field1} &lt;= ${m.table2}.${m.field2}
                     and ${m.table2}.${m.field2} - ${m.table1}.${m.field1 }
                     <if test="tags==1">
-                        &lt;= ${m.value}
+                        &lt;= '${m.value}'
                     </if>
                     <if test="tags==2">
                         &lt;= 0
@@ -192,7 +192,7 @@
                 <if test="tag==1">
                     where ${m.table1}.${m.field1}
                     <if test="tags==1">
-                        &lt;= ${m.value}
+                        &lt;= '${m.value}'
                     </if>
                     <if test="tags==2">
                         &lt;= 0
@@ -203,7 +203,7 @@
                 <if test="tag==2">
                     where ${m.table1}.${m.field1} != ${m.table2}.${m.field2}
                     <if test="tags==1">
-                        != ${m.value}
+                        != '${m.value}'
                     </if>
                     <if test="tags==2">
                         !=0
@@ -212,7 +212,7 @@
                 <if test="tag==1">
                     where ${m.table1}.${m.field1}
                     <if test="tags==1">
-                        != ${m.value}
+                        != '${m.value}'
                     </if>
                     <if test="tags==2">
                         != 0

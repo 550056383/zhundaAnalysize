@@ -7,6 +7,7 @@ import zd.zdanalysis.mapper.ProjectInfoMapper;
 import zd.zdcommons.pojo.Majors;
 import zd.zdcommons.pojo.Vice;
 import zd.zdcommons.pojo.Write;
+import zd.zdcommons.resouce.ExceclResouce;
 import zd.zdcommons.utils.PinYinUtils;
 import zd.zdcommons.utils.StringFormat;
 
@@ -59,11 +60,14 @@ public class DataService {
             projectInfoMapper.insetData(table, list);
         }
         }*/
+
+    //对批量插入数量进行控制
     public void insetData(String table, List<List<String>> lists, String[] titles) {
         System.out.println("开始每一张表的数据插入..............");
+        System.out.println("数据有多少条:" + lists.size());
         long l = System.currentTimeMillis();
         int size = lists.size();
-        int unitNum = 1000;
+        int unitNum = 2000;
         int startIndex = 0;
         int endIndex = 0;
         while (size > 0) {
@@ -73,8 +77,8 @@ public class DataService {
                 endIndex = startIndex + size;
             }
             List<List<String>> insertData = lists.subList(startIndex, endIndex);
-            insetDatas(table, lists, titles);
-            System.out.println("1000条数据插入完毕...........");
+            insetDatas(table, insertData, titles);
+            System.out.println("2000条数据插入完毕...........");
             size = size - unitNum;
             startIndex = endIndex;
         }
@@ -82,23 +86,30 @@ public class DataService {
         System.out.println("一张表插入时间:" + (l1 - l));
     }
 
+    //一次性批量插入数量
     public void insetDatas(String table, List<List<String>> lists, String[] titles) {
+        System.out.println("每次批量插入数量:" + lists.size());
         int length = titles.length;
         StringBuffer initial = new StringBuffer("(");
         for (List<String> list : lists) {
             for (int j = 0; j < length; j++) {
                 if (j == (length - 1)) {
-                    initial.append('"' + list.get(j) + '"' + "),");
+                    initial.append('"' + list.get(j).trim() + '"' + "),");
                 } else {
-                    initial.append('"' + list.get(j) + '"' + ",");
+                    initial.append('"' + list.get(j).trim() + '"' + ",");
                 }
             }
-            System.out.println("当前数据size" + list.size());
             initial = initial.append("(");
         }
         String string = initial.toString();
         string = string.substring(0, string.length() - 2);
-        projectInfoMapper.insetDatas(table, string);
+        try {
+            projectInfoMapper.insetDatas(table, string);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            ExceclResouce.clear();
+
+        }
     }
 
 
@@ -176,7 +187,7 @@ public class DataService {
                  }
                  //若arr追加条件没有,arr实际只有5个值
                  if (arr.length == 6) {
-                     majors.setValue(arr[5]);
+                     majors.setValue(arr[5].trim());
                      tags = 1;
                  } else {
                      tags = 2;
@@ -266,7 +277,7 @@ public class DataService {
         return writeList;
     }
 
-    //输出表字段,表名,字段不经过处理
+    //输出表字段,表名,字段不经过处理,用于写入
     public List<Write> selectTableCells(Map<String, Object> maps) {
         List<Write> writeList = new ArrayList<>();
         String tableCell = (String) maps.get("tableCell").toString();
@@ -284,7 +295,7 @@ public class DataService {
         return writeList;
     }
 
-    //条件设置对表名和字段不进行处理
+    //条件设置对表名和字段不进行处理,用于写入
     public List<Majors> getWriteRules(String[] arr1) {
         List<String[]> newlist = new ArrayList<>();
         List<Majors> majorsList = new ArrayList<>();
@@ -304,7 +315,7 @@ public class DataService {
                     majors.setField2(arr[4]);
                 }
                 if (arr.length == 6) {
-                    majors.setValue(arr[5]);
+                    majors.setValue(arr[5].trim());
                 }
                 System.out.println(majors);
                 majorsList.add(majors);

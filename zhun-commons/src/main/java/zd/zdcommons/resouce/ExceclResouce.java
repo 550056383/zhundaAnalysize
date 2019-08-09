@@ -41,7 +41,9 @@ public class ExceclResouce {
            // System.out.println("标题："+entry.getKey()+"-值：："+entry.getValue());
             recource.add(entry.getValue());
         }
-        recources.add(recource);
+        if (recource.size() != 0) {
+            recources.add(recource);
+        }
     }
     public static void clear(){
         listExcel.clear();

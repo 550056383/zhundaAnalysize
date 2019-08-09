@@ -28,7 +28,7 @@ public class CompleteV2 implements AnalysisImp {
     //结果信息的实体类
     private ResultMessage resultm = null;
     private Message message = null;
-    private List<Message> meslist=new ArrayList<Message>();
+    private List<Message> meslist=null;
     private ArrayList<String> listM5g = new ArrayList<String>();
     private ArrayList<String> listR5g = new ArrayList<String>();
     private ArrayList<String> listAnchor = new ArrayList<String>();
@@ -36,7 +36,7 @@ public class CompleteV2 implements AnalysisImp {
     @Override
     public ResultMessage getIntegrityAnalysis(Map<String, String> resource) {
         resultm=null;
-        meslist.clear();
+        meslist=new ArrayList<Message>();
         message=null;
         listMimo = new ArrayList<String>();
         listAnchor = new ArrayList<String>();
@@ -207,7 +207,7 @@ public class CompleteV2 implements AnalysisImp {
     "5G规划编号","直流空开熔丝","交流引入","PRRU规划数量","RHUB规划数量","规划RRU/PRRU数","rHUB类型","RHUB实际安装数",
     "RRU/PRRU实际安装数","规划RHUB数","产品类型","产品型号","是否有设计图纸"};
     private static final String[] stationR_Open={"Installation-Completed--Actual End Date","Delivery Type","NRO PO","RRU软调数量",
-    "5G小区带宽","5G传输具备","NM NE Name","5G传输带宽","NRO Subcontractor"};
+    "5G小区带宽","5G传输具备","NM NE Name","5G传输带宽","NRO Subcontractor","NRO服务合同号"};
     private static final String[] stationR_PayDate={"Software Commissioning--Actual End Date","5G交优完成日期"};
     private static final String[] stationR_Problem={"Software Commissioning--Actual End Date"};
 

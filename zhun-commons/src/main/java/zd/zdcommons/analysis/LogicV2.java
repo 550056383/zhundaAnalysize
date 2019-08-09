@@ -151,9 +151,9 @@ public class LogicV2 implements AnalysisImp {
 
     private final static String[] logicM5g = {"Ready For Installation--Actual End Date", "Material On Site--Actual End Date",
             "Installation-Completed--Actual End Date", "AAU开通--Actual End Date",
-            "Software Commissioning--Actual End Date", "5G交优完成日期", "5G 交优接收日期"};
+            "Software Commissioning--Actual End Date"};
     private final static String[] logicR5g = {"Ready For Installation--Actual End Date", "Material On Site--Actual End Date",
-            "Installation-Completed--Actual End Date", "Software Commissioning--Actual End Date", "5G交优完成日期", "5G 交优接收日期"};
+            "Installation-Completed--Actual End Date", "Software Commissioning--Actual End Date"};
     private final static String[] logicAnchor = {"FDD1800到货日期", "FDD1800安装", "FDD1800开通", "FDD1800交优完成日期", "FDD1800 交优接收日期", "FDD1800单验完成"};
     private final static String[] logicMimo = {"3D-MIMO安装时间", "Software Commissioning--Actual End Date", "3D-MIMO交优完成日期",
             "3D-MIMO 交优接收日期", "3D-MIMO单验完成日期"};

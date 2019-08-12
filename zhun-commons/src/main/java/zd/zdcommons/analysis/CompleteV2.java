@@ -81,7 +81,7 @@ public class CompleteV2 implements AnalysisImp {
         }
         if(listMimo.size()>0){
             count1800fdd=listMimo.size();
-            message = get1800Anchor(message, listMimo);
+            message = get3DMIMO(message, listMimo);
             meslist.add(message);
         }
 
@@ -149,21 +149,24 @@ public class CompleteV2 implements AnalysisImp {
         }
     }
     public void getAnchor(Map<String,String> resource){
-        if(StringUtils.isNotBlank(resource.get("FDD1800安装"))){
-            getError("FDD1800安装",false,anchor_Install,resource,true,"瞄点");
+        if(resource.get("FDD1800是否规划").equals("是")){
+            if(StringUtils.isNotBlank(resource.get("FDD1800安装"))){
+                getError("FDD1800安装",false,anchor_Install,resource,true,"瞄点");
+            }
+            if(StringUtils.isNotBlank(resource.get("FDD1800开通"))){
+                getError("FDD1800开通",false,anchor_Open,resource,true,"瞄点");
+            }
+            if(StringUtils.isNotBlank(resource.get("FDD1800 交优接收日期"))){
+                getError("FDD1800 交优接收日期",false,anchor_Receive,resource,true,"瞄点");
+            }
+            if(StringUtils.isNotBlank(resource.get("锚点FDD1800问题分类"))){
+                getError("锚点FDD1800问题分类",false,anchor_Problem,resource,false,"瞄点");
+            }
+            if(StringUtils.isBlank(resource.get("锚点FDD1800问题分类"))){
+                getError("锚点FDD1800问题分类",true,anchor_Problem,resource,true,"瞄点");
+            }
         }
-        if(StringUtils.isNotBlank(resource.get("FDD1800开通"))){
-            getError("FDD1800开通",false,anchor_Open,resource,true,"瞄点");
-        }
-        if(StringUtils.isNotBlank(resource.get("FDD1800 交优接收日期"))){
-            getError("FDD1800 交优接收日期",false,anchor_Receive,resource,true,"瞄点");
-        }
-        if(StringUtils.isNotBlank(resource.get("锚点FDD1800问题分类"))){
-            getError("锚点FDD1800问题分类",false,anchor_Problem,resource,false,"瞄点");
-        }
-        if(StringUtils.isBlank(resource.get("锚点FDD1800问题分类"))){
-            getError("锚点FDD1800问题分类",true,anchor_Problem,resource,true,"瞄点");
-        }
+
 
     }
     public void getMiMo(Map<String,String> resource){
@@ -219,9 +222,9 @@ public class CompleteV2 implements AnalysisImp {
     private static final String[] mimo_Problem={"Software Commissioning--Actual End Date"};
 
     //锚点FDD1800
-    private static final String[] anchor_Install={"4G传输具备","FDD1800规划编号","FDD1800施工计划","FDD1800是否规划","FDD1800 NM NE ID",
+    private static final String[] anchor_Install={"4G传输具备","FDD1800规划编号","FDD1800施工计划","FDD1800是否规划",
     "FDD1800到货日期"};
-    private static final String[] anchor_Open={"FDD1800安装","FDD1800网管基站名称","4G传输具备"};
+    private static final String[] anchor_Open={"FDD1800安装","FDD1800网管基站名称","4G传输具备","FDD1800 NM NE ID"};
     private static final String[] anchor_Receive={"FDD1800开通","FDD1800交优完成日期"};
     private static final String[] anchor_Problem={"FDD1800开通"};
 

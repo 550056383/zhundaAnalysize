@@ -217,8 +217,10 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                     sxName=sheetName;
                 }
                 String beValue = rowBefore.get(primaryKey);
+                beValue=(beValue==null?"":beValue);
                 String conValue = rowContents.get(primaryKey);
-                if(StringUtils.isNotBlank(beValue) &&beValue.equals(conValue)){
+                conValue=(conValue==null?"":conValue);
+                if(StringUtils.isBlank(beValue) ||beValue.equals(conValue)){
                     //叠加，拼接，覆盖
                     for (Map.Entry<String,String> entry:rowContents.entrySet()){
                         getOverlay(entry);

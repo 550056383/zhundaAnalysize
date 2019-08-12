@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zd.zdanalysis.mapper.ProjectInfoMapper;
 import zd.zdcommons.pojo.Majors;
+import zd.zdcommons.pojo.TableRelevance;
 import zd.zdcommons.pojo.Vice;
 import zd.zdcommons.pojo.Write;
 import zd.zdcommons.resouce.ExceclResouce;
@@ -54,7 +55,7 @@ public class DataService {
         return  i;
     }
 
-    //插入数据到临时表
+    //插入数据到临时表,第一版
    /* public void insetData(String table, List<List<String>> lists) {
       for (List<String> list:lists){
             projectInfoMapper.insetData(table, list);
@@ -86,17 +87,18 @@ public class DataService {
         System.out.println("一张表插入时间:" + (l1 - l));
     }
 
-    //一次性批量插入数量
+    //一次性批量插入数量,第二版
     public void insetDatas(String table, List<List<String>> lists, String[] titles) {
         System.out.println("每次批量插入数量:" + lists.size());
         int length = titles.length;
         StringBuffer initial = new StringBuffer("(");
         for (List<String> list : lists) {
             for (int j = 0; j < length; j++) {
+                String mes = list.get(j) == null ? "" : list.get(j);
                 if (j == (length - 1)) {
-                    initial.append('"' + list.get(j).trim() + '"' + "),");
+                    initial.append('"' + mes.trim() + '"' + "),");
                 } else {
-                    initial.append('"' + list.get(j).trim() + '"' + ",");
+                    initial.append('"' + mes.trim() + '"' + ",");
                 }
             }
             initial = initial.append("(");
@@ -110,10 +112,6 @@ public class DataService {
             ExceclResouce.clear();
 
         }
-    }
-
-
-    public void insetData(String uuid, String[] str, Map<Integer, List<String>> maps) {
     }
 
     //关联设置项表查询
@@ -325,4 +323,198 @@ public class DataService {
 
         return majorsList;
     }
+
+
+    /**
+     * 方法描述 : 多张表关联
+     *
+     * @param maps
+     * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
+     * @author Jack Chen
+     * @date 2019/8/12 09:43
+     **/
+    List<Map<String, Object>> selectByStatement(Map<String, Object> maps) {
+        //num:1代表> 2代表= .........
+        int num = 0;
+        int num2 = 0;
+        //1.表名相同或table2表为null默认进行表1查询 ,2:查询两表
+        int tag = 0;
+        //追加条件有无标记,1:有,2:无
+        int tags = 0;
+        //1.表名相同或table2表为null默认进行表1查询 ,2:查询两表
+        int tag2 = 0;
+        //追加条件有无标记,1:有,2:无
+        int tags2 = 0;
+
+
+        //获取输出表字段
+        List<Write> writeList = selectTableCell(maps);
+        //条件设置的条件
+        String writeRules = maps.get("writeRules").toString();
+        //字符串转数组
+        List<String[]> list = StringFormat.getString4(writeRules);
+        //添加主/副条件对象
+        List<String[]> newlist = new ArrayList<>();
+        List<String[]> newlist2 = new ArrayList<>();
+        List<Majors> majorsList = new ArrayList<>();
+        List<Vice> viceList = new ArrayList<>();
+
+        //主条件
+        String[] arr1 = list.get(0);
+        System.out.println("arr1" + arr1);
+        if (!arr1[0].isEmpty()) {
+            for (String s : arr1) {
+                List<String[]> list1 = StringFormat.stringToArr(s);
+                newlist = list1;
+            }
+
+            for (String[] arr : newlist) {
+                Majors majors = new Majors();
+                majors.setTable1(arr[0]);
+                majors.setField1(arr[1]);
+                majors.setConditions(arr[2]);
+                if (arr.length != 3) {
+                    majors.setTable2(arr[3]);
+                    majors.setField2(arr[4]);
+                }
+                //若arr追加条件没有,arr实际只有5个值
+                if (arr.length == 6) {
+                    majors.setValue(arr[5].trim());
+                    tags = 1;
+                } else {
+                    tags = 2;
+                }
+                System.out.println("majors条件" + majors);
+                //标记便于拼接SQL使用
+                switch (majors.getConditions().trim()) {
+                    case "大于":
+                        majors.setConditions("1");
+                        num = 1;
+                        break;
+                    case "等于":
+                        majors.setConditions("2");
+                        num = 2;
+                        break;
+                    case "小于":
+                        majors.setConditions("3");
+                        num = 3;
+                        break;
+                    case "大于等于":
+                        majors.setConditions("4");
+                        num = 4;
+                        break;
+                    case "小于等于":
+                        majors.setConditions("5");
+                        num = 5;
+                        break;
+                    case "不等于":
+                        majors.setConditions("6");
+                        num = 6;
+                        break;
+                }
+                //标记一组规则中表名是否相同 ,相同标记为1,判断一组规则中只有一个表时,标记为1
+                if (majors.getTable1().equals(majors.getTable2()) || majors.getTable2() == null) {
+                    tag = 1;
+                } else {
+                    tag = 2;
+                }
+                majorsList.add(majors);
+
+            }
+        }
+        StringFormat.clearList();
+
+        //副件条件处理
+        String[] arr2 = list.get(1);
+        if (!arr2[0].isEmpty()) {
+            for (String s : arr2) {
+                List<String[]> list1 = StringFormat.stringToArr(s);
+                newlist2 = list1;
+            }
+
+            System.out.println("newlsit2" + newlist2.size());
+            for (String[] arr : newlist2) {
+                Vice vice = new Vice();
+                vice.setTable1(arr[0]);
+                vice.setField1(arr[1]);
+                vice.setConditions(arr[2]);
+                if (arr.length != 3) {
+                    vice.setTable2(arr[3]);
+                    vice.setField2(arr[4]);
+                }
+                //若arr追加条件没有,arr实际只有5个值
+                if (arr.length == 6) {
+                    vice.setValue(arr[5].trim());
+                    tags2 = 1;
+                } else {
+                    tags2 = 2;
+                }
+                System.out.println("vice条件:" + vice);
+                //标记便于拼接SQL使用
+                switch (vice.getConditions().trim()) {
+                    case "大于":
+                        vice.setConditions("1");
+                        num2 = 1;
+                        break;
+                    case "等于":
+                        vice.setConditions("2");
+                        num2 = 2;
+                        break;
+                    case "小于":
+                        vice.setConditions("3");
+                        num2 = 3;
+                        break;
+                    case "大于等于":
+                        vice.setConditions("4");
+                        num2 = 4;
+                        break;
+                    case "小于等于":
+                        vice.setConditions("5");
+                        num2 = 5;
+                        break;
+                    case "不等于":
+                        vice.setConditions("6");
+                        num2 = 6;
+                        break;
+                }
+                //标记一组规则中表名是否相同 ,相同标记为1,判断一组规则中只有一个表时,标记为1
+                if (vice.getTable1().equals(vice.getTable2()) || vice.getTable2() == null) {
+                    tag2 = 1;
+                } else {
+                    tag2 = 2;
+                }
+                viceList.add(vice);
+            }
+        }
+        StringFormat.clearList();
+
+        String tableAssocia = (String) maps.get("tableAssocia").toString();
+        //字符串转数组
+        List<String[]> lists = StringFormat.getString1(tableAssocia);
+        List<TableRelevance> tableRelevances = new ArrayList<>();
+
+        String[] arrs = lists.get(0);
+        String str0 = StringFormat.uuid(arrs[0].trim());
+        String s1 = PinYinUtils.hanziToPinyin(arrs[1], "");
+
+        //一个list:表名--字段<==>表名--字段
+        for (String[] arr : lists) {
+
+            TableRelevance tableRelevance = new TableRelevance();
+            tableRelevance.setTable1(StringFormat.uuid(arr[0].trim()));
+            tableRelevance.setFields1(PinYinUtils.hanziToPinyin(arr[1], ""));
+            tableRelevance.setTable2(StringFormat.uuid(arr[2]).trim());
+            tableRelevance.setFields2(PinYinUtils.hanziToPinyin(arr[3], ""));
+            tableRelevances.add(tableRelevance);
+        }
+
+        System.out.println(num + "=" + num2 + "=" + tag + "=" + tag2 + "=" + tags + "=" + tags2);
+        List<Map<String, Object>> mapList = projectInfoMapper.selectByStatement(str0, s1, tableRelevances, writeList, tags, majorsList, viceList, num, tag, tags2, tag2, num2);
+        for (Map<String, Object> objectMap : mapList) {
+            System.out.println(objectMap);
+        }
+        return mapList;
+    }
+
+
 }

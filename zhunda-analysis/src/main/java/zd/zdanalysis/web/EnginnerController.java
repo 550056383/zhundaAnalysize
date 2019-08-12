@@ -33,7 +33,7 @@ public   ResponseEntity<List<ExcelTable>> getTest(@RequestParam("files") Multipa
 
     return ResponseEntity.ok(enginnerService.getMove(files, reads));
 }
-    @PostMapping("/cond")
+   /* @PostMapping("/cond")
     public ResponseEntity<List<Map<String, Object>>> getSetup(@RequestBody Map<String, Object> map, HttpServletResponse response, HttpServletRequest request) {
         System.out.println(map.size());
         for (Map.Entry<String,Object> entry:map.entrySet()){
@@ -42,10 +42,20 @@ public   ResponseEntity<List<ExcelTable>> getTest(@RequestParam("files") Multipa
         List<Map<String, Object>> mapList = enginnerService.getSetup(map, response, request);
 
         return ResponseEntity.ok(mapList);
-    }
+    }*/
 
     @GetMapping("/download")
     public ResponseEntity<String> downloadFile(HttpServletResponse response, @RequestParam("uid") String uid) {
         return ResponseEntity.ok(enginnerService.getDownloads(response, uid));
+    }
+
+    @PostMapping("/cond")
+    public ResponseEntity<List<Map<String, Object>>> getSetup2(@RequestBody Map<String, Object> map, HttpServletResponse response, HttpServletRequest request) {
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + "---------" + entry.getValue());
+        }
+        List<Map<String, Object>> mapList = enginnerService.getSetup2(map, response, request);
+
+        return ResponseEntity.ok(mapList);
     }
 }

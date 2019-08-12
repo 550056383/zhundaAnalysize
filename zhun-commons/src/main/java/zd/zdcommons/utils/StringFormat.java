@@ -120,8 +120,9 @@ public class StringFormat {
     }
 
     //对表名和字段进行处理
+    static List<String[]> newlist = new ArrayList<String[]>();
     public  static List<String[]> stringToArr(String s){
-        List<String[]> newlist=new ArrayList<String[]>();
+        //s:string1.xlsx--Sheet1, 回款金额, 大于, null, null, 99
         String[] split = s.split(",");
         split[0] = StringFormat.uuid(split[0].trim());
         split[1] = PinYinUtils.hanziToPinyin(split[1], "");
@@ -134,8 +135,11 @@ public class StringFormat {
             split[4] = PinYinUtils.hanziToPinyin(split[4], "");
         }
         newlist.add(split);
-
         return newlist;
+    }
+
+    public static void clearList() {
+        newlist.clear();
     }
 
     //对表名和字段不进行处理

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 import zd.zdanalysis.pojo.ProjectInfo;
 import zd.zdcommons.pojo.Majors;
+import zd.zdcommons.pojo.TableRelevance;
 import zd.zdcommons.pojo.Vice;
 import zd.zdcommons.pojo.Write;
 
@@ -42,7 +43,10 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
 
     List<String> selectTableCell(String s0, String s1);
 
-    //条件设置
+    //<!--两张表关联,多个输出字段,一个自定义字段,一个主条件(可选内容可为空)-->
 /*    List<Map<String, Object>> selectByWriteRules( Map<String,Object> map);*/
     List<Map<String, Object>> selectByWriteRules(String s0, String s1, String s2, String s3, @Param("writeList") List<Write> writeList, @Param("tags") int tags, @Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList, @Param("num") int num, @Param("tag") int tag);
+
+    List<Map<String, Object>> selectByStatement(String str0, String s1, @Param("tableRelevance") List<TableRelevance> tableRelevances, @Param("writeList") List<Write> writeList, @Param("tags") int tags, @Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList, @Param("num") int num, @Param("tag") int tag, @Param("tags2") int tags2, @Param("tag2") int tag2, @Param("num2") int num2);
+
 }

@@ -68,7 +68,7 @@ public class CompleteV2 implements AnalysisImp {
         }
         if(listM5g.size()>0){
             m5g=listM5g.size();
-            message = get5GR(message,listM5g);
+            message = get5GM(message,listM5g);
             meslist.add(message);
         }
         long count5g=r5g+m5g;

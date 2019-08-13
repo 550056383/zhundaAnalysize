@@ -1,7 +1,6 @@
 package com.test;
 
 import org.junit.Test;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,7 +47,7 @@ public class TableDealWith {
         if(fileName.endsWith("xlsx")){
             new ExcelXlsxAndDefaultHandler().process(inputStream,sheetNames,file.getName());
         }else if (fileName.endsWith("xls")){
-            //new ExcelXlsWithHSSFListener().process();
+            new ExcelXlsWithHSSFListenerV2().process(inputStream,sheetNames,file.getName());
         };
 
     }
@@ -73,13 +72,14 @@ public class TableDealWith {
                 for (int i=0;i<strs.length;i++){
                     preStrs[i]=strs[i]!=""?preStrs[i]+"--"+strs[i]:preStrs[i];
                 }
-                titleStr=preStrs;
             }
+            titleStr=preStrs;
         }
         else if (count>(titleNum+interva-1)){
             for (int i=0;i<strs.length;i++){
                 resource.put(titleStr[i],strs[i]);
             }
+            System.out.println("size:=[]"+resource);
             listRsourcecs.add(resource);
             resource= new LinkedHashMap<String, Object>();
         }
@@ -97,9 +97,8 @@ public class TableDealWith {
 
     private TableDealWith(){}
 
-    public static final TableDealWith getInstance(int titleNumx, String[] realRulesx,int intervax,String[] sheetNamesx) {
+    public static final TableDealWith getInstance(int titleNumx,int intervax,String[] sheetNamesx) {
         titleNum=titleNumx;
-        realRules=realRulesx;
         interva=intervax;
         sheetNames=sheetNamesx;
         return LayHolder.INSTANCE;

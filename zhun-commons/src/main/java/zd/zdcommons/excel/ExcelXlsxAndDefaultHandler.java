@@ -139,7 +139,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if(qName.equals("c")){
             if(preRef==null){
-                preRef=attributes.getValue("r");
+                preRef="A";
                 isStartFlag = true;
             }else{
                 //拿取上次的值
@@ -207,7 +207,7 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
             //更新列
             curColumn++;
         } else if (qName.equals("v")) {
-            if (ref.contains("A")) {
+            if (ref.contains("A")&&getStr(ref).length()==1) {
                 isStartFlag = false;
             }
             String value = this.getDataValue(lastContents.trim(), "");
@@ -229,6 +229,11 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                     curColumn++;
                 }
                 firstFag=false;
+            }
+            if(value.startsWith("\"")||value.endsWith("\"")){
+                System.out.println("xxx");
+                //ref.replaceAll("\\d+", "")
+                value=value.replaceAll("[\"]","");
             }
             if(total>titleNum){
                 rowContents.put(rowTitle.get(curColumn+""),value);
@@ -259,8 +264,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 if(StringUtils.isNotBlank(beValue) &&beValue.equals(conValue)){
                     //叠加，拼接，覆盖
                     for (Map.Entry<String,String> entry:rowContents.entrySet()){
-                        getOverlay(entry);
-                        getJoint(entry);
                         //如果是空
                         if(StringUtils.isBlank(entry.getValue())){
                             rowContents.put(entry.getKey(),rowBefore.get(entry.getKey()));

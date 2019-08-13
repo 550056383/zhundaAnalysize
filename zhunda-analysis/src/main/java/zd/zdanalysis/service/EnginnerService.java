@@ -67,6 +67,8 @@ public class EnginnerService {
             rules = objects[1].toString().replace("[", "").replace("]", "").split(",");
             primarykey = (String) objects[2];
             name = (String) objects[3];
+
+
             List<ExcelTable> list = utils.getExcelResource(file, num, rules, primarykey);
             ((CopyOnWriteArrayList<ExcelTable>) listEx).addAllAbsent(list);
             System.out.println("开始读取每个表数据进行存储..............");

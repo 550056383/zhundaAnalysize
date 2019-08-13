@@ -171,22 +171,22 @@ public class CompleteV2 implements AnalysisImp {
     }
     public void getMiMo(Map<String,String> resource){
         //安装
-        if (StringUtils.isNotBlank("3D-MIMO安装时间")) {
+        if (StringUtils.isNotBlank(resource.get("3D-MIMO安装时间"))) {
             getError("3D-MIMO安装时间",false,mimo_Install,resource,true,"3D");
         }
         //开通
-        if (StringUtils.isNotBlank("Software Commissioning--Actual End Date")) {
+        if (StringUtils.isNotBlank(resource.get("Software Commissioning--Actual End Date"))) {
             getError("Software Commissioning--Actual End Date",false,mimo_Open,resource,true,"3D");
         }
         //3D-MIMO交优完成日期
-        if (StringUtils.isNotBlank("3D-MIMO 交优接收日期")) {
+        if (StringUtils.isNotBlank(resource.get("3D-MIMO 交优接收日期"))) {
             getError("3D-MIMO 交优接收日期",false,mimo_Receive,resource,true,"3D");
         }
         //开通
-        if (StringUtils.isNotBlank("3D-MIMO问题分类")) {
+        if (StringUtils.isNotBlank(resource.get("3D-MIMO问题分类"))) {
             getError("3D-MIMO问题分类",false,mimo_Problem,resource,false,"3D");
         }
-        if (StringUtils.isBlank("3D-MIMO问题分类")) {
+        if (StringUtils.isBlank(resource.get("3D-MIMO问题分类"))) {
             getError("3D-MIMO问题分类",true,mimo_Problem,resource,true,"3D");
         }
     }
@@ -215,9 +215,9 @@ public class CompleteV2 implements AnalysisImp {
     private static final String[] stationR_Problem={"Software Commissioning--Actual End Date"};
 
     //3D-MIMO
-    private static final String[] mimo_Install={"3D-MIMO规划编号","3D-MIMO规划数量","3D-MIMO NM NE ID","3D-MIMO目标站型（设计图纸）",
-    "3D-MIMO开通站型","3D-MIMO到货数量"};
-    private static final String[] mimo_Open={"3D-MIMO安装时间","4G传输带宽","3D-MIMO网管基站名称","Software Commissioning--Actual End Date"};
+    private static final String[] mimo_Install={"3D-MIMO规划编号","3D-MIMO规划数量", "3D-MIMO到货数量"};
+    private static final String[] mimo_Open={"3D-MIMO安装时间","4G传输带宽","3D-MIMO网管基站名称","Software Commissioning--Actual End Date",
+            "3D-MIMO NM NE ID","3D-MIMO目标站型（设计图纸）","3D-MIMO开通站型",};
     private static final String[] mimo_Receive={"Software Commissioning--Actual End Date","3D-MIMO单验完成日期","3D-MIMO交优完成日期"};
     private static final String[] mimo_Problem={"Software Commissioning--Actual End Date"};
 

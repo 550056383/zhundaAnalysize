@@ -223,14 +223,13 @@
         </foreach>
     </select>
 
-    <!--新增多张表关联,多个输出字段,一个自定义字段,一个主条件(可选内容可为空)-->
+    <!--新增多张表关联,多个输出字段,一个自定义字段,多个主条件(可选内容可为空),多个副条件(可选内容可为空)-->
     <select id="selectByStatement" resultType="java.util.LinkedHashMap">
         <!--   select *  from
            ${param1}
            <foreach collection="tableRelevance" item="tr" >
             inner join ${tr.table2} on ${tr.table1}.${tr.fields1}=${tr.table2}.${tr.fields2}
            </foreach>-->
-        <if test="tag==1">
             select
             <foreach collection="writeList" item="write" separator=",">
                 ${write.table}.${write.field}
@@ -239,44 +238,33 @@
             ( ${param1}
             <foreach collection="tableRelevance" item="tr">
                 inner join ${tr.table2} on ${tr.table1}.${tr.fields1}=${tr.table2}.${tr.fields2}
-            </foreach>)where
-        </if>
-        <if test="tag==2">
-            select
-            <foreach collection="writeList" item="write" separator=",">
-                ${write.table}.${write.field}
-            </foreach>
-            from
-            (${param1}
-            <foreach collection="tableRelevance" item="tr">
-                inner join ${tr.table2} on ${tr.table1}.${tr.fields1}=${tr.table2}.${tr.fields2}
             </foreach>) where
-        </if>
+
         <foreach collection="majorsList" item="m" separator="and">
             <if test="m.conditions==1">
-                <if test="tag==2">
+                <if test="m.tag==2">
                     ${m.table1}.${m.field1} &gt; ${m.table2}.${m.field2}
                     and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }
-                    <if test="tags==1">
+                    <if test="m.tags==1">
                         &gt; '${m.value}'
                     </if>
-                    <if test="tags==2">
+                    <if test="m.tags==2">
                         >0
                     </if>
                 </if>
-                <if test="tag==1">
+                <if test="m.tag==1">
                     ${m.table1}.${m.field1}
-                    <if test="tags==1">
+                    <if test="m.tags==1">
                         &gt; '${m.value}'
                     </if>
-                    <if test="tags==2">
+                    <if test="m.tags==2">
                         > 0
                     </if>
                 </if>
             </if>
 
             <if test="m.conditions==2">
-                <if test="tag==2">
+                <if test="m.tag==2">
                     ${m.table1}.${m.field1}=${m.table2}.${m.field2}
                     <if test="tags==1">
                         and ${m.table2}.${m.field2} = '${m.value}'
@@ -285,31 +273,31 @@
 
                     </if>
                 </if>
-                <if test="tag==1">
+                <if test="m.tag==1">
                     ${m.table1}.${m.field1}
                     <if test="tags==1">
                         = '${m.value}'
                     </if>
                     <if test="tags==2">
-                        = 0
+                        = ""
                     </if>
                 </if>
             </if>
 
             <if test="m.conditions==3">
-                <if test="tag==2">
+                <if test="m.tag==2">
                     ${m.table1}.${m.field1} &lt; ${m.table2}.${m.field2}
                     and ${m.table2}.${m.field2} - ${m.table1}.${m.field1 }
                     <if test="tags==1">
                         &lt; '${m.value}'
                     </if>
-                    <if test="tags==2">
+                    <if test="m.tags==2">
                         &lt; 0
                     </if>
                 </if>
-                <if test="tag==1">
+                <if test="m.tag==1">
                     ${m.table1}.${m.field1}
-                    <if test="tags==1">
+                    <if test="m.tags==1">
                         &lt; '${m.value}'
                     </if>
                     <if test="tags==2">
@@ -319,66 +307,66 @@
             </if>
 
             <if test="m.conditions==4">
-                <if test="tag==2">
+                <if test="m.tag==2">
                     ${m.table1}.${m.field1} &gt;= ${m.table2}.${m.field2}
                     and ${m.table1}.${m.field1} - ${m.table2}.${m.field2 }
-                    <if test="tags==1">
+                    <if test="m.tags==1">
                         &gt;= '${m.value}'
                     </if>
-                    <if test="tags==2">
+                    <if test="m.tags==2">
                         &gt;=0
                     </if>
-                    <if test="tag==1">
+                </if>
+                <if test="m.tag==1">
                         ${m.table1}.${m.field1}
-                        <if test="tags==1">
+                    <if test="m.tags==1">
                             &gt;='${m.value}'
                         </if>
-                        <if test="tags==2">
+                    <if test="m.tags==2">
                             &gt;= 0
                         </if>
-                    </if>
                 </if>
             </if>
 
             <if test="m.conditions==5">
-                <if test="tag==2">
+                <if test="m.tag==2">
                     ${m.table1}.${m.field1} &lt;= ${m.table2}.${m.field2}
                     and ${m.table2}.${m.field2} - ${m.table1}.${m.field1 }
-                    <if test="tags==1">
+                    <if test="m.tags==1">
                         &lt;= '${m.value}'
                     </if>
-                    <if test="tags==2">
+                    <if test="m.tags==2">
                         &lt;= 0
                     </if>
-                    <if test="tag==1">
+                </if>
+                <if test="m.tag==1">
                         ${m.table1}.${m.field1}
-                        <if test="tags==1">
+                    <if test="m.tags==1">
                             &lt;= '${m.value}'
                         </if>
-                        <if test="tags==2">
+                    <if test="m.tags==2">
                             &lt;= 0
                         </if>
-                    </if>
                 </if>
             </if>
 
             <if test="m.conditions==6">
-                <if test="tag==2">
+                <if test="m.tag==2">
                     ${m.table1}.${m.field1} != ${m.table2}.${m.field2}
-                    <if test="tags==1">
+                    <if test="m.tags==1">
                         and ${m.table2}.${m.field2} != '${m.value}'
                     </if>
-                    <if test="tags==2">
+                    <if test="m.tags==2">
                         !=0
                     </if>
                 </if>
-                <if test="tag==1">
+                <if test="m.tag==1">
                     ${m.table1}.${m.field1}
-                    <if test="tags==1">
+                    <if test="m.tags==1">
                         != '${m.value}'
                     </if>
-                    <if test="tags==2">
-                        != 0
+                    <if test="m.tags==2">
+                        != ""
                     </if>
                 </if>
             </if>
@@ -386,142 +374,132 @@
 
         <foreach collection="viceList" item="v">
             <if test="v.conditions==1">
-                <if test="tag2==2">
+                <if test="v.tag==2">
                     and ${v.table1}.${v.field1} &gt; ${v.table2}.${v.field2}
                     and ${v.table1}.${v.field1} - ${v.table2}.${v.field2 }
-                    <if test="tags2==1">
+                    <if test="v.tags==1">
                         &gt; '${v.value}'
                     </if>
-                    <if test="tags2==2">
+                    <if test="v.tags==2">
                         >0
                     </if>
                 </if>
-                <if test="tag2==1">
-                    and
-                    ${v.table1}.${v.field1}
-                    <if test="tags2==1">
+                <if test="v.tag==1">
+                    and ${v.table1}.${v.field1}
+                    <if test="v.tags==1">
                         &gt; '${v.value}'
                     </if>
-                    <if test="tags2==2">
+                    <if test="v.tags==2">
                         > 0
                     </if>
                 </if>
             </if>
 
             <if test="v.conditions==2">
-                <if test="tag2==2">
-                    and
-                    ${v.table1}.${v.field1}=${v.table2}.${v.field2}
-                    <if test="tags2==1">
+                <if test="v.tag==2">
+                    and ${v.table1}.${v.field1}=${v.table2}.${v.field2}
+                    <if test="v.tags==1">
                         and ${v.table2}.${v.field2} = '${v.value}'
                     </if>
-                    <if test="tags2==2">
+                    <if test="v.tags==2">
 
                     </if>
                 </if>
-                <if test="tag2==1">
-                    and
-                    ${v.table1}.${v.field1}
-                    <if test="tags2==1">
+                <if test="v.tag==1">
+                    and ${v.table1}.${v.field1}
+                    <if test="v.tags==1">
                         = '${v.value}'
                     </if>
-                    <if test="tags2==2">
-                        = 0
+                    <if test="v.tags==2">
+                        = ""
                     </if>
                 </if>
             </if>
 
             <if test="v.conditions==3">
-                and
-                <if test="tag2==2">
-                    ${v.table1}.${v.field1} &lt; ${v.table2}.${v.field2}
+
+                <if test="v.tag==2">
+                    and ${v.table1}.${v.field1} &lt; ${v.table2}.${v.field2}
                     and ${v.table2}.${v.field2} - ${v.table1}.${v.field1 }
-                    <if test="tags2==1">
+                    <if test="v.tags==1">
                         &lt; '${v.value}'
                     </if>
-                    <if test="tags2==2">
+                    <if test="v.tags==2">
                         &lt; 0
                     </if>
                 </if>
-                <if test="tag2==1">
-                    and
-                    ${v.table1}.${v.field1}
-                    <if test="tags2==1">
+                <if test="v.tag==1">
+                    and ${v.table1}.${v.field1}
+                    <if test="v.tags==1">
                         &lt; '${v.value}'
                     </if>
-                    <if test="tags2==2">
+                    <if test="v.tags==2">
                         &lt; 0
                     </if>
                 </if>
             </if>
 
             <if test="v.conditions==4">
-                and
-                <if test="tag2==2">
-                    ${v.table1}.${v.field1} &gt;= ${v.table2}.${v.field2}
+                <if test="v.tag==2">
+                    and ${v.table1}.${v.field1} &gt;= ${v.table2}.${v.field2}
                     and ${v.table1}.${v.field1} - ${v.table2}.${v.field2 }
-                    <if test="tags2==1">
+                    <if test="v.tags==1">
                         &gt;= '${v.value}'
                     </if>
-                    <if test="tags2==2">
+                    <if test="v.tags==2">
                         &gt;=0
                     </if>
                 </if>
-                <if test="tag2==1">
-                    and
-                    ${v.table1}.${v.field1}
-                    <if test="tags2==1">
+                <if test="v.tag==1">
+                    and ${v.table1}.${v.field1}
+                    <if test="v.tags==1">
                         &gt;='${v.value}'
                     </if>
-                    <if test="tags2==2">
+                    <if test="v.tags==2">
                         &gt;= 0
                     </if>
                 </if>
             </if>
 
             <if test="v.conditions==5">
-                and
-                <if test="tag2==2">
-                    ${v.table1}.${v.field1} &lt;= ${v.table2}.${v.field2}
+                <if test="v.tag==2">
+                    and ${v.table1}.${v.field1} &lt;= ${v.table2}.${v.field2}
                     and ${v.table2}.${v.field2} - ${v.table1}.${v.field1 }
                     <if test="tags2==1">
                         &lt;= '${v.value}'
                     </if>
-                    <if test="tags2==2">
+                    <if test="v.tags==2">
                         &lt;= 0
                     </if>
                 </if>
-                <if test="tag2==1">
-                    and
-                    ${v.table1}.${v.field1}
+                <if test="v.tag==1">
+                    and ${v.table1}.${v.field1}
                     <if test="tags2==1">
                         &lt;= '${v.value}'
                     </if>
-                    <if test="tags2==2">
+                    <if test="v.tags==2">
                         &lt;= 0
                     </if>
                 </if>
             </if>
 
             <if test="v.conditions==6">
-                and
-                <if test="tag2==2">
-                    ${v.table1}.${v.field1} != ${v.table2}.${v.field2}
+                <if test="v.tag==2">
+                    and ${v.table1}.${v.field1} != ${v.table2}.${v.field2}
                     <if test="tags2==1">
                         and ${v.table2}.${v.field2} != '${v.value}'
                     </if>
-                    <if test="tags2==2">
+                    <if test="v.tags==2">
                         !=0
                     </if>
                 </if>
-                <if test="tag2==1">
-                    and
-                    ${v.table1}.${v.field1}
+                <if test="v.tag==1">
+                    and ${v.table1}.${v.field1}
                     <if test="tags2==1">
                         != '${v.value}'
                     </if>
-                    <if test="tags2==2">
-                        != 0
+                    <if test="v.tags==2">
+                        != ""
                     </if>
                 </if>
             </if>

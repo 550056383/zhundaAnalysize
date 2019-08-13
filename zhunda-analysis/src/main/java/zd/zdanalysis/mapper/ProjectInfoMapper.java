@@ -47,6 +47,6 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
 /*    List<Map<String, Object>> selectByWriteRules( Map<String,Object> map);*/
     List<Map<String, Object>> selectByWriteRules(String s0, String s1, String s2, String s3, @Param("writeList") List<Write> writeList, @Param("tags") int tags, @Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList, @Param("num") int num, @Param("tag") int tag);
 
-    List<Map<String, Object>> selectByStatement(String str0, String s1, @Param("tableRelevance") List<TableRelevance> tableRelevances, @Param("writeList") List<Write> writeList, @Param("tags") int tags, @Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList, @Param("num") int num, @Param("tag") int tag, @Param("tags2") int tags2, @Param("tag2") int tag2, @Param("num2") int num2);
+    List<Map<String, Object>> selectByStatement(String str0, @Param("tableRelevance") List<TableRelevance> tableRelevances, @Param("writeList") List<Write> writeList, @Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList);
 
 }

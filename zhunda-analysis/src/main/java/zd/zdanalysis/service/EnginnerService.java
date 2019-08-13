@@ -3,6 +3,7 @@ package zd.zdanalysis.service;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import zd.zdcommons.Utils;
 import zd.zdcommons.pojo.ExcelTable;
@@ -197,6 +198,7 @@ public class EnginnerService {
     }
 
 
+    @Transactional
     public List<Map<String, Object>> getSetup2(Map<String, Object> map, HttpServletResponse response, HttpServletRequest request) {
 
         List<Map<String, Object>> mapList = dataService.selectByStatement(map);

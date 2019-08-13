@@ -3,6 +3,7 @@ package zd.zdanalysis.service;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import zd.zdanalysis.mapper.ProjectInfoMapper;
 import zd.zdcommons.pojo.Majors;
 import zd.zdcommons.pojo.TableRelevance;
@@ -88,6 +89,7 @@ public class DataService {
     }
 
     //一次性批量插入数量,第二版
+    @Transactional
     public void insetDatas(String table, List<List<String>> lists, String[] titles) {
         System.out.println("每次批量插入数量:" + lists.size());
         int length = titles.length;
@@ -110,8 +112,9 @@ public class DataService {
         } catch (RuntimeException e) {
             e.printStackTrace();
             ExceclResouce.clear();
-
+            throw new RuntimeException("发生了异常!");
         }
+
     }
 
     //关联设置项表查询
@@ -333,19 +336,8 @@ public class DataService {
      * @author Jack Chen
      * @date 2019/8/12 09:43
      **/
+    @Transactional
     List<Map<String, Object>> selectByStatement(Map<String, Object> maps) {
-        //num:1代表> 2代表= .........
-        int num = 0;
-        int num2 = 0;
-        //1.表名相同或table2表为null默认进行表1查询 ,2:查询两表
-        int tag = 0;
-        //追加条件有无标记,1:有,2:无
-        int tags = 0;
-        //1.表名相同或table2表为null默认进行表1查询 ,2:查询两表
-        int tag2 = 0;
-        //追加条件有无标记,1:有,2:无
-        int tags2 = 0;
-
 
         //获取输出表字段
         List<Write> writeList = selectTableCell(maps);
@@ -380,43 +372,41 @@ public class DataService {
                 //若arr追加条件没有,arr实际只有5个值
                 if (arr.length == 6) {
                     majors.setValue(arr[5].trim());
-                    tags = 1;
+                    //tags = 1;
+                    majors.setTags("1");
                 } else {
-                    tags = 2;
+                    //tags = 2;
+                    majors.setTags("2");
                 }
                 System.out.println("majors条件" + majors);
                 //标记便于拼接SQL使用
                 switch (majors.getConditions().trim()) {
                     case "大于":
                         majors.setConditions("1");
-                        num = 1;
                         break;
                     case "等于":
                         majors.setConditions("2");
-                        num = 2;
                         break;
                     case "小于":
                         majors.setConditions("3");
-                        num = 3;
                         break;
                     case "大于等于":
                         majors.setConditions("4");
-                        num = 4;
                         break;
                     case "小于等于":
                         majors.setConditions("5");
-                        num = 5;
                         break;
                     case "不等于":
                         majors.setConditions("6");
-                        num = 6;
                         break;
                 }
                 //标记一组规则中表名是否相同 ,相同标记为1,判断一组规则中只有一个表时,标记为1
                 if (majors.getTable1().equals(majors.getTable2()) || majors.getTable2() == null) {
-                    tag = 1;
+                    // tag = 1;
+                    majors.setTag("1");
                 } else {
-                    tag = 2;
+                    // tag = 2;
+                    majors.setTag("2");
                 }
                 majorsList.add(majors);
 
@@ -445,43 +435,41 @@ public class DataService {
                 //若arr追加条件没有,arr实际只有5个值
                 if (arr.length == 6) {
                     vice.setValue(arr[5].trim());
-                    tags2 = 1;
+                    //tags2 = 1;
+                    vice.setTags("1");
                 } else {
-                    tags2 = 2;
+                    //tags2 = 2;
+                    vice.setTags("2");
                 }
                 System.out.println("vice条件:" + vice);
                 //标记便于拼接SQL使用
                 switch (vice.getConditions().trim()) {
                     case "大于":
                         vice.setConditions("1");
-                        num2 = 1;
                         break;
                     case "等于":
                         vice.setConditions("2");
-                        num2 = 2;
                         break;
                     case "小于":
                         vice.setConditions("3");
-                        num2 = 3;
                         break;
                     case "大于等于":
                         vice.setConditions("4");
-                        num2 = 4;
                         break;
                     case "小于等于":
                         vice.setConditions("5");
-                        num2 = 5;
                         break;
                     case "不等于":
                         vice.setConditions("6");
-                        num2 = 6;
                         break;
                 }
                 //标记一组规则中表名是否相同 ,相同标记为1,判断一组规则中只有一个表时,标记为1
                 if (vice.getTable1().equals(vice.getTable2()) || vice.getTable2() == null) {
-                    tag2 = 1;
+                    //tag2 = 1;
+                    vice.setTag("1");
                 } else {
-                    tag2 = 2;
+                    //tag2 = 2;
+                    vice.setTag("2");
                 }
                 viceList.add(vice);
             }
@@ -508,8 +496,7 @@ public class DataService {
             tableRelevances.add(tableRelevance);
         }
 
-        System.out.println(num + "=" + num2 + "=" + tag + "=" + tag2 + "=" + tags + "=" + tags2);
-        List<Map<String, Object>> mapList = projectInfoMapper.selectByStatement(str0, s1, tableRelevances, writeList, tags, majorsList, viceList, num, tag, tags2, tag2, num2);
+        List<Map<String, Object>> mapList = projectInfoMapper.selectByStatement(str0, tableRelevances, writeList, majorsList, viceList);
         for (Map<String, Object> objectMap : mapList) {
             System.out.println(objectMap);
         }

@@ -17,4 +17,6 @@ public class Majors {
     private String table2;
     private String field2;
     private String value;
+    private String tag;
+    private String tags;
 }

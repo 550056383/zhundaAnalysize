@@ -231,8 +231,6 @@ public class ExcelXlsxAndDefaultHandler extends DefaultHandler implements ExcelD
                 firstFag=false;
             }
             if(value.startsWith("\"")||value.endsWith("\"")){
-                System.out.println("xxx");
-                //ref.replaceAll("\\d+", "")
                 value=value.replaceAll("[\"]","");
             }
             if(total>titleNum){

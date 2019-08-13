@@ -162,6 +162,9 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                 curColumn = lsrec.getColumn();//列
                 //在共享表获取值
                 String value = sstRecord.getString(lsrec.getSSTIndex()).toString().trim();
+                if(value.startsWith("\"")||value.endsWith("\"")){
+                    value=value.replaceAll("[\"]","");
+                }
                 if(curRow<=titleNum){//默认第一行为标题
                     if(rowTitle.get(curColumn)!=null){
                         rowTitle.put(curColumn+"",value+"--"+rowTitle.get(curColumn));
@@ -190,11 +193,11 @@ public class ExcelXlsWithHSSFListener implements HSSFListener, ExcelDrivenImp {
                 BigDecimal b = new BigDecimal(valueDouble);
                 valueDouble=b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 value=formatter.formatRawCellContents(valueDouble, formatIndex, formatString).trim();
+                if(value.startsWith("\"")||value.endsWith("\"")){
+                    value=value.replaceAll("[\"]","");
+                }
                 //判断是否为空
                 value = value.equals("") ? "" : value;
-                if(value.contains("\"")){
-                    value=value.substring(1,value.length()-1);
-                }
                 //添加值
                 rowContents.put(rowTitle.get(curColumn+""),value);
                 break;

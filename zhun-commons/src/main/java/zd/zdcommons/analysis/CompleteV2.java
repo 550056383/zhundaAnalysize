@@ -165,9 +165,9 @@ public class CompleteV2 implements AnalysisImp {
             if(StringUtils.isBlank(resource.get("锚点FDD1800问题分类"))){
                 getError("锚点FDD1800问题分类",true,anchor_Problem,resource,true,"瞄点");
             }
+        }else{
+            getError("FDD1800是否规划",true,anchor_Xstart,resource,false,"瞄点");
         }
-
-
     }
     public void getMiMo(Map<String,String> resource){
         //安装
@@ -227,11 +227,10 @@ public class CompleteV2 implements AnalysisImp {
     private static final String[] anchor_Open={"FDD1800安装","FDD1800网管基站名称","4G传输具备","FDD1800 NM NE ID"};
     private static final String[] anchor_Receive={"FDD1800开通","FDD1800交优完成日期"};
     private static final String[] anchor_Problem={"FDD1800开通"};
+    private static final String[] anchor_Xstart={"FDD1800开通","FDD1800安装","FDD1800到货日期","FDD1800交优完成日期"};
 
 
     //双转规则
-
-
     /***
      *
      * @param conditions 当前条件字段
@@ -245,7 +244,7 @@ public class CompleteV2 implements AnalysisImp {
         List<String> list = new ArrayList<String>();
         for(int i = 0;i<rules.length;i++) {
             if(isNull?StringUtils.isBlank(map.get(rules[i])):StringUtils.isNotBlank(map.get(rules[i]))){
-                String str="当"+conditions+(isState?"未录入":"已录入")+"时，--"+rules[i]+(isNull?"为空":"不为空");
+                String str="当"+conditions+(isState?"未录入，或填写错误":"已录入")+"时，--"+rules[i]+(isNull?"为空":"不为空");
                 list.add(str);
             }
         }

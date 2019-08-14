@@ -119,6 +119,26 @@ public class StringFormat {
         return list;
     }
 
+    public static List<List<String[]>> getString5(String s) {
+        List<String[]> list = new ArrayList<String[]>();
+        List<List<String[]>> listList = new ArrayList<List<String[]>>();
+        String[] split = s.split("},");//一个自定义字段的条件为一个值
+        for (String arr : split) {
+            String[] arr2 = arr.split("]],");//一个自定义字段的条件分割为主条件,附条件,其他信息
+            for (String s1 : arr2) {
+                String[] split1 = s1.split("],");
+                for (int i = 0; i < split1.length; i++) {
+                    String replace = split1[i].replace("[", "").replace("]", "").replace("{", "").replace("}", "");
+                    String substring1 = replace.substring(replace.indexOf("=") + 1);
+                    split1[i] = substring1.trim();
+                }
+                list.add(split1);
+            }
+            listList.add(list);
+            list = new ArrayList<String[]>();
+        }
+        return listList;
+    }
     //对表名和字段进行处理
     static List<String[]> newlist = new ArrayList<String[]>();
     public  static List<String[]> stringToArr(String s){

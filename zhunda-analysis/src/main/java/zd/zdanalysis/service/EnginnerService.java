@@ -3,7 +3,6 @@ package zd.zdanalysis.service;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import zd.zdcommons.Utils;
 import zd.zdcommons.pojo.ExcelTable;
@@ -68,8 +67,6 @@ public class EnginnerService {
             rules = objects[1].toString().replace("[", "").replace("]", "").split(",");
             primarykey = (String) objects[2];
             name = (String) objects[3];
-
-
             List<ExcelTable> list = utils.getExcelResource(file, num, rules, primarykey);
             ((CopyOnWriteArrayList<ExcelTable>) listEx).addAllAbsent(list);
             System.out.println("开始读取每个表数据进行存储..............");
@@ -92,7 +89,9 @@ public class EnginnerService {
                 List<List<String>> resource = s.getResource();
                 dataService.insetData(uuid, resource, str);
 
-                // List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
+                List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
+                System.out.println("查询记录数:" + maps1.size());
+                // System.out.println(dataService.selectResults(uuid));
                 //写入Excel
                        /* WriteNewExcel writeNewExcel = new WriteNewExcel();
                         WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");*/
@@ -200,20 +199,56 @@ public class EnginnerService {
     }
 
 
-    @Transactional
+    /**
+     * 方法描述 : 多张表关联,多个输出字段,多个自定义字段,多个主条件,多个附条件,终极版
+     *
+     * @param map
+     * @param response
+     * @param request
+     * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
+     * @author Jack Chen
+     * @date 2019/8/14 11:24
+     **/
     public List<Map<String, Object>> getSetup2(Map<String, Object> map, HttpServletResponse response, HttpServletRequest request) {
-
-        List<Map<String, Object>> mapList = dataService.selectByStatement(map);
-        Object o = null;
-        //得到想要的自定义字段
+        int count = 1;
         String writeRules = map.get("writeRules").toString();
-        //字符串转数组
-        List<String[]> list = StringFormat.getString4(writeRules);
+        List<List<String[]>> list = StringFormat.getString5(writeRules);
+
+        List<List<Map<String, Object>>> mapLists = dataService.selectByStatement(map);
+
+        for (int i = 0; i < mapLists.size(); i++) {
+            WriteData(map, mapLists.get(i), count, list.get(i));
+            count++;
+        }
+
+
+        return null;
+    }
+
+    /**
+     * 方法描述 : 根据自定义条件将对应分析结果写入Excel
+     *
+     * @param map
+     * @param mapList
+     * @return void
+     * @author Jack Chen
+     * @date 2019/8/13 20:55
+     **/
+
+    public void WriteData(Map<String, Object> map, List<Map<String, Object>> mapList, int count, List<String[]> list){
+        Object o = null;
+   /* //得到想要的自定义字段
+    String writeRules = map.get("writeRules").toString();
+    //字符串转数组
+    List<String[]> list = StringFormat.getString4(writeRules);*/
         String[] arrs = list.get(0);
         String[] split = list.get(2)[0].split(",");
         String zidingyi = split[0];
+        System.out.println("zidingyi = " + zidingyi);
+
         List<Majors> writeRules1 = dataService.getWriteRules(arrs);
         for (Majors majors : writeRules1) {
+            System.out.println("majors = " + majors);
             String s = majors.getTable1();
             String s1 = majors.getField1();
             String s2 = majors.getConditions();
@@ -228,6 +263,7 @@ public class EnginnerService {
                 o = (Object) string;
             }
         }
+
         Map<String, Object> objectMap = new HashMap<>();
         for (Map<String, Object> map1 : mapList) {
             map1.put(zidingyi, o);
@@ -248,8 +284,7 @@ public class EnginnerService {
 
         //写入Excel
         WriteNewExcel writeNewExcel = new WriteNewExcel();
-        WriteNewExcel.writeExcecl(arr, mapList, "分析结果表", "");
-        // getDownload( response);
-        return null;
+        System.out.println("开始写入数据..........");
+        WriteNewExcel.writeExcecl(arr, mapList, "分析结果表", "分析结果表"+count);
     }
 }

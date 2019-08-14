@@ -1,6 +1,7 @@
 package com.test;
 
 import org.junit.Test;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,7 +31,7 @@ public class TableDealWith {
     private static int interva=0;
     private static String[] sheetNames=null;
     @Test
-    public void  Test(){
+   /* public void  Test(){
         String filePath="E:\\Zhunda\\测试\\工程所有信息表2019-01-02.xls";
         File file = new File(filePath);
         getRead(file);
@@ -39,9 +40,9 @@ public class TableDealWith {
                 System.out.println("键："+entry.getKey()+"-=-值："+entry.getValue());
             }
         }
-    }
+    }*/
 
-    public void getRead(File file){
+   /* public void getRead(File file){
         InputStream inputStream = getInputStream(file);
         String fileName = file.getName();
         if(fileName.endsWith("xlsx")){
@@ -50,7 +51,7 @@ public class TableDealWith {
             new ExcelXlsWithHSSFListenerV2().process(inputStream,sheetNames,file.getName());
         };
 
-    }
+    }*/
 
     private InputStream getInputStream(File file){
         FileInputStream inputStream=null;

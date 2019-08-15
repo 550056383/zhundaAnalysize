@@ -225,21 +225,19 @@
 
     <!--新增多张表关联,多个输出字段,一个自定义字段,多个主条件(可选内容可为空),多个副条件(可选内容可为空)-->
     <select id="selectByStatement" resultType="java.util.LinkedHashMap">
-        <!--   select *  from
-           ${param1}
-           <foreach collection="tableRelevance" item="tr" >
-            inner join ${tr.table2} on ${tr.table1}.${tr.fields1}=${tr.table2}.${tr.fields2}
-           </foreach>-->
             select
-            <foreach collection="writeList" item="write" separator=",">
+        <foreach collection="writeList" item="write" separator=",">
                 ${write.table}.${write.field}
             </foreach>
-            from
-            ( ${param1}
+        from
+        ${param1}
+        <if test="tableRelevance.size()!=0">
             <foreach collection="tableRelevance" item="tr">
-                inner join ${tr.table2} on ${tr.table1}.${tr.fields1}=${tr.table2}.${tr.fields2}
-            </foreach>) where
-
+                inner join ${tr.table2} on
+                ${tr.table1}.${tr.fields1}=${tr.table2}.${tr.fields2}
+            </foreach>
+        </if>
+        where
         <foreach collection="majorsList" item="m" separator="and">
             <if test="m.conditions==1">
                 <if test="m.tag==2">
@@ -266,10 +264,10 @@
             <if test="m.conditions==2">
                 <if test="m.tag==2">
                     ${m.table1}.${m.field1}=${m.table2}.${m.field2}
-                    <if test="tags==1">
+                    <if test="m.tags==1">
                         and ${m.table2}.${m.field2} = '${m.value}'
                     </if>
-                    <if test="tags==2">
+                    <if test="m.tags==2">
 
                     </if>
                 </if>
@@ -465,7 +463,7 @@
                 <if test="v.tag==2">
                     and ${v.table1}.${v.field1} &lt;= ${v.table2}.${v.field2}
                     and ${v.table2}.${v.field2} - ${v.table1}.${v.field1 }
-                    <if test="tags2==1">
+                    <if test="v.tags2==1">
                         &lt;= '${v.value}'
                     </if>
                     <if test="v.tags==2">
@@ -474,7 +472,7 @@
                 </if>
                 <if test="v.tag==1">
                     and ${v.table1}.${v.field1}
-                    <if test="tags2==1">
+                    <if test="v.tags2==1">
                         &lt;= '${v.value}'
                     </if>
                     <if test="v.tags==2">
@@ -486,7 +484,7 @@
             <if test="v.conditions==6">
                 <if test="v.tag==2">
                     and ${v.table1}.${v.field1} != ${v.table2}.${v.field2}
-                    <if test="tags2==1">
+                    <if test="v.tags2==1">
                         and ${v.table2}.${v.field2} != '${v.value}'
                     </if>
                     <if test="v.tags==2">
@@ -495,7 +493,7 @@
                 </if>
                 <if test="v.tag==1">
                     and ${v.table1}.${v.field1}
-                    <if test="tags2==1">
+                    <if test="v.tags2==1">
                         != '${v.value}'
                     </if>
                     <if test="v.tags==2">

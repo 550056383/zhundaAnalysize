@@ -1,6 +1,5 @@
 package zd.zdanalysis.service;
 
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zd.zdanalysis.mapper.ProjectInfoMapper;
@@ -25,24 +24,22 @@ import java.util.Map;
 public class DataService {
     @Autowired
     ProjectInfoMapper projectInfoMapper;
-    @Autowired
-    private SqlSessionTemplate sqlSessionTemplate;
+
     //动态创建临时表
    public  void createTables(String table,String[] strTitle){
-       projectInfoMapper.deleteTableByName(table);
+       projectInfoMapper.deleteTableByName(table);//如果表存在则删除
            projectInfoMapper.createTables(table, strTitle);
     }
 
     //查询临时表中的数据
     public  List<Map<String,Object>>  selectResult(String table){
         List<Map<String,Object>> list = projectInfoMapper.selectResult(table);
-      /*  for (Map<String,Object> map:list){
+        /*for (Map<String,Object> map:list){
             for (Map.Entry<String, Object> map1 : map.entrySet()) {
-                System.out.println("-------" + map1.getValue());
+                System.out.println(map1.getKey()+"-------" + map1.getValue());
             }
             System.out.println("=========================");
         }*/
-
         return list;
     }
 
@@ -103,30 +100,15 @@ public class DataService {
         }
         String string = initial.toString();
         string = string.substring(0, string.length() - 2);
+        try {
             projectInfoMapper.insetDatas(table, string);
+        } catch (RuntimeException e) {
+            new RuntimeException("存入数据出现异常!");
             ExceclResouce.clear();
-
-    }
-
-    //关联设置项表查询
-    public List<Map<String, Object>> selectTables(Map<String, Object> maps) {
-        String tableAssocia = (String) maps.get("tableAssocia").toString();
-        //字符串转数组
-        List<String[]> list = StringFormat.getString1(tableAssocia);
-        for (String[] arr : list) {
-            String str0 = StringFormat.uuid(arr[0]);
-            String str2 = StringFormat.uuid(arr[2]);
-            String s1 = PinYinUtils.hanziToPinyin(arr[1], "");
-            String s3 = PinYinUtils.hanziToPinyin(arr[3], "");
-            List<Map<String, Object>> mapList = projectInfoMapper.selectTables(str0, s1, str2, s3);
-            for (Map<String, Object> map : mapList) {
-                System.out.println(map);
-                System.out.println("关联设置项表查询");
-            }
         }
-        return null;
-    }
 
+
+    }
 
     //条件设置,第一版
     List<Map<String, Object>> selectByWriteRules(Map<String, Object> maps) {
@@ -259,12 +241,10 @@ public class DataService {
      **/
     List<List<Map<String, Object>>> selectByStatement(Map<String, Object> maps) {
 
-        //获取输出表字段
-        List<Write> writeList = selectTableCell(maps);
+        List<Write> writeList = selectTableCell(maps);//获取输出字段集合
 
-        //条件设置的条件
+        //条件设置的条件配置集合
         String writeRules = maps.get("writeRules").toString();
-        List<String[]> list = StringFormat.getString4(writeRules);
         List<List<String[]>> listList = StringFormat.getString5(writeRules);
 
         //添加主/副条件对象以及对应装配的集合
@@ -273,25 +253,29 @@ public class DataService {
         List<Majors> majorsList = new ArrayList<>();
         List<Vice> viceList = new ArrayList<>();
 
-        List<Map<String, Object>> mapList = new ArrayList<>();
-        List<List<Map<String, Object>>> lists = new ArrayList<>();
+        List<Map<String, Object>> mapList = new ArrayList<>();//接收每组条件配置查询结果
+        List<List<Map<String, Object>>> lists = new ArrayList<>();//多个条件配置查询结果的集合
 
         //得到关联表对象的list集合
         List<TableRelevance> tableRelevances = tableAssocia(maps);
-        //以那张表为主的表名
+
+        //以关联表第一张表为主的表名
         String table = getTable(maps);
+        if (table == null) {//为null代表单张表,无法进行关联,就取输出字段表名
+            table = writeList.get(0).getTable();//
+        }
 
-        //主条件
-        //List<String[]> strings = listList.get(0);//几个自定义条件就有几个list<string[]>
+        //遍历多组条件配置
         for (List<String[]> strings : listList) {
-
-            String[] arr1 = strings.get(0);
-            if (!arr1[0].isEmpty()) {
+            //主条件
+            String[] arr1 = strings.get(0);//主条件内容
+            if (!arr1[0].isEmpty()) {//避免null异常
                 for (String s : arr1) {
-                    List<String[]> list1 = StringFormat.stringToArr(s);
+                    List<String[]> list1 = StringFormat.stringToArr(s);//多个主条件转换成一个主条件为一个list
                     newlist = list1;
                 }
 
+                //遍历主条件集合并将每个主条件进行封装
                 for (String[] arr : newlist) {
                     Majors majors = new Majors();
                     majors.setTable1(arr[0]);
@@ -304,14 +288,12 @@ public class DataService {
                     //若arr追加条件没有,arr实际只有5个值
                     if (arr.length == 6) {
                         majors.setValue(arr[5].trim());
-                        //tags = 1;
-                        majors.setTags("1");
+                        majors.setTags("1");//标记追加条件有没有,1:有,2:无
                     } else {
-                        //tags = 2;
                         majors.setTags("2");
                     }
-                    System.out.println("majors条件" + majors);
-                    //标记便于拼接SQL使用
+
+                    //标记便于拼接SQL使用,每个主条件必定有一个比较条件
                     switch (majors.getConditions().trim()) {
                         case "大于":
                             majors.setConditions("1");
@@ -334,28 +316,25 @@ public class DataService {
                     }
                     //标记一组规则中表名是否相同 ,相同标记为1,判断一组规则中只有一个表时,标记为1
                     if (majors.getTable1().equals(majors.getTable2()) || majors.getTable2() == null) {
-                        // tag = 1;
                         majors.setTag("1");
                     } else {
-                        // tag = 2;
                         majors.setTag("2");
                     }
+                    System.out.println("majors条件:" + majors);
                     majorsList.add(majors);
 
                 }
             }
-            StringFormat.clearList();
+            StringFormat.clearList();//清除字符串转数组造成的缓存
 
             //副件条件处理
             String[] arr2 = strings.get(1);
             if (!arr2[0].isEmpty()) {
                 for (String s : arr2) {
-                    System.out.println("s = " + s);
                     List<String[]> list1 = StringFormat.stringToArr(s);
                     newlist2 = list1;
                 }
 
-                System.out.println("newlsit2" + newlist2.size());
                 for (String[] arr : newlist2) {
                     Vice vice = new Vice();
                     vice.setTable1(arr[0]);
@@ -368,13 +347,10 @@ public class DataService {
                     //若arr追加条件没有,arr实际只有5个值
                     if (arr.length == 6) {
                         vice.setValue(arr[5].trim());
-                        //tags2 = 1;
                         vice.setTags("1");
                     } else {
-                        //tags2 = 2;
                         vice.setTags("2");
                     }
-                    System.out.println("vice条件:" + vice);
                     //标记便于拼接SQL使用
                     switch (vice.getConditions().trim()) {
                         case "大于":
@@ -398,24 +374,47 @@ public class DataService {
                     }
                     //标记一组规则中表名是否相同 ,相同标记为1,判断一组规则中只有一个表时,标记为1
                     if (vice.getTable1().equals(vice.getTable2()) || vice.getTable2() == null) {
-                        //tag2 = 1;
                         vice.setTag("1");
                     } else {
-                        //tag2 = 2;
                         vice.setTag("2");
                     }
+                    System.out.println("vice条件:" + vice);
                     viceList.add(vice);
                 }
             }
             StringFormat.clearList();
 
+            //查询每组条件配置
             mapList = projectInfoMapper.selectByStatement(table, tableRelevances, writeList, majorsList, viceList);
+          /*  for (Map<String,Object> map:mapList){
+                System.out.println(map);
+            }*/
             System.out.println("查询结果数:" + mapList.size());
             lists.add(mapList);
+            //清除避免造成数据缓存
             majorsList.clear();
             viceList.clear();
         }
         return lists;
+    }
+
+    //关联设置项表查询
+    public List<Map<String, Object>> selectTables(Map<String, Object> maps) {
+        String tableAssocia = (String) maps.get("tableAssocia").toString();
+        //字符串转数组
+        List<String[]> list = StringFormat.getString1(tableAssocia);
+        for (String[] arr : list) {
+            String str0 = StringFormat.uuid(arr[0]);
+            String str2 = StringFormat.uuid(arr[2]);
+            String s1 = PinYinUtils.hanziToPinyin(arr[1], "");
+            String s3 = PinYinUtils.hanziToPinyin(arr[3], "");
+            List<Map<String, Object>> mapList = projectInfoMapper.selectTables(str0, s1, str2, s3);
+            for (Map<String, Object> map : mapList) {
+                System.out.println(map);
+                System.out.println("关联设置项表查询");
+            }
+        }
+        return null;
     }
 
     //输出表字段,表名,字段经过处理
@@ -486,36 +485,37 @@ public class DataService {
 
     //关联表处理
     public List<TableRelevance> tableAssocia(Map<String, Object> maps) {
-        String tableAssocia = (String) maps.get("tableAssocia").toString();
-        //字符串转数组
-        List<String[]> lists = StringFormat.getString1(tableAssocia);
         List<TableRelevance> tableRelevances = new ArrayList<>();
-
-        String[] arrs = lists.get(0);
-        String str0 = StringFormat.uuid(arrs[0].trim());
-
-        //一个list:表名--字段<==>表名--字段
-        for (String[] arr : lists) {
-
-            TableRelevance tableRelevance = new TableRelevance();
-            tableRelevance.setTable1(StringFormat.uuid(arr[0].trim()));
-            tableRelevance.setFields1(PinYinUtils.hanziToPinyin(arr[1], ""));
-            tableRelevance.setTable2(StringFormat.uuid(arr[2]).trim());
-            tableRelevance.setFields2(PinYinUtils.hanziToPinyin(arr[3], ""));
-            tableRelevances.add(tableRelevance);
+        String tableAssocia = (String) maps.get("tableAssocia").toString();
+        List<String[]> lists = StringFormat.getString1(tableAssocia);//字符串转数组
+        if (lists.size() != 0) {
+            String[] arrs = lists.get(0);
+            String str0 = StringFormat.uuid(arrs[0].trim());
+            //一个list:表名--字段<==>表名--字段
+            for (String[] arr : lists) {
+                TableRelevance tableRelevance = new TableRelevance();
+                tableRelevance.setTable1(StringFormat.uuid(arr[0].trim()));
+                tableRelevance.setFields1(PinYinUtils.hanziToPinyin(arr[1], ""));
+                tableRelevance.setTable2(StringFormat.uuid(arr[2]).trim());
+                tableRelevance.setFields2(PinYinUtils.hanziToPinyin(arr[3], ""));
+                tableRelevances.add(tableRelevance);
+            }
         }
+
         return tableRelevances;
     }
 
     //以哪一张表 为主,进行多表关联
     public String getTable(Map<String, Object> maps) {
+        String str0 = null;
         String tableAssocia = (String) maps.get("tableAssocia").toString();
-        //字符串转数组
-        List<String[]> lists = StringFormat.getString1(tableAssocia);
+        List<String[]> lists = StringFormat.getString1(tableAssocia); //字符串转数组
         List<TableRelevance> tableRelevances = new ArrayList<>();
 
-        String[] arrs = lists.get(0);
-        String str0 = StringFormat.uuid(arrs[0].trim());
+        if (lists.size() != 0) {//若lists.size()=0则是上传Excel表是单张表,没有关联表
+            String[] arrs = lists.get(0);
+            str0 = StringFormat.uuid(arrs[0].trim());
+        }
         return str0;
     }
 }

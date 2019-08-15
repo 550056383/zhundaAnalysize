@@ -89,11 +89,11 @@ public class EnginnerService {
                 List<List<String>> resource = s.getResource();
                 dataService.insetData(uuid, resource, str);
 
-                List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
-                System.out.println("查询记录数:" + maps1.size());
-                // System.out.println(dataService.selectResults(uuid));
+                //List<Map<String, Object>> maps1 = dataService.selectResult(uuid);
+                //System.out.println("查询记录数:" + maps1.size());
+                dataService.selectResults(uuid);
                 //写入Excel
-                       /* WriteNewExcel writeNewExcel = new WriteNewExcel();
+                      /*  WriteNewExcel writeNewExcel = new WriteNewExcel();
                         WriteNewExcel.writeExcecl(sTitle, maps1, uuid, "");*/
                 s.setResource(null);
             }
@@ -211,10 +211,10 @@ public class EnginnerService {
      **/
     public List<Map<String, Object>> getSetup2(Map<String, Object> map, HttpServletResponse response, HttpServletRequest request) {
         int count = 1;
-        String writeRules = map.get("writeRules").toString();
-        List<List<String[]>> list = StringFormat.getString5(writeRules);
+        String writeRules = map.get("writeRules").toString();//取条件设置规则
+        List<List<String[]>> list = StringFormat.getString5(writeRules);//转换成多组条件配置
 
-        List<List<Map<String, Object>>> mapLists = dataService.selectByStatement(map);
+        List<List<Map<String, Object>>> mapLists = dataService.selectByStatement(map);//返回每组条件配置查询结果集
 
         for (int i = 0; i < mapLists.size(); i++) {
             WriteData(map, mapLists.get(i), count, list.get(i));
@@ -228,8 +228,8 @@ public class EnginnerService {
     /**
      * 方法描述 : 根据自定义条件将对应分析结果写入Excel
      *
-     * @param map
-     * @param mapList
+     * @param map 前台传过来的条件集合
+     * @param mapList   一个自定义输出字段对应的主副条件集合
      * @return void
      * @author Jack Chen
      * @date 2019/8/13 20:55
@@ -237,14 +237,9 @@ public class EnginnerService {
 
     public void WriteData(Map<String, Object> map, List<Map<String, Object>> mapList, int count, List<String[]> list){
         Object o = null;
-   /* //得到想要的自定义字段
-    String writeRules = map.get("writeRules").toString();
-    //字符串转数组
-    List<String[]> list = StringFormat.getString4(writeRules);*/
-        String[] arrs = list.get(0);
+        String[] arrs = list.get(0);//取主条件
         String[] split = list.get(2)[0].split(",");
-        String zidingyi = split[0];
-        System.out.println("zidingyi = " + zidingyi);
+        String zidingyi = split[0];//取自定义字段内容
 
         List<Majors> writeRules1 = dataService.getWriteRules(arrs);
         for (Majors majors : writeRules1) {

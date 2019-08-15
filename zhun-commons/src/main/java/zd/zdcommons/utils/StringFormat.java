@@ -28,14 +28,6 @@ public class StringFormat {
      * @date 2019/7/26 14:36
      **/
     public static List<String[]> getString1(String s) {
-       /* String replace = s.replace("{", "").replace("}", "").replace("[", "").replace("]", "").toString();
-        String[] split = replace.split(",");
-        String[] arr = new String[split.length];
-        for (int i = 0; i < split.length; i++) {
-            String str = split[i].substring(split[i].indexOf("=") + 1);
-            arr[i] = str;
-        }
-        return  arr;*/
 
         List<String[]> list = new ArrayList<String[]>();
         String[] split = s.split("},");
@@ -45,7 +37,9 @@ public class StringFormat {
                 String substring1 = arr[i].substring(arr[i].indexOf("=") + 1);
                 arr[i] = substring1.trim();
             }
-            list.add(arr);
+            if (arr[0] != null && !arr[0].equals("")) {
+                list.add(arr);
+            }
         }
         return list;
     }
@@ -67,9 +61,7 @@ public class StringFormat {
                 String substring1 = arr[i].substring(arr[i].indexOf("=") + 1);
                 arr[i] = substring1.trim();
             }
-            if (arr.length > 1) {
-                list.add(arr);
-            }
+            list.add(arr);
         }
         return list;
     }
@@ -119,6 +111,7 @@ public class StringFormat {
         return list;
     }
 
+    //针对两个及以上输出字段对应主条件和附条件处理
     public static List<List<String[]>> getString5(String s) {
         List<String[]> list = new ArrayList<String[]>();
         List<List<String[]>> listList = new ArrayList<List<String[]>>();

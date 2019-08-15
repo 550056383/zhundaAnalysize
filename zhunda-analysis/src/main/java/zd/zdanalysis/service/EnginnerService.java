@@ -17,10 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
@@ -107,69 +104,6 @@ public class EnginnerService {
     }
 
     /**
-     *方法描述 : 实现两张表进行关联,多个输出字段,一个自定义字段,一个主条件(选填可有可无)的查询
-     * @author Jack Chen
-     * @date 2019/8/9 14:37
-     * @param map
-     * @param response
-     * @param request
-     * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
-     **/
-    public List<Map<String, Object>> getSetup(Map<String, Object> map, HttpServletResponse response, HttpServletRequest request) {
-        Object o = null;
-
-        //条件设置
-        List<Map<String, Object>> mapList = dataService.selectByWriteRules(map);
-
-        //得到想要的自定义字段
-        String writeRules = map.get("writeRules").toString();
-        //字符串转数组
-        List<String[]> list = StringFormat.getString4(writeRules);
-        String[] arrs = list.get(0);
-        String[] split = list.get(2)[0].split(",");
-        String zidingyi = split[0];
-        List<Majors> writeRules1 = dataService.getWriteRules(arrs);
-        for (Majors majors : writeRules1) {
-            String s = majors.getTable1();
-            String s1 = majors.getField1();
-            String s2 = majors.getConditions();
-            String s3 = majors.getTable2();
-            String s4 = majors.getField2();
-            String s5 = majors.getValue();
-            if (s3 == null) {
-                String string = s + "表的" + s1 + s2 + s5;
-                o = (Object) string;
-            } else {
-                String string = s + "表的" + s1 + s2 + s3 + "表的" + s4 + "并且" + s2 + s5;
-                o = (Object) string;
-            }
-        }
-        Map<String, Object> objectMap = new HashMap<>();
-        for (Map<String, Object> map1 : mapList) {
-            map1.put(zidingyi, o);
-        }
-
-
-        //得到想要的表头
-        List<Write> writeList = dataService.selectTableCells(map);
-        String[] arr = new String[writeList.size() + 1];
-        for (int i = 0; i < writeList.size(); i++) {
-            Write write = writeList.get(i);
-            String s1 = write.getField().toString();
-            String s2 = write.getTable().toString();
-            String str = s2 + " ：" + s1;
-            arr[i] = str;
-        }
-        arr[writeList.size()] = zidingyi;
-
-        //写入Excel
-        WriteNewExcel writeNewExcel = new WriteNewExcel();
-        WriteNewExcel.writeExcecl(arr, mapList, "分析结果表", "");
-        // getDownload( response);
-        return null;
-    }
-
-    /**
      *方法描述 : 下载条件分析得到的数据
      * @author Jack Chen
      * @date 2019/8/9 14:38
@@ -202,26 +136,53 @@ public class EnginnerService {
     /**
      * 方法描述 : 多张表关联,多个输出字段,多个自定义字段,多个主条件,多个附条件,终极版
      *
-     * @param map
+     * @param maps
      * @param response
      * @param request
      * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
      * @author Jack Chen
      * @date 2019/8/14 11:24
      **/
-    public List<Map<String, Object>> getSetup2(Map<String, Object> map, HttpServletResponse response, HttpServletRequest request) {
-        int count = 1;
-        String writeRules = map.get("writeRules").toString();//取条件设置规则
-        List<List<String[]>> list = StringFormat.getString5(writeRules);//转换成多组条件配置
+    public List<Map<String, Object>> getSetup2(Map<String, Object> maps, HttpServletResponse response, HttpServletRequest request) {
 
-        List<List<Map<String, Object>>> mapLists = dataService.selectByStatement(map);//返回每组条件配置查询结果集
 
-        for (int i = 0; i < mapLists.size(); i++) {
-            WriteData(map, mapLists.get(i), count, list.get(i));
-            count++;
+        //只提交输出字段那块数据
+        List<Write> writeList = dataService.selectTableCell(maps);//获取输出字段集合
+        //以关联表第一张表为主的表名
+        String table = dataService.getTable(maps);
+        StringBuffer stringBuffer = new StringBuffer("");
+        if (table == null) {//为null代表单张表,无法进行关联,就取输出字段表名
+            for (int i = 0; i < writeList.size(); i++) {
+                String table1 = writeList.get(i).getTable();
+                if (i == 0) {
+                    stringBuffer.append(table1);
+                } else {
+                    stringBuffer.append(".equals(");
+                    stringBuffer.append(table1);
+                    stringBuffer.append(")");
+                }
+            }
+            boolean equals = stringBuffer.toString().equals(true);//判定多个输出字段表名是否相等
+            if (false == equals) {
+                List<List<String>> lists = dataService.selectTableDatas(writeList, false);//多个输出字段表名不相同
+                WriteDataField(lists, maps);
+            } else {
+                List<List<String>> list = dataService.selectTableDatas(writeList, true);//多个输出字段表名相同
+                WriteDataField(list, maps);
+            }
+        } else {
+
+            int count = 1;
+            String writeRules = maps.get("writeRules").toString();//取条件设置规则
+            List<List<String[]>> list = StringFormat.getString5(writeRules);//转换成多组条件配置
+
+            List<List<Map<String, Object>>> mapLists = dataService.selectByStatement(maps);//返回每组条件配置查询结果集
+
+            for (int i = 0; i < mapLists.size(); i++) {
+                WriteData(maps, mapLists.get(i), count, list.get(i));
+                count++;
+            }
         }
-
-
         return null;
     }
 
@@ -280,6 +241,36 @@ public class EnginnerService {
         //写入Excel
         WriteNewExcel writeNewExcel = new WriteNewExcel();
         System.out.println("开始写入数据..........");
-        WriteNewExcel.writeExcecl(arr, mapList, "分析结果表", "分析结果表"+count);
+        WriteNewExcel.writeExcecl(arr, mapList, "分析结果表", "分析结果表" + count, count);
+    }
+
+    //只提交输出字段表数据写入Excel
+    public void WriteDataField(List<List<String>> lists, Map<String, Object> maps) {
+        List<Map<String, Object>> listmap = new ArrayList<>();
+        Map<String, Object> map = new LinkedHashMap<>();
+        //得到想要的表头
+        List<Write> writeList = dataService.selectTableCells(maps);
+        String[] arr = new String[writeList.size()];
+        for (int i = 0; i < writeList.size(); i++) {
+            Write write = writeList.get(i);
+            String s1 = write.getField().toString();
+            String s2 = write.getTable().toString();
+            String str = s2 + " ：" + s1;
+            arr[0] = str;
+
+            for (String ss : lists.get(i)) {//取每个输出字段查询的结果
+                map.put(str, ss);
+                listmap.add(map);
+            }
+            System.out.println(listmap.size());
+            //写入Excel
+            WriteNewExcel writeNewExcel = new WriteNewExcel();
+            System.out.println("第" + i + "次开始写入输出字段数据..........");
+            WriteNewExcel.writeExcecl(arr, listmap, "输出字段表", "输出字段表" + (i + 1), (i + 1));
+            map.clear();
+            listmap.clear();
+
+        }
+
     }
 }

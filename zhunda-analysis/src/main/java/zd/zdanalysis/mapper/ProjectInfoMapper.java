@@ -32,8 +32,6 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     List<Map<String,Object>>  selectResult(@Param("tables") String table);
 
     //插入数据到临时表
-    void insetData(String table, List<String> list);
-
     void insetDatas(String table, String string);
 
       int selectResults(@Param("tables") String table);
@@ -41,11 +39,11 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     //关联设置项表查询
     List<Map<String, Object>> selectTables(String s0, String s1, String s2, String s3);
 
-    List<String> selectTableCell(String s0, String s1);
+    //输出表字段,多个字段来自多个表
+    List<String> selectTableDada(@Param("write") Write write);
 
-    //<!--两张表关联,多个输出字段,一个自定义字段,一个主条件(可选内容可为空)-->
-/*    List<Map<String, Object>> selectByWriteRules( Map<String,Object> map);*/
-    List<Map<String, Object>> selectByWriteRules(String s0, String s1, String s2, String s3, @Param("writeList") List<Write> writeList, @Param("tags") int tags, @Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList, @Param("num") int num, @Param("tag") int tag);
+    //输出表字段,多个字段来自同一个表
+    List<String> selectTableDada2(@Param("writeList") List<Write> writeList);
 
     List<Map<String, Object>> selectByStatement(String str0, @Param("tableRelevance") List<TableRelevance> tableRelevances, @Param("writeList") List<Write> writeList, @Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList);
 

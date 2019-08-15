@@ -24,11 +24,19 @@ import java.util.Map;
  */
 public class WriteNewExcel {
     static XSSFWorkbook workbook = new XSSFWorkbook();
-    public static void writeExcecl(String []titles, List<Map<String,Object>> lisMap, String fileName, String shteeName){
+
+    public static void writeExcecl(String[] titles, List<Map<String, Object>> lisMap, String fileName, String shteeName, int num) {
         System.out.println("我是sheetname" + shteeName);
+        if (num == 1) {
+            workbook = new XSSFWorkbook();
+        }
         //第一步，创建一个workbook对应一个excel文件
         /* XSSFWorkbook workbook=new XSSFWorkbook();*/
         //第二部，在workbook中创建一个sheet对应excel中的sheet
+        XSSFSheet sheet1 = workbook.getSheet(shteeName);
+        if (sheet1 != null) {
+            workbook.removeSheetAt(workbook.getSheetIndex(shteeName));
+        }
         XSSFSheet sheet = workbook.createSheet(shteeName != "" ? shteeName : "分析结果表");
         //第三部，在sheet表中添加表头第0行，老版本的poi对sheet的行列有限制
         XSSFRow row = sheet.createRow(0);

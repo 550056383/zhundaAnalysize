@@ -27,9 +27,9 @@ public class WriteNewExcel {
 
     public static void writeExcecl(String[] titles, List<Map<String, Object>> lisMap, String fileName, String shteeName, int num) {
         System.out.println("我是sheetname" + shteeName);
-        if (num == 1) {
+        /*if (num == 1) {
             workbook = new XSSFWorkbook();
-        }
+        }*/
         //第一步，创建一个workbook对应一个excel文件
         /* XSSFWorkbook workbook=new XSSFWorkbook();*/
         //第二部，在workbook中创建一个sheet对应excel中的sheet
@@ -56,7 +56,7 @@ public class WriteNewExcel {
             List<String> oneData= new ArrayList<String>();
             //便利Map添加一行数据的每列数据
             for (Map.Entry<String,Object> entry:objectMap.entrySet()){
-              //  System.out.println(entry.getKey()+entry.getValue());
+                // System.out.println(entry.getKey()+entry.getValue());
                 oneData.add(entry.getValue().toString().trim());
             }
             WritableCellFormat format = new WritableCellFormat();

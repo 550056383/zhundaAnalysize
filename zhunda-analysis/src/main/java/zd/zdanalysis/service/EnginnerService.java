@@ -144,33 +144,36 @@ public class EnginnerService {
      * @date 2019/8/14 11:24
      **/
     public List<Map<String, Object>> getSetup2(Map<String, Object> maps, HttpServletResponse response, HttpServletRequest request) {
-
-
         //只提交输出字段那块数据
         List<Write> writeList = dataService.selectTableCell(maps);//获取输出字段集合
         //以关联表第一张表为主的表名
         String table = dataService.getTable(maps);
-        StringBuffer stringBuffer = new StringBuffer("");
-        if (table == null) {//为null代表单张表,无法进行关联,就取输出字段表名
+        int num = 0;
+        String temp = writeList.get(0).getTable();
+        for (int i = 0; i < writeList.size(); i++) {
+            if (temp.equals(writeList.get(i).getTable())) {
+                num++;
+            }
+        }
+        if (num != writeList.size() && table == null) {//输出字段表名不相同,多表
+            List<List<String>> lists = dataService.selectTableDatas(writeList);//多个输出字段表名不相同
+            WriteDataField(lists, maps);
+        }
+
+        /*if (table == null) {//为null没进行关联,就取输出字段表名
             for (int i = 0; i < writeList.size(); i++) {
-                String table1 = writeList.get(i).getTable();
-                if (i == 0) {
-                    stringBuffer.append(table1);
-                } else {
-                    stringBuffer.append(".equals(");
-                    stringBuffer.append(table1);
-                    stringBuffer.append(")");
-                }
+               if (temp.equals(writeList.get(i).getTable())){
+                   num++;
+               }
             }
-            boolean equals = stringBuffer.toString().equals(true);//判定多个输出字段表名是否相等
-            if (false == equals) {
-                List<List<String>> lists = dataService.selectTableDatas(writeList, false);//多个输出字段表名不相同
+            if (num!=writeList.size()) {//输出字段表名不相同,多表
+                List<List<String>> lists = dataService.selectTableDatas(writeList);//多个输出字段表名不相同
                 WriteDataField(lists, maps);
-            } else {
-                List<List<String>> list = dataService.selectTableDatas(writeList, true);//多个输出字段表名相同
-                WriteDataField(list, maps);
+            } else {//输出字段表名相同,单表
+                List<Map<String,Object>> listmap = dataService.selectTableDatas2(writeList);//多个输出字段表名相同
+                WriteDataField2(listmap, maps);
             }
-        } else {
+        } else {   }*/
 
             int count = 1;
             String writeRules = maps.get("writeRules").toString();//取条件设置规则
@@ -182,7 +185,7 @@ public class EnginnerService {
                 WriteData(maps, mapLists.get(i), count, list.get(i));
                 count++;
             }
-        }
+
         return null;
     }
 
@@ -198,31 +201,33 @@ public class EnginnerService {
 
     public void WriteData(Map<String, Object> map, List<Map<String, Object>> mapList, int count, List<String[]> list){
         Object o = null;
+        String zidingyi = null;
         String[] arrs = list.get(0);//取主条件
-        String[] split = list.get(2)[0].split(",");
-        String zidingyi = split[0];//取自定义字段内容
-
-        List<Majors> writeRules1 = dataService.getWriteRules(arrs);
-        for (Majors majors : writeRules1) {
-            System.out.println("majors = " + majors);
-            String s = majors.getTable1();
-            String s1 = majors.getField1();
-            String s2 = majors.getConditions();
-            String s3 = majors.getTable2();
-            String s4 = majors.getField2();
-            String s5 = majors.getValue();
-            if (s3 == null) {
-                String string = s + "表的" + s1 + s2 + s5;
-                o = (Object) string;
-            } else {
-                String string = s + "表的" + s1 + s2 + s3 + "表的" + s4 + "并且" + s2 + s5;
-                o = (Object) string;
+        if (!arrs[0].equals("")) {
+            String[] split = list.get(2)[0].split(",");
+            zidingyi = split[0];//取自定义字段内容
+            List<Majors> writeRules1 = dataService.getWriteRules(arrs);
+            for (Majors majors : writeRules1) {
+                System.out.println("majors = " + majors);
+                String s = majors.getTable1();
+                String s1 = majors.getField1();
+                String s2 = majors.getConditions();
+                String s3 = majors.getTable2();
+                String s4 = majors.getField2();
+                String s5 = majors.getValue();
+                if (s3 == null) {
+                    String string = s + "表的" + s1 + s2 + s5;
+                    o = (Object) string;
+                } else {
+                    String string = s + "表的" + s1 + s2 + s3 + "表的" + s4 + "并且" + s2 + s5;
+                    o = (Object) string;
+                }
             }
-        }
 
-        Map<String, Object> objectMap = new HashMap<>();
-        for (Map<String, Object> map1 : mapList) {
-            map1.put(zidingyi, o);
+            Map<String, Object> objectMap = new HashMap<>();
+            for (Map<String, Object> map1 : mapList) {
+                map1.put(zidingyi, o);
+            }
         }
 
 
@@ -236,7 +241,9 @@ public class EnginnerService {
             String str = s2 + " ：" + s1;
             arr[i] = str;
         }
-        arr[writeList.size()] = zidingyi;
+        if (!arrs[0].equals("")) {
+            arr[writeList.size()] = zidingyi;
+        }
 
         //写入Excel
         WriteNewExcel writeNewExcel = new WriteNewExcel();
@@ -244,7 +251,7 @@ public class EnginnerService {
         WriteNewExcel.writeExcecl(arr, mapList, "分析结果表", "分析结果表" + count, count);
     }
 
-    //只提交输出字段表数据写入Excel
+    //提交输出字段表数据写入Excel,输出字段表名不相同
     public void WriteDataField(List<List<String>> lists, Map<String, Object> maps) {
         List<Map<String, Object>> listmap = new ArrayList<>();
         Map<String, Object> map = new LinkedHashMap<>();
@@ -266,11 +273,29 @@ public class EnginnerService {
             //写入Excel
             WriteNewExcel writeNewExcel = new WriteNewExcel();
             System.out.println("第" + i + "次开始写入输出字段数据..........");
-            WriteNewExcel.writeExcecl(arr, listmap, "输出字段表", "输出字段表" + (i + 1), (i + 1));
+            WriteNewExcel.writeExcecl(arr, listmap, "分析结果表", "输出多表字段表" + (i + 1), (i + 1));
             map.clear();
             listmap.clear();
 
         }
 
+    }
+
+    //提交输出字段表数据写入Excel,输出字段表名全相同
+    public void WriteDataField2(List<Map<String, Object>> listmap, Map<String, Object> maps) {
+        int num = 1;
+        //得到想要的表头
+        List<Write> writeList = dataService.selectTableCells(maps);
+        String[] arr = new String[writeList.size()];
+        for (int i = 0; i < writeList.size(); i++) {
+            Write write = writeList.get(i);
+            String s1 = write.getField().toString();
+            String s2 = write.getTable().toString();
+            String str = s2 + " ：" + s1;
+            arr[i] = str;
+        }
+        //写入Excel
+        WriteNewExcel writeNewExcel = new WriteNewExcel();
+        WriteNewExcel.writeExcecl(arr, listmap, "分析结果表", "输出单表字段表", num);
     }
 }

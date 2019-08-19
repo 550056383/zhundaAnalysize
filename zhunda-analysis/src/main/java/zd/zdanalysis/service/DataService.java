@@ -114,6 +114,20 @@ public class DataService {
     List<List<Map<String, Object>>> selectByStatement(Map<String, Object> maps) {
 
         List<Write> writeList = selectTableCell(maps);//获取输出字段集合
+        //判定输出字段的表名是否相同
+        int tag;
+        int num = 0;
+        String temp = writeList.get(0).getTable();
+        for (int i = 0; i < writeList.size(); i++) {
+            if (temp.equals(writeList.get(i).getTable())) {
+                num++;
+            }
+        }
+        if (num != writeList.size()) {
+            tag = 2;//表名不同
+        } else {
+            tag = 1;//表名相同
+        }
 
         //条件设置的条件配置集合
         String writeRules = maps.get("writeRules").toString();
@@ -257,8 +271,8 @@ public class DataService {
             StringFormat.clearList();
 
             //查询每组条件配置
-            mapList = projectInfoMapper.selectByStatement(table, tableRelevances, writeList, majorsList, viceList);
-          /*  for (Map<String,Object> map:mapList){
+            mapList = projectInfoMapper.selectByStatement(table, tag, tableRelevances, writeList, majorsList, viceList);
+          /*for (Map<String,Object> map:mapList){
                 System.out.println(map);
             }*/
             System.out.println("查询结果数:" + mapList.size());
@@ -392,18 +406,18 @@ public class DataService {
     }
 
     //查询单张表输出字段
-    public List<List<String>> selectTableDatas(List<Write> writeList, boolean b) {
+    public List<List<String>> selectTableDatas(List<Write> writeList) {
         List<List<String>> data = new ArrayList<>();
-        if (false == b) {
             for (Write w : writeList) {
                 List<String> strings = projectInfoMapper.selectTableDada(w);
                 data.add(strings);
             }
-        } else {
-            List<String> list = projectInfoMapper.selectTableDada2(writeList);
-            data.add(list);
-        }
-
         return data;
+    }
+
+    //查询单张表输出字段
+    public List<Map<String, Object>> selectTableDatas2(List<Write> writeList) {
+        List<Map<String, Object>> listmap = projectInfoMapper.selectTableDada2(writeList);
+        return listmap;
     }
 }

@@ -43,8 +43,8 @@ public interface ProjectInfoMapper extends Mapper<ProjectInfo> {
     List<String> selectTableDada(@Param("write") Write write);
 
     //输出表字段,多个字段来自同一个表
-    List<String> selectTableDada2(@Param("writeList") List<Write> writeList);
+    List<Map<String, Object>> selectTableDada2(@Param("writeList") List<Write> writeList);
 
-    List<Map<String, Object>> selectByStatement(String str0, @Param("tableRelevance") List<TableRelevance> tableRelevances, @Param("writeList") List<Write> writeList, @Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList);
+    List<Map<String, Object>> selectByStatement(@Param("name") String str0, @Param("tag") int tag, @Param("tableRelevance") List<TableRelevance> tableRelevances, @Param("writeList") List<Write> writeList, @Param("majorsList") List<Majors> mapList, @Param("viceList") List<Vice> viceList);
 
 }
